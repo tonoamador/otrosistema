@@ -39,7 +39,7 @@ function displayData(posts) {
                 </div>
             </td>
             <td>
-                <p class="text-gray-600 text-hover-primary mb-1">${post.username}</p>
+                <a href="overview-lider.html" class="text-gray-600 text-hover-primary mb-1">${post.username}</a>
             </td>
             <td>
                 <a href="#" class="text-gray-600 text-hover-primary mb-1">123</a>
@@ -54,15 +54,10 @@ function displayData(posts) {
                 <p class="text-gray-600 mb-1">Boca del Río</p>
             </td>
             <td>
-                <a href="overview-movilizador.html?=Juan" class="text-gray-600 mb-1 text-hover-primary">Juan (Consultar)</a>
+                <p class="text-gray-600 mb-1">Juan</p>
             </td>
             <td>
-                <a href="overview-lider.html?=" class="text-gray-600 mb-1">Santiago(Consultar)</a>
-            </td>
-            <td>
-                <!--begin::Badges-->
-                <div class="badge badge-light-danger">No votó</div>
-                <!--end::Badges-->
+                <p class="text-gray-600 mb-1">Santiago</p>
             </td>
         </tr>
     <!--end::Table body-->
