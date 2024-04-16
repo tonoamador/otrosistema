@@ -1,14 +1,11 @@
 document.addEventListener("DOMContentLoaded", fetchData);
 
 function fetchData() {
-  fetch("https://hcpboca.ddns.net:3050/api/getAllUsers/", {
+  fetch("https://hcpboca.ddns.net:3050/api/getCiudadanos/", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({
-      filters: [{ field: "user_type", value: "ciudadano" }],
-    }),
   })
     .then((response) => {
       if (!response.ok) {
@@ -32,6 +29,7 @@ function displayData(posts) {
 
   // Iterar sobre los posts y agregarlos a la tabla
   posts.forEach((post) => {
+    console.log(post);
     const row = `
             
         
@@ -55,21 +53,23 @@ function displayData(posts) {
                   post.direccion_int +
                   ", " +
                   post.colonia +
-                  " " +
+                  ", " +
                   post.c_postal
                 }</a>
             </td>
             <td>
-                <a href="#" class="text-gray-600 text-hover-primary mb-1">2291529343</a>
+                <a href="#" class="text-gray-600 text-hover-primary mb-1">${
+                  post.telefono
+                }</a>
             </td>
             <td>
-                <p class="text-gray-600 mb-1">123</p>
+                <p class="text-gray-600 mb-1">${post.seccion["numero"]}</p>
             </td>
             <td>
-                <p class="text-gray-600 mb-1">Boca del Río</p>
+                <p class="text-gray-600 mb-1">${post.municipio["nombre"]}</p>
             </td>
             <td>
-                <a href="overview-movilizador.html?=Juan" class="text-gray-600 mb-1 text-hover-primary">Juan (Consultar)</a>
+                <a href="overview-movilizador.html?=${post.movilizador[0]['_id']}" class="text-gray-600 mb-1 text-hover-primary">${post.movilizador[0]['nombre']+" "+ post.movilizador[0]['paterno']+" "+post.movilizador[0]['materno']}</a>
             </td>
             <td>
                 <a href="overview-lider.html?=" class="text-gray-600 mb-1">Santiago(Consultar)</a>
