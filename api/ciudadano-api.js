@@ -1,35 +1,38 @@
-document.addEventListener('DOMContentLoaded', fetchData);
+document.addEventListener("DOMContentLoaded", fetchData);
 
 function fetchData() {
-    fetch('https://hcpboca.ddns.net:3050/api/getAllUsers/', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        }
+  fetch("https://hcpboca.ddns.net:3050/api/getAllUsers/", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      filters: [{ field: "user_type", value: "ciudadano" }],
+    }),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      return response.json();
     })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return response.json();
+    .then((posts) => {
+      displayData(posts);
     })
-    .then(posts => {
-        displayData(posts);
-    })
-    .catch(error => {
-        console.error('Error fetching data:', error);
+    .catch((error) => {
+      console.error("Error fetching data:", error);
     });
 }
 
 function displayData(posts) {
-    const tableBody = document.querySelector('#contenido-tabla');
+  const tableBody = document.querySelector("#contenido-tabla");
 
-    // Limpiar cualquier fila existente en la tabla
-    tableBody.innerHTML = '';
+  // Limpiar cualquier fila existente en la tabla
+  tableBody.innerHTML = "";
 
-    // Iterar sobre los posts y agregarlos a la tabla
-    posts.forEach(post => {
-        const row = `
+  // Iterar sobre los posts y agregarlos a la tabla
+  posts.forEach((post) => {
+    const row = `
             
         
         <tr>
@@ -39,10 +42,22 @@ function displayData(posts) {
                 </div>
             </td>
             <td>
-                <p class="text-gray-600 text-hover-primary mb-1">${post.username}</p>
+                <p class="text-gray-600 text-hover-primary mb-1">${
+                  post.nombre + " " + post.paterno + " " + post.materno
+                }</p>
             </td>
             <td>
-                <a href="#" class="text-gray-600 text-hover-primary mb-1">123</a>
+                <a href="#" class="text-gray-600 text-hover-primary mb-1">${
+                  post.calle +
+                  " " +
+                  post.direccion_ext +
+                  " " +
+                  post.direccion_int +
+                  ", " +
+                  post.colonia +
+                  " " +
+                  post.c_postal
+                }</a>
             </td>
             <td>
                 <a href="#" class="text-gray-600 text-hover-primary mb-1">2291529343</a>
@@ -68,6 +83,6 @@ function displayData(posts) {
     <!--end::Table body-->
             
         `;
-        tableBody.innerHTML += row;
-    });
+    tableBody.innerHTML += row;
+  });
 }
