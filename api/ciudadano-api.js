@@ -72,11 +72,11 @@ function displayData(posts) {
                 <a href="overview-movilizador.html?=${post.movilizador[0]['_id']}" class="text-gray-600 mb-1 text-hover-primary">${post.movilizador[0]['nombre']+" "+ post.movilizador[0]['paterno']+" "+post.movilizador[0]['materno']}</a>
             </td>
             <td>
-                <a href="overview-lider.html?=" class="text-gray-600 mb-1">Santiago(Consultar)</a>
+                <a href="overview-lider.html?=${post.lider[0]['_id']}" class="text-gray-600 mb-1">${post.lider[0]['nombre']+" "+ post.lider[0]['paterno']+" "+post.lider[0]['materno']}</a>
             </td>
             <td>
                 <!--begin::Badges-->
-                <div class="badge badge-light-danger">No votó</div>
+                <div class="badge badge-light-${post.voto ? 'success' : 'danger'}">${post.voto ? 'Votó' : 'Sin voto'}</div>
                 <!--end::Badges-->
             </td>
         </tr>
