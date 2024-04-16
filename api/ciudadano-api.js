@@ -29,7 +29,6 @@ function displayData(posts) {
 
   // Iterar sobre los posts y agregarlos a la tabla
   posts.forEach((post) => {
-    console.log(post);
     const row = `
             
         
@@ -69,7 +68,7 @@ function displayData(posts) {
                 <p class="text-gray-600 mb-1">${post.municipio["nombre"]}</p>
             </td>
             <td>
-                <a href="overview-movilizador.html?=${post.movilizador[0]['_id']}" class="text-gray-600 mb-1 text-hover-primary">${post.movilizador[0]['nombre']+" "+ post.movilizador[0]['paterno']+" "+post.movilizador[0]['materno']}</a>
+                <a href="overview-movilizador.html?=${post._id}" class="text-gray-600 mb-1 text-hover-primary">${post.movilizador[0]['nombre']+" "+ post.movilizador[0]['paterno']+" "+post.movilizador[0]['materno']}</a>
             </td>
             <td>
                 <a href="overview-lider.html?=${post.lider[0]['_id']}" class="text-gray-600 mb-1">${post.lider[0]['nombre']+" "+ post.lider[0]['paterno']+" "+post.lider[0]['materno']}</a>

@@ -423,14 +423,14 @@ License: For each use you must have a valid license purchased only from above li
 														<div class="d-flex flex-column">
 															<!--begin::Name-->
 															<div class="d-flex align-items-center mb-2">
-																<p class="text-gray-900 text-hover-primary fs-2 fw-bold me-1">Nombre Completo</p>
+																<p class="text-gray-900 text-hover-primary fs-2 fw-bold me-1" id="nombreOVMov"></p>
 																
 															</div>
 															<!--end::Name-->
 															<!--begin::Info-->
 															<div class="d-flex flex-wrap fw-semibold fs-6 mb-4 pe-2">
-																<i class="ki-outline ki-geolocation fs-4 me-1"></i><p>Dirección</p>
-																<i class="ki-outline ki-phone fs-4 me-1"></i><p>Teléfono</p>
+																<i class="ki-outline ki-geolocation fs-4 me-1"></i><p id="direccionOVMov"></p>
+																<i class="ki-outline ki-phone fs-4 me-1"></i><p id="telefonoOVMov"></p>
 															</div>
 															<!--end::Info-->
 														</div>
@@ -448,7 +448,7 @@ License: For each use you must have a valid license purchased only from above li
 									<!--end::Navbar-->
 									<!--begin::Row-->
 									<!--begin::Card body-->
-									<h1>Aqui se supone que van los ciudadanos que tiene ese movilizador</h1>
+									<h1>Ciudadanos a cargo de este movilizador</h1>
 										<div class="card-body pt-0">
 											<!--begin::Table-->
 											<table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
@@ -462,10 +462,6 @@ License: For each use you must have a valid license purchased only from above li
 														<th class="min-w-125px">Nombre</th>
 														<th class="min-w-125px">Dirección</th>
 														<th class="min-w-125px">Telefono</th>
-														<th class="min-w-125px">Seccional</th>
-														<th class="min-w-125px">Municipio</th>
-														<th class="min-w-125px">Movilizador</th>
-														<th class="min-w-125px">Lider</th>
 														<th class="min-w-125px">Votó/No Votó?</th>
 													</tr>
 												</thead>
@@ -5670,9 +5666,7 @@ License: For each use you must have a valid license purchased only from above li
 		<script src="assets/plugins/custom/datatables/datatables.bundle.js"></script>
 		<!--end::Vendors Javascript-->
 		<!--begin::Custom Javascript(used for this page only)-->
-		<script src="assets/js/custom/apps/ecommerce/customers/listing/listing.js"></script>
-		<script src="assets/js/custom/apps/ecommerce/customers/listing/add.js"></script>
-		<script src="assets/js/custom/apps/ecommerce/customers/listing/export.js"></script>
+
 		<script src="assets/js/custom/utilities/modals/create-campaign.js"></script>
 		<script src="assets/js/custom/utilities/modals/new-target.js"></script>
 		<script src="assets/js/custom/utilities/modals/new-card.js"></script>
