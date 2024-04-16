@@ -32,6 +32,14 @@ function fetchData() {
         ", " +
         posts.c_postal;
       document.querySelector("#telefonoOVMov").innerHTML = posts.telefono;
+      document.querySelector("#nombreLider").innerHTML =
+        posts.lider[0]["nombre"] +
+        " " +
+        posts.lider[0]["paterno"] +
+        " " +
+        posts.lider[0]["materno"];
+      document.querySelector("#telefonoLider").innerHTML =
+        posts.lider[0]["telefono"];
       displayData(posts.ciudadanos);
     })
     .catch((error) => {
@@ -47,7 +55,6 @@ function displayData(posts) {
 
   // Iterar sobre los posts y agregarlos a la tabla
   posts.forEach((post) => {
-    console.log(post)
     const row = `
             
         
@@ -82,7 +89,9 @@ function displayData(posts) {
             </td>
             <td>
                 <!--begin::Badges-->
-                <div class="badge badge-light-${post.voto ? 'success' : 'danger'}">${post.voto ? 'Votó' : 'Sin voto'}</div>
+                <div class="badge badge-light-${
+                  post.voto ? "success" : "danger"
+                }">${post.voto ? "Votó" : "Sin voto"}</div>
                 <!--end::Badges-->
             </td>
         </tr>

@@ -23,7 +23,7 @@ function fetchData() {
 
 function displayData(posts) {
   const tableBody = document.querySelector("#contenido-tabla");
-
+console.log(posts)
   // Limpiar cualquier fila existente en la tabla
   tableBody.innerHTML = "";
 

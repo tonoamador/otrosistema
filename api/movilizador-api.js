@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', fetchData);
 
 function fetchData() {
-    fetch('https://hcpboca.ddns.net:3050/api/getAllUsers/', {
+    fetch('https://hcpboca.ddns.net:3050/api/getMovilizadores/', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -29,7 +29,7 @@ function displayData(posts) {
 
     // Iterar sobre los posts y agregarlos a la tabla
     posts.forEach(post => {
-
+console.log(post)
         const row = `
             
         
