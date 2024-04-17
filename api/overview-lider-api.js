@@ -32,7 +32,7 @@ function fetchData() {
         ", " +
         posts.c_postal;
       document.querySelector("#telefonoOVLid").innerHTML = posts.telefono;
-      displayData(posts.movilizadores)
+      displayData(posts.movilizadores);
     })
     .catch((error) => {
       console.error("Error fetching data:", error);
@@ -57,33 +57,35 @@ function displayData(posts) {
                 </div>
             </td>
             <td>
-                <a href="#" class="text-gray-600 text-hover-primary mb-1">${post.nombre + " " + post.paterno + " " + post.materno}</a>
+                <a href="#" class="text-gray-600 text-hover-primary mb-1">${
+                  post.nombre + " " + post.paterno + " " + post.materno
+                }</a>
             </td>
             <td>
                 <a href="#" class="text-gray-600 text-hover-primary mb-1">${
-                    post.calle +
-                    " " +
-                    post.direccion_ext +
-                    " " +
-                    post.direccion_int +
-                    ", " +
-                    post.colonia +
-                    ", " +
-                    post.c_postal
-                  }</a>
+                  post.calle +
+                  " " +
+                  post.direccion_ext +
+                  " " +
+                  post.direccion_int +
+                  ", " +
+                  post.colonia +
+                  ", " +
+                  post.c_postal
+                }</a>
             </td>
             <td>
                 <a href="#" class="text-gray-600 text-hover-primary mb-1">${
-                    post.telefono
-                  }</a>
+                  post.telefono
+                }</a>
             </td>
             <td>
                 <p class="text-gray-600 mb-1">${
-                    post.seccion[0].numero
-                  }</p>
+                  post.seccion[0] ? post.seccion[0].numero : ""
+                }</p>
             </td>
             <td>
-                <p class="text-gray-600 mb-1">${post.municipio[0].nombre}</p>
+                <p class="text-gray-600 mb-1">${post.municipio[0]?post.municipio[0].nombre:""}</p>
             </td>
         </tr>
     <!--end::Table body-->

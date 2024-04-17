@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', fetchData);
 
 function fetchData() {
-    fetch('https://hcpboca.ddns.net:3050/api/getAllUsers/', {
+    fetch('https://hcpboca.ddns.net:3050/api/getLideres/', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -39,26 +39,34 @@ function displayData(posts) {
                 </div>
             </td>
             <td>
-                <a href="overview-lider.html" class="text-gray-600 text-hover-primary mb-1">${post.username}</a>
+                <a href="overview-lider.html?=${post._id}" class="text-gray-600 text-hover-primary mb-1">${
+                    post.nombre + " " + post.paterno + " " + post.materno
+                  }</a>
             </td>
             <td>
-                <a href="#" class="text-gray-600 text-hover-primary mb-1">123</a>
+            <a href="#" class="text-gray-600 text-hover-primary mb-1">${
+                post.calle +
+                " " +
+                post.direccion_ext +
+                " " +
+                post.direccion_int +
+                ", " +
+                post.colonia +
+                ", " +
+                post.c_postal
+              }</a>
             </td>
             <td>
-                <a href="#" class="text-gray-600 text-hover-primary mb-1">2291529343</a>
+            <p class="text-gray-600 text-hover-primary mb-1">${
+                post.telefono
+              }</p>
             </td>
             <td>
-                <p class="text-gray-600 mb-1">123</p>
+            <a href="#" class="text-gray-600 text-hover-primary mb-1">${
+                post.seccion.map(x => x.numero).join(', ')
+              }</a>
             </td>
-            <td>
-                <p class="text-gray-600 mb-1">Boca del Río</p>
-            </td>
-            <td>
-                <p class="text-gray-600 mb-1">Juan</p>
-            </td>
-            <td>
-                <p class="text-gray-600 mb-1">Santiago</p>
-            </td>
+  
         </tr>
     <!--end::Table body-->
             
