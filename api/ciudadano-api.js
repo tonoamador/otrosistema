@@ -28,6 +28,7 @@ function displayData(posts) {
 
   // Iterar sobre los posts y agregarlos a la tabla
   posts.forEach((post) => {
+    
     const row = `
 
         <tr>
