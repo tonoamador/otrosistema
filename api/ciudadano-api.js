@@ -44,7 +44,7 @@ console.log(posts)
                 }</p>
             </td>
             <td>
-                <a href="#" class="text-gray-600 text-hover-primary mb-1">${
+                <p class="text-gray-600 text-hover-primary mb-1">${
                   post.calle +
                   " " +
                   post.direccion_ext +
@@ -54,18 +54,18 @@ console.log(posts)
                   post.colonia +
                   ", " +
                   post.c_postal
-                }</a>
+                }</p>
             </td>
             <td>
-                <a href="#" class="text-gray-600 text-hover-primary mb-1">${
+                <p class="text-gray-600 text-hover-primary mb-1">${
                   post.telefono
-                }</a>
+                }</p>
             </td>
             <td>
-                <p class="text-gray-600 mb-1">${post.seccion["numero"]}</p>
+                <p class="text-gray-600 text-hover-primary mb-1">${post.seccion["numero"]}</p>
             </td>
             <td>
-                <p class="text-gray-600 mb-1">${post.municipio["nombre"]}</p>
+                <p class="text-gray-600 text-hover-primary mb-1">${post.municipio["nombre"]}</p>
             </td>
             <td>
                 <a href="overview-movilizador.html?=${post._id}" class="text-gray-600 mb-1 text-hover-primary">${post.movilizador[0]['nombre']+" "+ post.movilizador[0]['paterno']+" "+post.movilizador[0]['materno']}</a>

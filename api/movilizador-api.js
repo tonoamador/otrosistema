@@ -41,12 +41,12 @@ function displayData(posts) {
                 </div>
             </td>
             <td>
-                <a href="#" class="text-gray-600 asd text-hover-primary mb-1">${
+                <a href="overview-movilizador.html?=${post._id}" class="text-gray-600 asd text-hover-primary mb-1">${
                   post.nombre + " " + post.paterno + " " + post.materno
                 }</a>
             </td>
             <td>
-                <a href="#" class="text-gray-600 text-hover-primary mb-1"> ${
+                <p class="text-gray-600 text-hover-primary mb-1"> ${
                   post.calle +
                   " " +
                   post.direccion_ext +
@@ -56,12 +56,12 @@ function displayData(posts) {
                   post.colonia +
                   ", " +
                   post.c_postal
-                }</a>
+                }</p>
             </td>
             <td>
-                <a href="#" class="text-gray-600 text-hover-primary mb-1">${
+                <p class="text-gray-600 text-hover-primary mb-1">${
                   post.telefono
-                }</a>
+                }</p>
             </td>
             <td>
                 <p class="text-gray-600 mb-1">${post.seccion["numero"]}</p>
