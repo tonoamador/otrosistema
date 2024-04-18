@@ -57,7 +57,7 @@ function displayData(posts) {
                 </div>
             </td>
             <td>
-                <a href="#" class="text-gray-600 text-hover-primary mb-1">${
+                <a href="overview-movilizador.html?=${post._id}" class="text-gray-600 text-hover-primary mb-1">${
                   post.paterno + " " + post.materno + " " + post.nombre
                 }</a>
             </td>

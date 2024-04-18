@@ -14,8 +14,6 @@ function fetchData() {
       return response.json();
     })
     .then((posts) => {
-    console.log(posts)
-
       displayData(posts);
     })
     .catch((error) => {
