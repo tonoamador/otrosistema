@@ -20,7 +20,7 @@ function fetchData() {
     })
     .then((posts) => {
       document.querySelector("#nombreOVLid").innerHTML =
-        posts.nombre + " " + posts.paterno + " " + posts.materno;
+        posts.paterno + " " + posts.materno + " " + posts.nombre;
       document.querySelector("#direccionOVLid").innerHTML =
         posts.calle +
         " " +
@@ -58,7 +58,7 @@ function displayData(posts) {
             </td>
             <td>
                 <a href="#" class="text-gray-600 text-hover-primary mb-1">${
-                  post.nombre + " " + post.paterno + " " + post.materno
+                  post.paterno + " " + post.materno + " " + post.nombre
                 }</a>
             </td>
             <td>

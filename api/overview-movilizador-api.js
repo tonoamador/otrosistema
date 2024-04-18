@@ -19,8 +19,9 @@ function fetchData() {
       return response.json();
     })
     .then((posts) => {
+      console.log(posts)
       document.querySelector("#nombreOVMov").innerHTML =
-        posts.nombre + " " + posts.paterno + " " + posts.materno;
+        posts.paterno + " " + posts.materno + " " + posts.nombre;
       document.querySelector("#direccionOVMov").innerHTML =
         posts.calle +
         " " +
@@ -33,11 +34,11 @@ function fetchData() {
         posts.c_postal;
       document.querySelector("#telefonoOVMov").innerHTML = posts.telefono;
       document.querySelector("#nombreLider").innerHTML =
-        posts.lider[0]["nombre"] +
-        " " +
         posts.lider[0]["paterno"] +
         " " +
-        posts.lider[0]["materno"];
+        posts.lider[0]["materno"] +
+        " " +
+        posts.lider[0]["nombre"];
       document.querySelector("#telefonoLider").innerHTML =
         posts.lider[0]["telefono"];
       displayData(posts.ciudadanos);
@@ -66,7 +67,7 @@ function displayData(posts) {
             </td>
             <td>
                 <p class="text-gray-600 text-hover-primary mb-1">${
-                  post.nombre + " " + post.paterno + " " + post.materno
+                  post.paterno + " " + post.materno + " " + post.nombre
                 }</p>
             </td>
             <td>

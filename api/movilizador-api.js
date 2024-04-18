@@ -14,7 +14,7 @@ function fetchData() {
       return response.json();
     })
     .then((posts) => {
-    console.log(posts)
+      console.log(posts);
 
       displayData(posts);
     })
@@ -41,9 +41,11 @@ function displayData(posts) {
                 </div>
             </td>
             <td>
-                <a href="overview-movilizador.html?=${post._id}" class="text-gray-600 asd text-hover-primary mb-1">${
-                  post.nombre + " " + post.paterno + " " + post.materno
-                }</a>
+                <a href="overview-movilizador.html?=${
+                  post._id
+                }" class="text-gray-600 asd text-hover-primary mb-1">${
+      post.paterno + " " + post.materno + " " + post.nombre
+    }</a>
             </td>
             <td>
                 <p class="text-gray-600 text-hover-primary mb-1"> ${
@@ -64,13 +66,23 @@ function displayData(posts) {
                 }</p>
             </td>
             <td>
-                <p class="text-gray-600 mb-1">${post.seccion["numero"]}</p>
+                <p class="text-gray-600 mb-1">${post.seccion
+                  .map((x) => x.numero)
+                  .join(", ")}</p>
             </td>
             <td>
                 <p class="text-gray-600 mb-1">${post.municipio["nombre"]}</p>
             </td>
             <td>
-                <a href="overview-lider.html?=${post.lider[0]['_id']}" class="text-gray-600 mb-1">${post.lider[0]['nombre']+" "+ post.lider[0]['paterno']+" "+post.lider[0]['materno']}</a>
+                <a href="overview-lider.html?=${
+                  post.lider[0]["_id"]
+                }" class="text-gray-600 mb-1">${
+      post.lider[0]["paterno"] +
+      " " +
+      post.lider[0]["materno"] +
+      " " +
+      post.lider[0]["nombre"]
+    }</a>
             </td>
 
         </tr>

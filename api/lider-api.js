@@ -40,7 +40,7 @@ function displayData(posts) {
             </td>
             <td>
                 <a href="overview-lider.html?=${post._id}" class="text-gray-600 text-hover-primary mb-1">${
-                    post.nombre + " " + post.paterno + " " + post.materno
+                    post.paterno + " " + post.materno + " " + post.nombre
                   }</a>
             </td>
             <td>

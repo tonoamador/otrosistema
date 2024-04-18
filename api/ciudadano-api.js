@@ -39,7 +39,7 @@ function displayData(posts) {
             </td>
             <td>
                 <p class="text-gray-600 text-hover-primary mb-1">${
-                  post.nombre + " " + post.paterno + " " + post.materno
+                  post.paterno + " " + post.materno+ " " + post.nombre
                 }</p>
             </td>
             <td>
@@ -61,16 +61,18 @@ function displayData(posts) {
                 }</p>
             </td>
             <td>
-                <p class="text-gray-600 text-hover-primary mb-1">${post.seccion["numero"]}</p>
+                <p class="text-gray-600 text-hover-primary mb-1">${post.seccion
+                  .map((x) => x.numero)
+                  .join(", ")}</p>
             </td>
             <td>
-                <p class="text-gray-600 text-hover-primary mb-1">${post.municipio["nombre"]}</p>
+                <p class="text-gray-600 text-hover-primary mb-1">${post.municipio[0]["nombre"]}</p>
             </td>
             <td>
-                <a href="overview-movilizador.html?=${post.movilizador[0]._id}" class="text-gray-600 mb-1 text-hover-primary">${post.movilizador[0]['nombre']+" "+ post.movilizador[0]['paterno']+" "+post.movilizador[0]['materno']}</a>
+                <a href="overview-movilizador.html?=${post.movilizador[0]._id}" class="text-gray-600 mb-1 text-hover-primary">${post.movilizador[0]['paterno']+" "+ post.movilizador[0]['materno']+" "+post.movilizador[0]['nombre']}</a>
             </td>
             <td>
-                <a href="overview-lider.html?=${post.lider[0]['_id']}" class="text-gray-600 mb-1">${post.lider[0]['nombre']+" "+ post.lider[0]['paterno']+" "+post.lider[0]['materno']}</a>
+                <a href="overview-lider.html?=${post.lider[0]['_id']}" class="text-gray-600 mb-1">${post.lider[0]['paterno']+" "+ post.lider[0]['materno']+" "+post.lider[0]['nombre']}</a>
             </td>
             <td>
                 <!--begin::Badges-->
