@@ -19,6 +19,7 @@ function fetchData() {
       return response.json();
     })
     .then((posts) => {
+      console.log(posts)
       document.querySelector("#nombreOVMov").innerHTML =
         posts.paterno + " " + posts.materno + " " + posts.nombre;
       document.querySelector("#direccionOVMov").innerHTML =

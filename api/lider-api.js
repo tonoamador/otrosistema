@@ -66,6 +66,11 @@ function displayData(posts) {
                 post.seccion.map(x => x.numero).join(', ')
               }</a>
             </td>
+            <td>
+            <a href="#" class="text-gray-600 text-hover-primary mb-1">${
+                [...new Set(post.municipios.map(x => x.nombre))].join(', ')
+              }</a>
+            </td>
   
         </tr>
     <!--end::Table body-->
