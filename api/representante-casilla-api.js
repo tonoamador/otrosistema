@@ -78,9 +78,8 @@ function displayData(posts) {
                   }</p>
             </td>
             <td>
-                <p class="text-gray-600 mb-1">${
-                    post.casilla.lat
-                  }</p>
+            <a href="https://www.google.com/maps/search/?api=1&query=${post.casilla.lat},${post.casilla.long}" class="text-gray-600 text-hover-primary mb-1">
+
             </td>
            
         </tr>
