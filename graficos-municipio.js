@@ -34,6 +34,21 @@ function handleClick(event, array) {
     }
 }
 
+ // Función para exportar a Excel
+ function exportToExcel() {
+    const workbook = XLSX.utils.book_new();
+    const worksheet = XLSX.utils.json_to_sheet([
+        { Fecha: 'Enero', Ventas: 12 },
+        { Fecha: 'Febrero', Ventas: 19 },
+        { Fecha: 'Marzo', Ventas: 3 },
+        { Fecha: 'Abril', Ventas: 5 },
+        { Fecha: 'Mayo', Ventas: 2 }
+    ]);
+
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Ventas');
+    XLSX.writeFile(workbook, 'ventas.xlsx');
+}
+
 // Crear el gráfico de barras
 var ctx = document.getElementById('graficos-municipio').getContext('2d');
 var myChart = new Chart(ctx, {
