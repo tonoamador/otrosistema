@@ -77,10 +77,7 @@ function displayData(posts) {
                     [...new Set(post.municipios.map(x => x.nombre))].join(', ')
                   }</p>
             </td>
-            <td>
-                <p class="text-gray-600 mb-1">${
-                    post.casilla.lat
-                  }</p>
+            <td>Ubicacion
             </td>
            
         </tr>
