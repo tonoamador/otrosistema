@@ -77,9 +77,7 @@ function displayData(posts) {
                     [...new Set(post.municipios.map(x => x.nombre))].join(', ')
                   }</p>
             </td>
-            <td>
-            <a href="https://www.google.com/maps/search/?api=1&query=${post.casilla.lat},${post.casilla.long}" class="text-gray-600 text-hover-primary mb-1">
-
+            <td>Ubicacion
             </td>
            
         </tr>
