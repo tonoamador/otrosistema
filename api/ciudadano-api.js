@@ -79,6 +79,9 @@ function displayData(posts) {
                 <div class="badge badge-light-${post.voto ? 'success' : 'danger'}">${post.voto ? 'Votó' : 'Sin voto'}</div>
                 <!--end::Badges-->
             </td>
+            <td>
+                  <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modal_editar"><i class="ki-solid ki-pencil"></i></button><button class="btn btn-danger"><i class="ki-solid ki-trash"></i></button>
+            </td>
         </tr>
     <!--end::Table body-->
             
