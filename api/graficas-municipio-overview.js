@@ -34,10 +34,10 @@ function displayData(posts) {
         
         <tr>
             <td>
-              <a href="grafica-municipio-overview.html?=" class="text-gray-600 mb-1 text-hover-primary">Cosamaloapan</a>
+              <a href="grafica-municipio-seccional.html?=" class="text-gray-600 mb-1 text-hover-primary">*NUMERO DE SECCIONAL*</a>
             </td>
             <td>
-            <a href="grafica-municipio-overview.html?=" class="text-gray-600 mb-1 text-hover-primary">Seleccionar</a>
+              <a href="grafica-municipio-seccional.html?=" class="text-gray-600 mb-1 text-hover-primary">Consultar</a>
             </td>
             
 

@@ -30,14 +30,12 @@ function displayData(posts) {
   // Iterar sobre los posts y agregarlos a la tabla
   posts.forEach((post) => {
     const row = `
-            
-        
         <tr>
             <td>
-              <a href="grafica-municipio-overview.html?=" class="text-gray-600 mb-1 text-hover-primary">Cosamaloapan</a>
+              <p class="text-gray-600 mb-1 text-hover-primary">*CASILLA*</a>
             </td>
             <td>
-            <a href="grafica-municipio-overview.html?=" class="text-gray-600 mb-1 text-hover-primary">Seleccionar</a>
+              <div class="badge badge-light-success">Abierta</div>
             </td>
             
 
