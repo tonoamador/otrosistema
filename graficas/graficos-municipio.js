@@ -44,15 +44,11 @@ function handleClick(event, array) {
 function exportToExcel() {
   const workbook = XLSX.utils.book_new();
   const worksheet = XLSX.utils.json_to_sheet([
-    { Fecha: "Enero", Ventas: 12 },
-    { Fecha: "Febrero", Ventas: 19 },
-    { Fecha: "Marzo", Ventas: 3 },
-    { Fecha: "Abril", Ventas: 5 },
-    { Fecha: "Mayo", Ventas: 2 },
+    { Municipio: "Cosamaloapan", Abierta: 12, Cerrada: 15 },
   ]);
 
-  XLSX.utils.book_append_sheet(workbook, worksheet, "Ventas");
-  XLSX.writeFile(workbook, "ventas.xlsx");
+  XLSX.utils.book_append_sheet(workbook, worksheet, "Municipio");
+  XLSX.writeFile(workbook, "Gráfica Municipio.xlsx");
 }
 // Función para exportar a PDF
 function exportToPDF() {
