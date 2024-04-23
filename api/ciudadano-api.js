@@ -1,4 +1,6 @@
 document.addEventListener("DOMContentLoaded", fetchData);
+
+
 function fetchData() {
   fetch("https://hcpboca.ddns.net:3050/api/getCiudadanos/", {
     method: "POST",
@@ -14,6 +16,50 @@ function fetchData() {
     })
     .then((posts) => {
       displayData(posts);
+      var KTDatatablesExample = (function () {
+        // Shared variables
+        var table;
+        var datatable;
+    
+        // Private functions
+        var initDatatable = function () {
+    
+    
+            // Init datatable --- more info on datatables: https://datatables.net/manual/
+            datatable = $(table).DataTable({
+                "info": false,
+                'order': [],
+                'pageLength': 10,
+            });
+        }
+    
+        // Search Datatable --- official docs reference: https://datatables.net/reference/api/search()
+        var handleSearchDatatable = () => {
+            const filterSearch = document.querySelector('[data-kt-user-table-filter="search"]');
+            filterSearch.addEventListener('keyup', function (e) {
+                datatable.search(e.target.value).draw();
+            });
+        }
+    
+        // Public methods
+        return {
+            init: function () {
+                table = document.querySelector('#kt_table_users');
+    
+                if ( !table ) {
+                    return;
+                }
+    
+                initDatatable();
+                handleSearchDatatable();
+            }
+        };
+    });
+    
+    // On document ready
+    KTUtil.onDOMContentLoaded(function () {
+        KTDatatablesExample.init();
+    });
     })
     .catch((error) => {
       console.error("Error fetching data:", error);
@@ -27,7 +73,6 @@ function displayData(posts) {
 
   // Iterar sobre los posts y agregarlos a la tabla
   posts.forEach((post) => {
-    
     const row = `
 
         <tr>
@@ -38,7 +83,7 @@ function displayData(posts) {
             </td>
             <td>
                 <p class="text-gray-600 text-hover-primary mb-1">${
-                  post.paterno + " " + post.materno+ " " + post.nombre
+                  post.paterno + " " + post.materno + " " + post.nombre
                 }</p>
             </td>
             <td>
@@ -65,17 +110,37 @@ function displayData(posts) {
                   .join(", ")}</p>
             </td>
             <td>
-                <p class="text-gray-600 text-hover-primary mb-1">${post.municipio[0]["nombre"]}</p>
+                <p class="text-gray-600 text-hover-primary mb-1">${
+                  post.municipio[0]["nombre"]
+                }</p>
             </td>
             <td>
-                <a href="overview-movilizador.html?=${post.movilizador[0]._id}" class="text-gray-600 mb-1 text-hover-primary">${post.movilizador[0]['paterno']+" "+ post.movilizador[0]['materno']+" "+post.movilizador[0]['nombre']}</a>
+                <a href="overview-movilizador.html?=${
+                  post.movilizador[0]._id
+                }" class="text-gray-600 mb-1 text-hover-primary">${
+      post.movilizador[0]["paterno"] +
+      " " +
+      post.movilizador[0]["materno"] +
+      " " +
+      post.movilizador[0]["nombre"]
+    }</a>
             </td>
             <td>
-                <a href="overview-lider.html?=${post.lider[0]['_id']}" class="text-gray-600 mb-1">${post.lider[0]['paterno']+" "+ post.lider[0]['materno']+" "+post.lider[0]['nombre']}</a>
+                <a href="overview-lider.html?=${
+                  post.lider[0]["_id"]
+                }" class="text-gray-600 mb-1">${
+      post.lider[0]["paterno"] +
+      " " +
+      post.lider[0]["materno"] +
+      " " +
+      post.lider[0]["nombre"]
+    }</a>
             </td>
             <td>
                 <!--begin::Badges-->
-                <div class="badge badge-light-${post.voto ? 'success' : 'danger'}">${post.voto ? 'Votó' : 'Sin voto'}</div>
+                <div class="badge badge-light-${
+                  post.voto ? "success" : "danger"
+                }">${post.voto ? "Votó" : "Sin voto"}</div>
                 <!--end::Badges-->
             </td>
             <td>
