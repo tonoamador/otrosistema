@@ -32,15 +32,8 @@ function fetchData() {
         ", " +
         posts.c_postal;
       document.querySelector("#telefonoOVMov").innerHTML = posts.telefono;
-      document.querySelector("#nombreLider").innerHTML =
-        posts.lider[0]["paterno"] +
-        " " +
-        posts.lider[0]["materno"] +
-        " " +
-        posts.lider[0]["nombre"];
-      document.querySelector("#telefonoLider").innerHTML =
-        posts.lider[0]["telefono"];
-      displayData(posts.ciudadanos);
+
+      displayData(posts.rcs);
     })
     .catch((error) => {
       console.error("Error fetching data:", error);
@@ -87,12 +80,33 @@ function displayData(posts) {
                   post.telefono
                 }</a>
             </td>
+
             <td>
-                <!--begin::Badges-->
-                <div class="badge badge-light-${
-                  post.voto ? "success" : "danger"
-                }">${post.voto ? "Votó" : "Sin voto"}</div>
-                <!--end::Badges-->
+            <a href="#" class="text-gray-600 text-hover-primary mb-1">${[
+              ...new Set(
+                post.casilla.flatMap((casillaItem) =>
+                  casillaItem.seccion.map((section) => section.numero)
+                )
+              ),
+            ].join(", ")}</a>
+            </td>
+            <td>
+            <a href="#" class="text-gray-600 text-hover-primary mb-1">${[
+              ...new Set(post.casilla.map((x) => x.nombre)),
+            ].join(", ")}</a>
+            </td>
+            <td>
+            <a href="https://www.google.com/maps/search/?api=1&query=${[
+              ...new Set(
+                post.casilla.flatMap((casillaItem) =>
+                  casillaItem.seccion.map(
+                    (section) => section.lat + "," + section.long
+                  )
+                )
+              ),
+            ].join(
+              ", "
+            )}" class="btn btn-icon btn-primary" target="_blank"><i class="fas fa-search-location fs-4 "></i></a>
             </td>
         </tr>
     <!--end::Table body-->
