@@ -2430,6 +2430,10 @@ progress {
     }
 }
 
+.no-flex {
+    display: block !important;
+}
+
 .table {
     --bs-table-color-type: initial;
     --bs-table-bg-type: initial;
