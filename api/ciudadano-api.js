@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", fetchData);
-
 function fetchData() {
   fetch("https://hcpboca.ddns.net:3050/api/getCiudadanos/", {
     method: "POST",
