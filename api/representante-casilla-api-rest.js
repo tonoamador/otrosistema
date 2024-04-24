@@ -56,7 +56,11 @@ var KTDatatablesServerSide = function () {
                         return [...new Set(row.municipios.map(x => x.nombre))].join(', ');
                     }
                 },
-                { data: '_id'},
+                { data: null,
+                    render: function (data, type, row) {
+                        return '<a href="https://www.google.com/maps/search/?api=1&query='+[...new Set(row.seccion.map((section) => section.lat + ',' + section.long)),].join(', ')+'" class="btn btn-icon btn-primary" target="_blank"><i class="fas fa-search-location fs-4 "></i></a>'
+                    }
+                },
             ],
             columnDefs: [
                 {
