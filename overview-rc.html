@@ -484,39 +484,107 @@ License: For each use you must have a valid license purchased only from above li
 										<div class="d-flex flex-wrap flex-sm-nowrap">
 											<!--begin: Pic-->
 											<div class="me-7 mb-4">
-												<div
-													class="symbol symbol-100px symbol-lg-160px symbol-fixed position-relative">
+												<div class="symbol symbol-100px symbol-lg-160px symbol-fixed position-relative">
 													<img src="assets/media/avatars/300-1.jpg" alt="image" />
+													<div class="position-absolute translate-middle bottom-0 start-100 mb-6 bg-success rounded-circle border border-4 border-body h-20px w-20px"></div>
 												</div>
 											</div>
 											<!--end::Pic-->
 											<!--begin::Info-->
 											<div class="flex-grow-1">
 												<!--begin::Title-->
-												<div
-													class="d-flex justify-content-between align-items-start flex-wrap mb-2">
+												<div class="d-flex justify-content-between align-items-start flex-wrap mb-2">
 													<!--begin::User-->
 													<div class="d-flex flex-column">
 														<!--begin::Name-->
 														<div class="d-flex align-items-center mb-2">
-															<p class="text-gray-900 text-hover-primary fs-2 fw-bold me-1"
-																id="nombreOVMov"></p>
+															<a href="#" class="text-gray-900 text-hover-primary fs-2 fw-bold me-1">Max Smith</a>
+															<a href="#">
+																<i class="ki-outline ki-verify fs-1 text-primary"></i>
+															</a>
 														</div>
 														<!--end::Name-->
 														<!--begin::Info-->
 														<div class="d-flex flex-wrap fw-semibold fs-6 mb-4 pe-2">
-															<i class="ki-outline ki-geolocation fs-4 me-1"></i>
-															<p id="direccionOVMov"></p>
-															<i class="ki-outline ki-phone fs-4 me-1"></i>
-															<p id="telefonoOVMov"></p>
+															<a href="#" class="d-flex align-items-center text-gray-500 text-hover-primary me-5 mb-2">
+															<i class="ki-outline ki-chart-pie-too fs-4 me-1"></i>Seccional&nbsp;<span data-id="seccion">2525</span></a>
+															<a href="#" class="d-flex align-items-center text-gray-500 text-hover-primary me-5 mb-2">
+															<i class="ki-outline ki-geolocation fs-4 me-1"></i>Municipio&nbsp;<span data-id="municipio">VERACRUZ</span></a>
+															<a href="#" class="d-flex align-items-center text-gray-500 text-hover-primary mb-2">
+															<i class="ki-outline ki-archive fs-4 me-1"></i>Casilla&nbsp;<span data-id="casilla">Contigua 1</span></a>
 														</div>
 														<!--end::Info-->
 													</div>
-
 													<!--end::User-->
+													<!--begin::Actions-->
+													<div class="d-flex my-4">
+														<a href="#" class="btn btn-info me-2" id="kt_user_follow_button" data-status="false" data-id-casilla="66198d46c80fd64bb56036a4">
+															<i class="ki-outline ki-check fs-3 d-none"></i>
+															<!--begin::Indicator label-->
+															<span class="indicator-label">APERTURAR CASILLA</span>
+															<!--end::Indicator label-->
+															<!--begin::Indicator progress-->
+															<span class="indicator-progress">Por favor espera... 
+															<span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+															<!--end::Indicator progress-->
+														</a>
+														
+													</div>
+													<!--end::Actions-->
 												</div>
-
-											
+												<!--end::Title-->
+												<!--begin::Stats-->
+												<div class="d-flex flex-wrap flex-stack">
+													<!--begin::Wrapper-->
+													<div class="d-flex flex-column flex-grow-1 pe-8">
+														<!--begin::Stats-->
+														<div class="d-flex flex-wrap">
+															<!--begin::Stat-->
+															<div class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
+																<!--begin::Number-->
+																<div class="d-flex align-items-center">
+																	<i class="ki-outline ki-arrow-up fs-3 text-success me-2"></i>
+																	<div class="fs-2 fw-bold" data-kt-countup="true" data-kt-countup-value="4500">0</div>
+																</div>
+																<!--end::Number-->
+																<!--begin::Label-->
+																<div class="fw-semibold fs-6 text-success">Votos NG</div>
+																<!--end::Label-->
+															</div>
+															<!--end::Stat-->
+															<!--begin::Stat-->
+															<div class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
+																<!--begin::Number-->
+																<div class="d-flex align-items-center">
+																	<i class="ki-outline ki-arrow-up fs-3 text-gray me-2"></i>
+																	<div class="fs-2 fw-bold" data-kt-countup="true" data-kt-countup-value="80">0</div>
+																</div>
+																<!--end::Number-->
+																<!--begin::Label-->
+																<div class="fw-semibold fs-6 text-gray-700">Votos X</div>
+																<!--end::Label-->
+															</div>
+															<!--end::Stat-->
+															<!--begin::Stat-->
+															<div class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
+																<!--begin::Number-->
+																<div class="d-flex align-items-center">
+																	<i class="ki-outline ki-arrow-up fs-3 text-success me-2"></i>
+																	<div class="fs-2 fw-bold" data-kt-countup="true" data-kt-countup-value="60" data-kt-countup-prefix="%">0</div>
+																</div>
+																<!--end::Number-->
+																<!--begin::Label-->
+																<div class="fw-semibold fs-6 text-gray-500">Porcentaje a la meta</div>
+																<!--end::Label-->
+															</div>
+															<!--end::Stat-->
+														</div>
+														<!--end::Stats-->
+													</div>
+													<!--end::Wrapper-->
+													
+												</div>
+												<!--end::Stats-->
 											</div>
 											<!--end::Info-->
 										</div>
@@ -6319,6 +6387,21 @@ License: For each use you must have a valid license purchased only from above li
 	</div>
 	<!--end::Modal - Users Search-->
 	<!--end::Modals-->
+	<!--begin::Toast-->
+	<div class="position-fixed top-0 end-0 p-3 z-index-100">
+		<div id="kt_docs_toast_toggle" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+			<div class="toast-header">
+				<i class="ki-duotone ki-information fs-1 text-danger me-3"><span class="path1"></span><span class="path2"></span></i>
+				<strong class="me-auto fs-1">Hubo un error</strong>
+				<!--<small>11 mins ago</small>-->
+				<button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+			</div>
+			<div class="toast-body fs-6">
+				No se pudo aperturar la casilla, por favor intenta de nuevo.
+			</div>
+		</div>
+	</div>
+	<!--end::Toast-->
 	<!--begin::Javascript-->
 	<script>var hostUrl = "assets/";</script>
 	<!--begin::Global Javascript Bundle(mandatory for all pages)-->
@@ -6327,9 +6410,12 @@ License: For each use you must have a valid license purchased only from above li
 	<!--end::Global Javascript Bundle-->
 	<!--begin::Vendors Javascript(used for this page only)-->
 	<script src="assets/plugins/custom/datatables/datatables.bundle.js"></script>
+	<script src="src/js/components/app.js"></script>
 	<!--end::Vendors Javascript-->
 	<!--begin::Custom Javascript(used for this page only)-->
 
+	<script src="api/overview-rc-api.js"></script>
+	<script src="assets/js/custom/pages/user-profile/general.js"></script>
 	<script src="assets/js/custom/utilities/modals/create-campaign.js"></script>
 	<script src="assets/js/custom/utilities/modals/new-target.js"></script>
 	<script src="assets/js/custom/utilities/modals/new-card.js"></script>
@@ -6341,7 +6427,7 @@ License: For each use you must have a valid license purchased only from above li
 	<script src="assets/js/custom/utilities/modals/share-earn.js"></script>
 	<script src="assets/js/custom/utilities/modals/upgrade-plan.js"></script>
 	<script src="assets/js/custom/utilities/modals/users-search.js"></script>
-	<script src="api/overview-movilizador-api.js"></script>
+	<!--<script src="api/overview-movilizador-api.js"></script>-->
 	<script>
 		document.addEventListener("DOMContentLoaded", function () {
 			// HTTP Request

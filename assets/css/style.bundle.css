@@ -13101,6 +13101,10 @@ fieldset:disabled .btn {
     z-index: 3 !important
 }
 
+.z-index-100 {
+    z-index: 100 !important
+}
+
 .cursor-help {
     cursor: help !important
 }
