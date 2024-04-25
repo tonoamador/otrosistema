@@ -12303,6 +12303,10 @@ fieldset:disabled .btn {
     font-size: calc(1.9rem + 7.8vw) !important
 }
 
+.fs-table th, .fs-table tr {
+    font-size: 1.2rem !important
+}
+
 .fst-italic {
     font-style: italic !important
 }

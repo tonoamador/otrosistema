@@ -1,29 +1,47 @@
 const toastElement = document.getElementById("kt_docs_toast_toggle")
 const toast = bootstrap.Toast.getOrCreateInstance(toastElement)
+var state = false;
+
+function buttonState(posts) {
+    // console.log(posts.data['open'])
+    return posts.data['open']
+}
 
 function OpenBox() {
-    var status = false;
+    
     const e = document.getElementById("kt_user_follow_button");
     const id = e.getAttribute("data-id-casilla");
-    fetch("https://hcpboca.ddns.net:3050/api/openCasilla/"+id, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-    })
-    .then((response) => {
-        if(!response.ok){
-            throw new Error("Network response was not ok")
-            console.log('Si hay pex')
-        }else{
-            status = true
-            console.log('No hay pex')
+    $.ajax({
+        url: "https://hcpboca.ddns.net:3050/api/openCasilla/"+id,
+        dataType: "JSON",
+        method: 'POST',
+        async: false,
+        success: function (i) {
+            state = i.data['open']
         }
-        return response.json()
     })
-    .catch((error) => {
-        console.error("Error fetching data: ", error)
-    });
-    
-    return status;
+    return state
+}
+
+function loadingPage() {
+    const loadingEl = document.createElement("div")
+    document.body.prepend(loadingEl)
+    loadingEl.classList.add("page-loader");
+    loadingEl.classList.add("flex-column");
+    loadingEl.classList.add("bg-dark");
+    loadingEl.classList.add("bg-opacity-25");
+    loadingEl.innerHTML = `
+        <span class="spinner-border text-primary" role="status"></span>
+        <span class="text-gray-800 fs-6 fw-semibold mt-5">Cargando...</span>
+    `;
+
+    // Show page loading
+    KTApp.showPageLoading();
+
+    // Hide after 3 seconds
+    setTimeout(function() {
+        KTApp.hidePageLoading();
+        loadingEl.remove();
+        window.location.replace("ciudadanos-rc.html")
+    }, 3000);
 }

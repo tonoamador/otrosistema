@@ -1,6 +1,6 @@
 "use strict";
 var KTProfileGeneral = (function () {
-  var t, e, i, o, s;
+  var t, e, i, o, s
   return {
     init: function () {
       (t = document.querySelector("#kt_followers_show_more_button")),
@@ -46,6 +46,7 @@ var KTProfileGeneral = (function () {
                         (i.querySelector(".indicator-label").innerHTML =
                             "CASILLA ABIERTA"),
                         (i.disabled = !1)
+                        loadingPage();
                     }else{
                         toast.show();
                         i.removeAttribute("data-kt-indicator")
