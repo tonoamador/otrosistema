@@ -1,6 +1,11 @@
 "use strict"
 var am5 = am5
+$.noConflict();
 
+const params = new URLSearchParams(window.location.search);
+const TownhallId = params.get("id");
+let e = document.querySelector("#townhall");
+e.setAttribute("data-id-townhall", TownhallId)
 
 var getVotosXMunicipio = function () {
     var dataVotos
@@ -8,6 +13,8 @@ var getVotosXMunicipio = function () {
     var idTownHall = el.getAttribute("data-id-townhall")
     var dataChart
     var dataSecciones
+    let table
+    let dt
     
     $.ajax({
         url: "https://hcpboca.ddns.net:3050/api/getVotosMunicipio/",
@@ -19,7 +26,7 @@ var getVotosXMunicipio = function () {
             id: idTownHall,
         }),
         success: function (i) {
-            
+            e.innerHTML = i[0].nombre
             dataSecciones = i[0].secciones
             dataChart = [
                 {
@@ -216,7 +223,9 @@ var getVotosXMunicipio = function () {
         //Iterar el JSON y dibujar las TR
         dataSecciones.forEach((seccion) => {
             let percent = 0;
-            percent = 100 * seccion.conteo_seccion_ng / seccion.esperados_seccion_ng
+            if(seccion.esperados_seccion_ng != 0){
+                percent = 100 * seccion.conteo_seccion_ng / seccion.esperados_seccion_ng
+            }
 
             // var classPercent = percent = 0 ? "bg-light" : percent < 50 ? "bg-warning" : percent >=50 ? "bg-success" : "bg-light";
             let classPercent = "bg-light"
@@ -232,14 +241,14 @@ var getVotosXMunicipio = function () {
                     <td>${seccion.conteo_seccion_ng}</td>
                     <td>${seccion.conteo_seccion_og}</td>
                     <td>${seccion.faltan_seccion_ng}</td>
-                    <td><a href="grafica-votos-lider.html?id=${seccion.rg._id}">${seccion.rg.nombre+" "+seccion.rg.paterno+" "+seccion.rg.materno}</a></td>
+                    <td><a href="grafica-votos-lider.html?id=${seccion.lider._id}">${seccion.lider.nombre+" "+seccion.lider.paterno+" "+seccion.lider.materno}</a></td>
                     <td>
                         <div class="d-flex align-items-center w-200px w-sm-300px flex-column mt-3">
                             <div class="d-flex justify-content-between w-100 mt-auto mb-2">
                                 
                                 <span class="fw-bold fs-6">${percent}%</span>
                             </div>
-                            <div class="h-5px mx-3 w-100 bg-light mb-3">
+                            <div class="h-5px mx-3 w-100 bg-secondary mb-3">
                                 <div class="${classPercent} rounded h-5px" role="progressbar" style="width: ${percent}%;" aria-valuenow="${percent}" aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
                         </div>
@@ -248,6 +257,25 @@ var getVotosXMunicipio = function () {
             `
             tableBody.innerHTML += row;
         })
+
+        dt = $("#kt_table_townhall").DataTable({
+            searchDelay: 500,
+            processing: true,
+            stateSave: true,
+        });
+
+        table = dt.$;
+
+        dt.on('draw', function () {
+            KTMenu.createInstances();
+        })
+    }
+
+    var handleSearchDatatable = function () {
+        const filterSearch = document.querySelector('[data-kt-docs-table-filter="search"]');
+        filterSearch.addEventListener('keyup', function (e) {
+            dt.search(e.target.value).draw();
+        });
     }
     
 
@@ -256,6 +284,7 @@ var getVotosXMunicipio = function () {
     return {
         init: function () {
             CreateTableSections()
+            handleSearchDatatable()
             
         }
     }
