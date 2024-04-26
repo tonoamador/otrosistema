@@ -392,7 +392,7 @@ License: For each use you must have a valid license purchased only from above li
 										<!--begin::Page title-->
 										<div class="page-title d-flex flex-column justify-content-center gap-1 me-3">
 											<!--begin::Title-->
-											<h1 class="page-heading d-flex flex-column justify-content-center text-gray-900 fw-bold fs-3 m-0">Gráficos General de Votos</h1>
+											<h1 class="page-heading d-flex flex-column justify-content-center text-gray-900 fw-bold fs-3 m-0">VOTOS AL MOMENTO EN <span id="townhall" data-name-townhall data-id-townhall="66182204b253de7036b61d6e">VERACRUZ</span></h1>
 											<!--end::Title-->
 											
 										</div>
@@ -424,11 +424,13 @@ License: For each use you must have a valid license purchased only from above li
 										<!--end::Card header-->
 										<!--begin::Card body-->
 										<div class="card-body pt-0">
-											<canvas id="graficos-votantes" class="mh-400px"></canvas>
+											<!--<canvas id="graficos-votantes" class="mh-400px"></canvas>
 											<button class="btn btn-success" onclick="exportToExcel()">Exportar a Excel</button>
 											<button class="btn btn-danger" onclick="exportToPDF()">Exportar a PDF *broken*</button>	
-											<button class="btn btn-secondary" onclick="exportToPNG()">Exportar a PNG</button>											
-										
+											<button class="btn btn-secondary" onclick="exportToPNG()">Exportar a PNG</button>		-->									
+											<div class="card-body">
+												<div id="kt_amcharts_1" style="height: 500px;"></div>
+											</div>
 										</div>
 										<!--end::Card body-->
 
@@ -438,11 +440,15 @@ License: For each use you must have a valid license purchased only from above li
 											<table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
 												<thead>
 													<tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0">
-														<th class="min-w-125px">Municipio</th>
-														<th class="min-w-125px">Seleccionar</th>
+														<th>Seccional</th>
+														<th>Votos NG</th>
+														<th>Votos X</th>
+														<th>Faltan NG</th>
+														<th>Lider</th>
+														<th>Porcentaje al Momento</th>
 													</tr>
 												</thead>
-												<tbody id="contenido-tabla">
+												<tbody id="tabla-votos-seccional">
 												
 												</tbody>
 												
@@ -6152,7 +6158,7 @@ License: For each use you must have a valid license purchased only from above li
 		<script src="assets/plugins/custom/datatables/datatables.bundle.js"></script>
 		<!--end::Vendors Javascript-->
 		<!--begin::Custom Javascript(used for this page only)-->
-		<script src="assets/js/custom/apps/ecommerce/customers/listing/listing.js"></script>
+		
 		<script src="assets/js/custom/apps/ecommerce/customers/listing/add.js"></script>
 		<script src="assets/js/custom/apps/ecommerce/customers/listing/export.js"></script>
 		<script src="assets/js/custom/utilities/modals/create-campaign.js"></script>
@@ -6167,8 +6173,16 @@ License: For each use you must have a valid license purchased only from above li
 		<script src="assets/js/custom/utilities/modals/upgrade-plan.js"></script>
 		<script src="assets/js/custom/utilities/modals/users-search.js"></script>
 		<script src="assets/plugins/global/plugins.bundle.js"></script>
-		<script src="graficas/graficos-votantes.js"></script>
-		<script src="api/graficas-municipio.js"></script>
+		<!--<script src="graficas/graficos-votantes.js"></script>-->
+		<!--<script src="api/graficas-municipio.js"></script>-->
+		<script src="https://cdn.amcharts.com/lib/5/index.js"></script>
+		<script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
+		<script src="https://cdn.amcharts.com/lib/5/percent.js"></script>
+		<script src="https://cdn.amcharts.com/lib/5/radar.js"></script>
+		<script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
+		<script src="https://cdn.amcharts.com/lib/5/themes/Responsive.js"></script>
+
+		<script src="graficas/graficos-votos-per-municipio.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.4/xlsx.full.min.js"></script>
 		<script>
 			document.addEventListener("DOMContentLoaded", function() {

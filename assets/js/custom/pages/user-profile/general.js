@@ -36,7 +36,7 @@ var KTProfileGeneral = (function () {
                   }, 1500)
                 : setTimeout(function () {
                     s = OpenBox();
-                    console.log(s)
+                    // console.log(s)
                     if(s){
                         i.removeAttribute("data-kt-indicator"),
                         i.classList.add("btn-success"),
