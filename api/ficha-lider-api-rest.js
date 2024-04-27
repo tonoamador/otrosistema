@@ -22,7 +22,7 @@ var KTDatatablesServerSide = function () {
             },
             ajax: {
                 type: "POST",
-                url: "https://hcpboca.ddns.net:3050/api/getRcs/",
+                url: "https://hcpboca.ddns.net:3050/api/getMovilizadores/",
                 dataSrc: "",
             },
             
@@ -30,7 +30,7 @@ var KTDatatablesServerSide = function () {
                 { data: null},
                 { data: null,
                     render: function (data, type, row) {
-                        return `<a href="overview-rc.html?=${row._id}" class="text-gray-600 mb-1 text-hover-primary">${row.paterno} ${row.materno} ${row.nombre}</a>`;
+                        return `<a href="overview-lider.html?=${row._id}" class="text-gray-600 mb-1 text-hover-primary">${row.paterno} ${row.materno} ${row.nombre}</a>`;
                     }
                 },
                 { data: null,
@@ -48,17 +48,7 @@ var KTDatatablesServerSide = function () {
                 },
                 { data: null,
                     render: function (data, type, row) {
-                        return row.casilla.nombre
-                    }
-                },
-                { data: null,
-                    render: function (data, type, row) {
-                        return [...new Set(row.municipios.map(x => x.nombre))].join(', ');
-                    }
-                },
-                { data: null,
-                    render: function (data, type, row) {
-                        return '<a href="https://www.google.com/maps/search/?api=1&query='+[...new Set(row.seccion.map((section) => section.lat + ',' + section.long)),].join(', ')+'" class="btn btn-icon btn-primary" target="_blank"><i class="fas fa-search-location fs-4 "></i></a>'
+                        return row.municipio.nombre;
                     }
                 },
             ],
