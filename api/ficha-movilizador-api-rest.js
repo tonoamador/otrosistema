@@ -30,7 +30,7 @@ var KTDatatablesServerSide = function () {
                 { data: null},
                 { data: null,
                     render: function (data, type, row) {
-                        return row.paterno + ' ' + row.materno + ' ' + row.nombre;
+                        return `<a href="overview-movilizador.html?=${row._id}" class="text-gray-600 mb-1 text-hover-primary">${row.paterno} ${row.materno} ${row.nombre}</a>`;
                     }
                 },
                 { data: null,
@@ -48,7 +48,7 @@ var KTDatatablesServerSide = function () {
                 },
                 { data: null,
                     render: function (data, type, row) {
-                        return row.municipio.nombre; // Acceso al nombre del municipio
+                        return row.municipio.nombre;
                     }
                 },
                 { data: null,
