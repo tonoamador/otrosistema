@@ -48,17 +48,22 @@ var KTDatatablesServerSide = function () {
                 },
                 { data: null,
                     render: function (data, type, row) {
+                        return row.casilla.nombre;
+                    }
+                },
+                { data: null,
+                    render: function (data, type, row) {
                         return [...new Set(row.municipio.map(x => x.nombre))].join(', ');
                     }
                 },
                 { data: null,
                     render: function (data, type, row) {
-                        return `<a href="overview-lider.html?=${[...new Set(row.lider.map(x => x._id))].join(', ')}" class="text-gray-600 mb-1 text-hover-primary">${[...new Set(row.lider.map(x => `${x.paterno} ${x.materno} ${x.nombre}`))].join(', ')}</a>`;
-                    }
+                        return `<a href="overview-movilizador.html?=${[...new Set(row.movilizador.map(x => x._id))].join(', ')}" class="text-gray-600 mb-1 text-hover-primary">${[...new Set(row.movilizador.map(x => `${x.paterno} ${x.materno} ${x.nombre}`))].join(', ')}</a>`;                    }
                 },
                 { data: null,
                     render: function (data, type, row) {
-                        return `<a href="overview-movilizador.html?=${[...new Set(row.movilizador.map(x => x._id))].join(', ')}" class="text-gray-600 mb-1 text-hover-primary">${[...new Set(row.movilizador.map(x => `${x.paterno} ${x.materno} ${x.nombre}`))].join(', ')}</a>`;                    }
+                        return `<a href="overview-lider.html?=${[...new Set(row.lider.map(x => x._id))].join(', ')}" class="text-gray-600 mb-1 text-hover-primary">${[...new Set(row.lider.map(x => `${x.paterno} ${x.materno} ${x.nombre}`))].join(', ')}</a>`;
+                    }
                 },
                 { data : null,
                     render: function (data, type, row) {
