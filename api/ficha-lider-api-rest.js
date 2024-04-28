@@ -22,7 +22,7 @@ var KTDatatablesServerSide = function () {
             },
             ajax: {
                 type: "POST",
-                url: "https://hcpboca.ddns.net:3050/api/getMovilizadores/",
+                url: "https://hcpboca.ddns.net:3050/api/getLideres/",
                 dataSrc: "",
             },
             
@@ -41,14 +41,12 @@ var KTDatatablesServerSide = function () {
                 { data: 'telefono'},
                 { data: null,
                     render: function (data, type, row) {
-                        return row.seccion
-                            .map((x) => x.numero)
-                            .join(", ");
+                        return [...new Set(row.seccion.map((x) => x.numero))].join(", ");
                     }
                 },
                 { data: null,
                     render: function (data, type, row) {
-                        return row.municipio.nombre;
+                        return [...new Set(row.municipios.map(x => x.nombre))].join(', ');
                     }
                 },
             ],
