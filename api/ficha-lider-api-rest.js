@@ -23,28 +23,34 @@ var KTDatatablesServerSide = function () {
             ajax: {
                 type: "POST",
                 url: "https://hcpboca.ddns.net:3050/api/getLideres/",
-                dataSrc: "",
+                dataSrc: function (json) {
+                    return json[0].lideres;
+                }
             },
-            
+
             columns: [
-                { data: null},
-                { data: null,
+                { data: null },
+                {
+                    data: null,
                     render: function (data, type, row) {
                         return `<a href="overview-lider.html?=${row._id}" class="text-gray-600 mb-1 text-hover-primary">${row.paterno} ${row.materno} ${row.nombre}</a>`;
                     }
                 },
-                { data: null,
+                {
+                    data: null,
                     render: function (data, type, row) {
-                        return row.calle+' '+row.direccion_ext+' '+row.direccion_int+', '+row.colonia+', '+row.c_postal;
+                        return row.calle + ' ' + row.direccion_ext + ' ' + row.direccion_int + ', ' + row.colonia + ', ' + row.c_postal;
                     }
                 },
-                { data: 'telefono'},
-                { data: null,
+                { data: 'telefono' },
+                {
+                    data: null,
                     render: function (data, type, row) {
                         return [...new Set(row.seccion.map((x) => x.numero))].join(", ");
                     }
                 },
-                { data: null,
+                {
+                    data: null,
                     render: function (data, type, row) {
                         return [...new Set(row.municipios.map(x => x.nombre))].join(', ');
                     }
