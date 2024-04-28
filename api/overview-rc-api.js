@@ -2,6 +2,12 @@ const toastElement = document.getElementById("kt_docs_toast_toggle")
 const toast = bootstrap.Toast.getOrCreateInstance(toastElement)
 var state = false;
 
+if(window.location.hash){
+    const params = new URLSearchParams(window.location.search);
+    const idRc = params.get("id");
+}
+
+
 function buttonState(posts) {
     // console.log(posts.data['open'])
     return posts.data['open']
@@ -42,6 +48,11 @@ function loadingPage() {
     setTimeout(function() {
         KTApp.hidePageLoading();
         loadingEl.remove();
-        window.location.replace("ciudadanos-rc.html")
+        if(window.location.hash){
+
+        }else{
+            window.location.replace("ciudadanos-rc.html")
+        }
+        
     }, 3000);
 }

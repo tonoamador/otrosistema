@@ -6,74 +6,38 @@ var KTDatatablesServerSide = function () {
     var table;
     var dt;
     var filterPayment;
+    let idRc = "66198d46c80fd64bb56036a4"
 
     // Private functions
     var initDatatable = function () {
         dt = $("#rc-table").DataTable({
             searchDelay: 500,
             processing: true,
-            serverSide: false,
+            serverSide: true,
             order: [[1, 'desc']],
-            stateSave: true,
-            select: {
-                style: 'multi',
-                selector: 'td:first-child input[type="checkbox"]',
-                className: 'row-selected'
-            },
+            // stateSave: true,
             ajax: {
                 type: "POST",
-                url: "https://hcpboca.ddns.net:3050/api/getRcs/",
-                dataSrc: "",
+                url: "https://hcpboca.ddns.net:3050/api/getCiudadanosByCasilla",
+                dataSrc: true,
+                contentType: "application/json",
+                data: function(d) {
+                    console.log(d)
+                    var stringify = JSON.stringify({"id": idRc})
+                    console.log(stringify)
+                    return stringify
+                }
+                
             },
-            
             columns: [
-                { data: null},
-                { data: null,
-                    render: function (data, type, row) {
-                        return row.paterno + ' ' + row.materno + ' ' + row.nombre;
-                    }
-                },
-                { data: null,
-                    render: function (data, type, row) {
-                        return row.calle+' '+row.direccion_ext+' '+row.direccion_int+', '+row.colonia+', '+row.c_postal;
-                    }
-                },
-                { data: 'telefono'},
-                { data: null,
-                    render: function (data, type, row) {
-                        return row.seccion
-                            .map((x) => x.numero)
-                            .join(", ");
-                    }
-                },
-                { data: null,
-                    render: function (data, type, row) {
-                        return row.casilla.nombre
-                    }
-                },
-                { data: null,
-                    render: function (data, type, row) {
-                        return [...new Set(row.municipios.map(x => x.nombre))].join(', ');
-                    }
-                },
-                { data: null,
-                    render: function (data, type, row) {
-                        return '<a href="https://www.google.com/maps/search/?api=1&query='+[...new Set(row.seccion.map((section) => section.lat + ',' + section.long)),].join(', ')+'" class="btn btn-icon btn-primary" target="_blank"><i class="fas fa-search-location fs-4 "></i></a>'
-                    }
-                },
+                {data: "_id"}
+                // { data: null,
+                //     render: function (data, type, row) {
+                //         // return row.paterno + ' ' + row.materno + ' ' + row.nombre;
+                //       return row._id
+                //     }
+                // }
             ],
-            columnDefs: [
-                {
-                    targets: 0,
-                    orderable: false,
-                    render: function (data) {
-                        return `
-                            <div class="form-check form-check-sm form-check-custom form-check-solid">
-                                <input class="form-check-input" type="checkbox" value="${data}" />
-                            </div>`;
-                    }
-                },
-            ]
         });
 
         table = dt.$;
