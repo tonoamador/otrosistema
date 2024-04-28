@@ -48,6 +48,11 @@ var KTDatatablesServerSide = function () {
                 },
                 { data: null,
                     render: function (data, type, row) {
+                        return row.casilla.nombre;
+                    }
+                },
+                { data: null,
+                    render: function (data, type, row) {
                         return [...new Set(row.municipio.map(x => x.nombre))].join(', ');
                     }
                 },
