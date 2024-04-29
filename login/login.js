@@ -56,7 +56,6 @@ var KTSigninGeneral = (function () {
                     );
 
                     const token = JSON.parse(jsonPayload);
-                    console.log(token);
                     localStorage.setItem("token", JSON.stringify(token));
                     Swal.fire({
                       text: "You have successfully logged in!",
@@ -66,9 +65,12 @@ var KTSigninGeneral = (function () {
                       customClass: { confirmButton: "btn btn-primary" },
                     }).then(function (e) {
                       if (e.isConfirmed) {
-                        var redirectUrl = t.getAttribute(
-                          "data-kt-redirect-url"
-                        );
+                        var redirectUrl = "index.html";
+                        switch (token.user_type) {
+                          case "rc":
+                            redirectUrl = "overview-rc.html";
+                            break;
+                        }
                         var additionalParams = "";
 
                         if (redirectUrl) {
