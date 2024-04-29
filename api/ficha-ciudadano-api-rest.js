@@ -6,11 +6,14 @@ var KTDatatablesServerSide = (function () {
   const token = JSON.parse(localStorage.getItem("token"));
   if (
     !token ||
-
-    token.user_type !== "admin" ||
+    (token.user_type !== "admin") ||
     isTokenExpired(token)
   ) {
     window.location.replace("index.html");
+  }
+  function isTokenExpired(token) {
+    const currentTime = Date.now() / 1000;
+    return token.exp < currentTime;
   }
   var initDatatable = function () {
     dt = $("#rc-table").DataTable({

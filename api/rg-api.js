@@ -1,5 +1,15 @@
 document.addEventListener('DOMContentLoaded', fetchData);
-
+if (
+    !token ||
+    (token.user_type !== "admin") ||
+    isTokenExpired(token)
+  ) {
+    window.location.replace("index.html");
+  }
+  function isTokenExpired(token) {
+    const currentTime = Date.now() / 1000;
+    return token.exp < currentTime;
+  }
 function fetchData() {
     fetch('https://hcpboca.ddns.net:3050/api/getRgs/', {
         method: 'POST',

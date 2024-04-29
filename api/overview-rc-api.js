@@ -4,12 +4,17 @@ var state = false;
 const token = JSON.parse(localStorage.getItem("token"));
 if (
   !token ||
-  token.user_type !== "rc" ||
-  token.user_type !== "admin" ||
+  (token.user_type !== "rc" && token.user_type !== "admin") ||
   isTokenExpired(token)
 ) {
   window.location.replace("index.html");
 }
+
+function isTokenExpired(token) {
+  const currentTime = Date.now() / 1000;
+  return token.exp < currentTime;
+}
+
 document.querySelector("#nombre").textContent =
   token.paterno + " " + token.materno + " " + token.nombre;
 document.querySelector("#seccion").textContent = token.casilla.seccion.numero;
@@ -21,10 +26,7 @@ if (window.location.hash) {
   const idRc = params.get("id");
 }
 
-function isTokenExpired(token) {
-  const currentTime = Date.now() / 1000;
-  return token.exp < currentTime;
-}
+
 
 function OpenBox() {
   const id = token.casilla._id;
