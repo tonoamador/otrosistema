@@ -2,7 +2,12 @@ const toastElement = document.getElementById("kt_docs_toast_toggle");
 const toast = bootstrap.Toast.getOrCreateInstance(toastElement);
 var state = false;
 const token = JSON.parse(localStorage.getItem("token"));
-if (!token || token.user_type !== "rc" || isTokenExpired(token)) {
+if (
+  !token ||
+  token.user_type !== "rc" ||
+  token.user_type !== "admin" ||
+  isTokenExpired(token)
+) {
   window.location.replace("index.html");
 }
 document.querySelector("#nombre").textContent =
