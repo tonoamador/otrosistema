@@ -14,7 +14,9 @@ function isTokenExpired(token) {
   const currentTime = Date.now() / 1000;
   return token.exp < currentTime;
 }
-
+$(function() {
+  $("#sameNavbar").load("./navbar.html");
+});
 document.querySelector("#nombre").textContent =
   token.paterno + " " + token.materno + " " + token.nombre;
 document.querySelector("#seccion").textContent = token.casilla.seccion.numero;
