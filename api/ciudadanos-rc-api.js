@@ -3,10 +3,20 @@
 // Class definition
 var KTDatatablesServerSide = function () {
     // Shared variables
-    var table;
-    var dt;
-    var filterPayment;
+    var table
+    var dt
+    var source
+    var filterPayment
     let idRc = "66198d46c80fd64bb56036a4"
+
+    var getData = function () {
+        $.ajax({
+            url: "https://hcpboca.ddns.net:3050/api/getCiudadanosByCasilla",
+            dataType: "JSON",
+            method: "POST",
+            
+        })
+    }
 
     // Private functions
     var initDatatable = function () {

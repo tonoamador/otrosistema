@@ -1,6 +1,8 @@
 const toastElement = document.getElementById("kt_docs_toast_toggle");
 const toast = bootstrap.Toast.getOrCreateInstance(toastElement);
 var state = false;
+
+//Funcion Login
 const token = JSON.parse(localStorage.getItem("token"));
 if (!token || token.user_type !== "rc" || isTokenExpired(token)) {
   window.location.replace("index.html");

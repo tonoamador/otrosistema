@@ -92,5 +92,7 @@ function displayData(posts) {
             
         `;
     tableBody.innerHTML += row;
+
+    $("#kt_customers_table").DataTable()
   });
 }
