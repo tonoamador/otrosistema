@@ -22,7 +22,7 @@ var KTDatatablesServerSide = function () {
             },
             ajax: {
                 type: "POST",
-                url: "https://hcpboca.ddns.net:3050/api/getRcs/",
+                url: "https://hcpboca.ddns.net:3050/api/getCiudadanos/",
                 dataSrc: "",
             },
             
@@ -30,10 +30,10 @@ var KTDatatablesServerSide = function () {
                 { data: null},
                 { data: null,
                     render: function (data, type, row) {
-                        return `<a href="overview-rc.html?id=${row._id}" class="text-gray-600 mb-1 text-hover-primary">${row.paterno} ${row.materno} ${row.nombre}</a>`;
+                        return row.paterno + ' ' + row.materno + ' ' + row.nombre;
                     }
                 },
-                { data: null,
+                { data: 'nombre',
                     render: function (data, type, row) {
                         return row.calle+' '+row.direccion_ext+' '+row.direccion_int+', '+row.colonia+', '+row.c_postal;
                     }
@@ -48,17 +48,28 @@ var KTDatatablesServerSide = function () {
                 },
                 { data: null,
                     render: function (data, type, row) {
-                        return row.casilla.nombre
+                        return row.casilla.nombre;
                     }
                 },
                 { data: null,
                     render: function (data, type, row) {
-                        return [...new Set(row.municipios.map(x => x.nombre))].join(', ');
+                        return [...new Set(row.municipio.map(x => x.nombre))].join(', ');
                     }
                 },
                 { data: null,
                     render: function (data, type, row) {
-                        return '<a href="https://www.google.com/maps/search/?api=1&query='+[...new Set(row.seccion.map((section) => section.lat + ',' + section.long)),].join(', ')+'" class="btn btn-icon btn-primary" target="_blank"><i class="fas fa-search-location fs-4 "></i></a>'
+                        return `<a href="overview-movilizador.html?=${[...new Set(row.movilizador.map(x => x._id))].join(', ')}" class="text-gray-600 mb-1 text-hover-primary">${[...new Set(row.movilizador.map(x => `${x.paterno} ${x.materno} ${x.nombre}`))].join(', ')}</a>`;                    }
+                },
+                { data: null,
+                    render: function (data, type, row) {
+                        return `<a href="overview-lider.html?=${[...new Set(row.lider.map(x => x._id))].join(', ')}" class="text-gray-600 mb-1 text-hover-primary">${[...new Set(row.lider.map(x => `${x.paterno} ${x.materno} ${x.nombre}`))].join(', ')}</a>`;
+                    }
+                },
+                { data : null,
+                    render: function (data, type, row) {
+                        return `<div class="badge badge-light-${
+                            row.voto ? "success" : "danger"
+                          }">${row.voto ? "Votó" : "Sin voto"}</div>`
                     }
                 },
             ],

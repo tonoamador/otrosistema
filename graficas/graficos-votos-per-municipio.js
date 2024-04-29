@@ -7,7 +7,7 @@ const TownhallId = params.get("id");
 let e = document.querySelector("#townhall");
 e.setAttribute("data-id-townhall", TownhallId)
 
-var getCasillasXMunicipio = function () {
+var getVotosXMunicipio = function () {
     var dataVotos
     var el = document.getElementById("townhall")
     var idTownHall = el.getAttribute("data-id-townhall")
@@ -17,7 +17,7 @@ var getCasillasXMunicipio = function () {
     let dt
     
     $.ajax({
-        url: "https://hcpboca.ddns.net:3050/api/getMunicipioCasillasAbiertas/",
+        url: "https://hcpboca.ddns.net:3050/api/getVotosMunicipio/",
         dataType: "JSON",
         method: "POST",
         async: false,
@@ -30,12 +30,20 @@ var getCasillasXMunicipio = function () {
             dataSecciones = i[0].secciones
             dataChart = [
                 {
-                    casillas: "Casillas Abiertas",
-                    value: i[0].abiertas_total,
+                    votos: "Total Votos X",
+                    value: i[0].conteo_og,
                 },
                 {
-                    casillas: "Casillas Cerradas",
-                    value: i[0].cerradas_total,
+                    votos: "Total Votos NG",
+                    value: i[0].conteo_ng,
+                },
+                {
+                    votos: "No han votado",
+                    value: i[0].faltan_ng,
+                },
+                {
+                    votos: "Total Votos General",
+                    value: i[0].conteo_total,
                 },
             ];
         }
@@ -90,7 +98,7 @@ var getCasillasXMunicipio = function () {
         
         var xAxis = chart.xAxes.push(am5xy.CategoryAxis.new(root, {
           maxDeviation: 0,
-          categoryField: "casillas",
+          categoryField: "votos",
           renderer: xRenderer,
           tooltip: am5.Tooltip.new(root, {})
         }));
@@ -117,7 +125,7 @@ var getCasillasXMunicipio = function () {
           yAxis: yAxis,
           valueYField: "value",
           sequencedInterpolation: true,
-          categoryXField: "casillas",
+          categoryXField: "votos",
         //   tooltip: am5.Tooltip.new(root, { dy: -25, labelText: "{valueY, valueX} {valueX}" })
         }));
         
@@ -140,6 +148,47 @@ var getCasillasXMunicipio = function () {
           return chart.get("colors").getIndex(series.columns.indexOf(target));
         });
         
+        // Set data
+        // var data = [
+        //   {
+        //     votos: "Votos GX",
+        //     value: 35654,
+        //     bulletSettings: { src: "https://www.amcharts.com/lib/images/faces/A04.png" }
+        //   },
+        //   {
+        //     votos: "Votos NG",
+        //     value: 65456,
+        //     bulletSettings: { src: "https://www.amcharts.com/lib/images/faces/C02.png" }
+        //   },
+        //   {
+        //     votos: "No Votado NG",
+        //     value: 45724,
+        //     bulletSettings: { src: "https://www.amcharts.com/lib/images/faces/D02.png" }
+        //   },
+        //   {
+        //     votos: "Votos Totales",
+        //     value: 13654,
+        //     bulletSettings: { src: "https://www.amcharts.com/lib/images/faces/E01.png" }
+        //   }
+        // ];
+        
+        // series.bullets.push(function() {
+        //   return am5.Bullet.new(root, {
+        //     locationY: 1,
+        //     sprite: am5.Picture.new(root, {
+        //       templateField: "bulletSettings",
+        //       width: 50,
+        //       height: 50,
+        //       centerX: am5.p50,
+        //       centerY: am5.p50,
+        //       shadowColor: am5.color(0x000000),
+        //       shadowBlur: 4,
+        //       shadowOffsetX: 4,
+        //       shadowOffsetY: 4,
+        //       shadowOpacity: 0.6
+        //     })
+        //   });
+        // });
         // Add Label bullet
         series.bullets.push(function () {
             return am5.Bullet.new(root, {
@@ -174,8 +223,8 @@ var getCasillasXMunicipio = function () {
         //Iterar el JSON y dibujar las TR
         dataSecciones.forEach((seccion) => {
             let percent = 0;
-            if(seccion.total_seccion != 0){
-                percent = 100 * seccion.abiertas_seccion / seccion.total_seccion
+            if(seccion.esperados_seccion_ng != 0){
+                percent = 100 * seccion.conteo_seccion_ng / seccion.esperados_seccion_ng
             }
 
             // var classPercent = percent = 0 ? "bg-light" : percent < 50 ? "bg-warning" : percent >=50 ? "bg-success" : "bg-light";
@@ -188,10 +237,11 @@ var getCasillasXMunicipio = function () {
             
             const row = `
                 <tr>
-                    <td>${seccion.numero}</td>
-                    <td>${seccion.abiertas_seccion}</td>
-                    <td>${seccion.cerradas_seccion}</td>
-                    <td>${seccion.total_seccion}</td>
+                    <td><a href="grafica-votos-seccional.html?id=${seccion._id}">${seccion.numero}</a></td>
+                    <td>${seccion.conteo_seccion_ng}</td>
+                    <td>${seccion.conteo_seccion_og}</td>
+                    <td>${seccion.faltan_seccion_ng}</td>
+                    <td><a href="grafica-votos-lider.html?id=${seccion.lider._id}">${seccion.lider.nombre+" "+seccion.lider.paterno+" "+seccion.lider.materno}</a></td>
                     <td>
                         <div class="d-flex align-items-center w-200px w-sm-300px flex-column mt-3">
                             <div class="d-flex justify-content-between w-100 mt-auto mb-2">
@@ -241,39 +291,5 @@ var getCasillasXMunicipio = function () {
 }();
 
 KTUtil.onDOMContentLoaded( function () {
-    getCasillasXMunicipio.init();
+    getVotosXMunicipio.init();
 })
-
-// Función para exportar a Excel
-function exportToExcel() {
-  const workbook = XLSX.utils.book_new();
-  const worksheet = XLSX.utils.json_to_sheet([
-    { Municipio: "Cosamaloapan", Abierta: 12, Cerrada: 15 },
-  ]);
-
-  XLSX.utils.book_append_sheet(workbook, worksheet, "Municipio");
-  XLSX.writeFile(workbook, "Gráfica Municipio.xlsx");
-}
-// Función para exportar a PDF
-function exportToPDF() {
-  const canvas = document.getElementById("graficos-municipio");
-  const chartDataURL = canvas.toDataURL("image/png");
-  const pdf = new jsPDF();
-  const imgWidth = 208;
-  const imgHeight = (canvas.height * imgWidth) / canvas.width;
-
-  pdf.addImage(chartDataURL, "PNG", 0, 0, imgWidth, imgHeight);
-  pdf.save("grafico.pdf");
-}
-
-// Función para exportar a PNG
-function exportToPNG() {
-    const canvas = document.getElementById('graficos-municipio');
-    const imageURL = canvas.toDataURL('image/png');
-    const link = document.createElement('a');
-    link.href = imageURL;
-    link.download = 'grafico.png';
-    link.click();
-}
-
-

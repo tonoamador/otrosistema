@@ -9,7 +9,7 @@ var KTDatatablesServerSide = function () {
 
     // Private functions
     var initDatatable = function () {
-        dt = $("#rc-table").DataTable({
+        dt = $("#rg-table").DataTable({
             searchDelay: 500,
             processing: true,
             serverSide: false,
@@ -22,7 +22,7 @@ var KTDatatablesServerSide = function () {
             },
             ajax: {
                 type: "POST",
-                url: "https://hcpboca.ddns.net:3050/api/getRcs/",
+                url: "https://hcpboca.ddns.net:3050/api/getRgs/",
                 dataSrc: "",
             },
             
@@ -30,7 +30,7 @@ var KTDatatablesServerSide = function () {
                 { data: null},
                 { data: null,
                     render: function (data, type, row) {
-                        return `<a href="overview-rc.html?id=${row._id}" class="text-gray-600 mb-1 text-hover-primary">${row.paterno} ${row.materno} ${row.nombre}</a>`;
+                        return `<a href="overview-rc.html?=${row._id}" class="text-gray-600 mb-1 text-hover-primary">${row.paterno} ${row.materno} ${row.nombre}</a>`;
                     }
                 },
                 { data: null,
@@ -41,26 +41,16 @@ var KTDatatablesServerSide = function () {
                 { data: 'telefono'},
                 { data: null,
                     render: function (data, type, row) {
-                        return row.seccion
-                            .map((x) => x.numero)
-                            .join(", ");
+                        return [...new Set(row.secciones.map((x) => x.numero))].join(", ");
                     }
                 },
-                { data: null,
-                    render: function (data, type, row) {
-                        return row.casilla.nombre
-                    }
-                },
+ 
                 { data: null,
                     render: function (data, type, row) {
                         return [...new Set(row.municipios.map(x => x.nombre))].join(', ');
                     }
                 },
-                { data: null,
-                    render: function (data, type, row) {
-                        return '<a href="https://www.google.com/maps/search/?api=1&query='+[...new Set(row.seccion.map((section) => section.lat + ',' + section.long)),].join(', ')+'" class="btn btn-icon btn-primary" target="_blank"><i class="fas fa-search-location fs-4 "></i></a>'
-                    }
-                },
+
             ],
             columnDefs: [
                 {
@@ -213,7 +203,7 @@ var KTDatatablesServerSide = function () {
     var initToggleToolbar = function () {
         // Toggle selected action toolbar
         // Select all checkboxes
-        const container = document.querySelector('#rc-table');
+        const container = document.querySelector('#rg-table');
         const checkboxes = container.querySelectorAll('[type="checkbox"]');
 
         // Select elements
@@ -289,7 +279,7 @@ var KTDatatablesServerSide = function () {
     // Toggle toolbars
     var toggleToolbars = function () {
         // Define variables
-        const container = document.querySelector('#rc-table');
+        const container = document.querySelector('#rg-table');
         const toolbarBase = document.querySelector('[data-kt-docs-table-toolbar="base"]');
         const toolbarSelected = document.querySelector('[data-kt-docs-table-toolbar="selected"]');
         const selectedCount = document.querySelector('[data-kt-docs-table-select="selected_count"]');

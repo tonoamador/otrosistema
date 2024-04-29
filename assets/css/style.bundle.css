@@ -511,7 +511,8 @@ select:disabled {
 [type=reset],
 [type=submit],
 button {
-    -webkit-appearance: button
+    -webkit-appearance: button;
+    appearance: button
 }
 
 [type=button]:not(:disabled),
@@ -572,6 +573,7 @@ legend+* {
 
 [type=search] {
     -webkit-appearance: textfield;
+    appearance: textfield;
     outline-offset: -2px
 }
 
@@ -585,7 +587,8 @@ legend+* {
 
 ::file-selector-button {
     font: inherit;
-    -webkit-appearance: button
+    -webkit-appearance: button;
+    appearance: button;
 }
 
 output {
@@ -12303,6 +12306,10 @@ fieldset:disabled .btn {
     font-size: calc(1.9rem + 7.8vw) !important
 }
 
+.fs-table th, .fs-table tr {
+    font-size: 1.2rem !important
+}
+
 .fst-italic {
     font-style: italic !important
 }
@@ -13099,6 +13106,10 @@ fieldset:disabled .btn {
 
 .z-index-3 {
     z-index: 3 !important
+}
+
+.z-index-100 {
+    z-index: 100 !important
 }
 
 .cursor-help {
