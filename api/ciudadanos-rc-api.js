@@ -3,10 +3,29 @@
 // Class definition
 var KTDatatablesServerSide = function () {
     // Shared variables
+<<<<<<< HEAD
     var table
     var dt
     var source
     var filterPayment
+=======
+    const token = JSON.parse(localStorage.getItem("token"));
+function isTokenExpired(token) {
+    const currentTime = Date.now() / 1000;
+    return token.exp < currentTime;
+  }
+    if (
+        !token ||
+        (token.user_type !== "admin") ||
+        isTokenExpired(token) || token==undefined
+      ) {
+        window.location.replace("index.html");
+      }
+
+    var table;
+    var dt;
+    var filterPayment;
+>>>>>>> 541b28cbb3705209585fb8588654b70c721c125f
     let idRc = "66198d46c80fd64bb56036a4"
 
     var getData = function () {
