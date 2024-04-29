@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", fetchData);
+const token = JSON.parse(localStorage.getItem("token"));
 if (
   !token ||
   (token.user_type !== "admin") ||

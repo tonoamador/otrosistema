@@ -1,5 +1,5 @@
 "use strict";
-
+const token = JSON.parse(localStorage.getItem("token"));
 // Class definition
 var KTDatatablesServerSide = function () {
     // Shared variables
