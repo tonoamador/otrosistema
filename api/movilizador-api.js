@@ -14,6 +14,7 @@ function fetchData() {
       return response.json();
     })
     .then((posts) => {
+
       displayData(posts);
     })
     .catch((error) => {
@@ -29,6 +30,8 @@ function displayData(posts) {
 
   // Iterar sobre los posts y agregarlos a la tabla
   posts.forEach((post) => {
+    console.log(post)
+
     const row = `
             
         
