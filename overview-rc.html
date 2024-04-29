@@ -24,6 +24,8 @@
 	data-kt-app-header-secondary-enabled="true" data-kt-app-sidebar-enabled="true" data-kt-app-sidebar-fixed="true"
 	data-kt-app-sidebar-push-toolbar="true" data-kt-app-sidebar-push-footer="true" data-kt-app-toolbar-enabled="true"
 	class="app-default">
+	
+
 	<script>
 		var defaultThemeMode = "light"; var themeMode; if (document.documentElement) { if (document.documentElement.hasAttribute("data-bs-theme-mode")) { themeMode = document.documentElement.getAttribute("data-bs-theme-mode"); } else { if (localStorage.getItem("data-bs-theme") !== null) { themeMode = localStorage.getItem("data-bs-theme"); } else { themeMode = defaultThemeMode; } } if (themeMode === "system") { themeMode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"; } document.documentElement.setAttribute("data-bs-theme", themeMode); }
 	</script>
@@ -6320,7 +6322,10 @@
 	<script>var hostUrl = "assets/";</script>
 	<!--begin::Global Javascript Bundle(mandatory for all pages)-->
 	<script src="assets/plugins/global/plugins.bundle.js"></script>
+	<script src="api/overview-rc-api.js"></script>
+
 	<script src="assets/js/scripts.bundle.js"></script>
+
 	<!--end::Global Javascript Bundle-->
 	<!--begin::Vendors Javascript(used for this page only)-->
 	<script src="assets/plugins/custom/datatables/datatables.bundle.js"></script>
@@ -6330,7 +6335,6 @@
 
 
 	<script src="assets/js/custom/pages/user-profile/general.js"></script>
-	<script src="api/overview-rc-api.js"></script>
 	<script src="assets/js/custom/utilities/modals/create-campaign.js"></script>
 	<script src="assets/js/custom/utilities/modals/new-target.js"></script>
 	<script src="assets/js/custom/utilities/modals/new-card.js"></script>

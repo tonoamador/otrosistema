@@ -69,7 +69,7 @@ var KTSigninGeneral = (function () {
                         var redirectUrl = t.getAttribute(
                           "data-kt-redirect-url"
                         );
-                        var additionalParams = "id=" + token._id;
+                        var additionalParams = "";
 
                         if (redirectUrl) {
                           location.href = redirectUrl + additionalParams;
