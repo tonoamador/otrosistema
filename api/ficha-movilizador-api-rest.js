@@ -38,7 +38,11 @@ var KTDatatablesServerSide = function () {
                         return row.calle+' '+row.direccion_ext+' '+row.direccion_int+', '+row.colonia+', '+row.c_postal;
                     }
                 },
-                { data: 'telefono'},
+                { data: null,
+                    render: function (data, type, row) {
+                        return row.telefono;
+                    }
+                },
                 { data: null,
                     render: function (data, type, row) {
                         return row.seccion
