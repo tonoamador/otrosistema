@@ -21,14 +21,13 @@ var getCasillasXMunicipio = function () {
         url: "https://hcpboca.ddns.net:3050/api/getMunicipioCasillasAbiertas/",
         dataType: "JSON",
         method: "POST",
-        async: false,
+        async:false,
         contentType: "application/json; charset=utf-8",
         data: JSON.stringify({
             id: idTownHall,
         }),
         success: function (i) {
-            exportToExcel(idTownHall)
-            console.log(idTownHall)
+            exportToExcel(i[0])
   
             e.innerHTML = i[0].nombre
             dataSecciones = i[0].secciones
@@ -250,26 +249,31 @@ KTUtil.onDOMContentLoaded( function () {
 
 // Función para exportar a Excel
 function exportToExcel(data) {
-    if (!data || !Array.isArray(data)) {
-      console.error("Los datos de la API son inválidos.");
-      console.log(data);
+    if (typeof data !== 'object' || data === null) {
+      console.error("Los datos de la API son inválidos o no son un objeto.");
       return;
     }
   
+    // Convertir el objeto JSON a un array de arrays con [clave, valor]
+    const dataArray = Object.entries(data).flatMap(([key, value]) => {
+      if (Array.isArray(value)) {
+        return value.map(item => Object.assign({ Municipio: key }, item));
+      }
+      return [{ Municipio: key, ...value }];
+    });
+  
+    // Crear un nuevo libro de trabajo
     const workbook = XLSX.utils.book_new();
   
-    // Crear una hoja de cálculo
-    const worksheetData = data.flatMap(municipio => municipio.secciones.map(seccion => ({
-      Municipio: municipio.nombre,
-      Seccion: seccion.numero,
-    })));
-  
-    const worksheet = XLSX.utils.json_to_sheet(worksheetData);
+    // Crear una hoja de trabajo a partir del array de datos
+    const worksheet = XLSX.utils.json_to_sheet(dataArray);
     XLSX.utils.book_append_sheet(workbook, worksheet, "Datos Casillas");
   
-    // Guardar el archivo
+    // Escribir el archivo Excel
     XLSX.writeFile(workbook, "Datos_Casillas.xlsx");
   }
+  
+  
 // Función para exportar a PDF
 function exportToPDF() {
   const canvas = document.getElementById("graficos-municipio");
