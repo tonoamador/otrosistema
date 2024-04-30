@@ -305,7 +305,6 @@ function exportToExcel() {
     console.error("No hay datos aún.");
     return;
   }
-  console.log(fetchedData);
   const workbook = XLSX.utils.book_new();
   const worksheet = XLSX.utils.json_to_sheet([]);
 

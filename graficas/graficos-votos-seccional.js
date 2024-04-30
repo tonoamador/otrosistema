@@ -1,7 +1,7 @@
 "use strict";
 var am5 = am5;
 $.noConflict();
-
+let fetchedData;
 const params = new URLSearchParams(window.location.search);
 const TownhallId = params.get("id");
 let e = document.querySelector("#townhall");
@@ -46,12 +46,12 @@ var getVotosXSeccion = (function () {
           value: i.total_votos,
         },
       ];
+      fetchedData = i;
     },
   }).done(function (result) {});
 
   am5.ready(function () {
     var root = am5.Root.new("kt_amcharts_1");
-
 
     root.setThemes([am5themes_Animated.new(root)]);
 
@@ -134,7 +134,6 @@ var getVotosXSeccion = (function () {
       return chart.get("colors").getIndex(series.columns.indexOf(target));
     });
 
-  
     series.bullets.push(function () {
       return am5.Bullet.new(root, {
         locationY: 1,
@@ -175,7 +174,13 @@ var getVotosXSeccion = (function () {
 
     const row = `
     <tr>
-    <td><a href="overview-lider.html?id=${dataSecciones.lider._id}">${dataSecciones.lider.nombre+" "+dataSecciones.lider.paterno+" "+dataSecciones.lider.materno}</a></td>
+    <td><a href="overview-lider.html?id=${dataSecciones.lider._id}">${
+      dataSecciones.lider.nombre +
+      " " +
+      dataSecciones.lider.paterno +
+      " " +
+      dataSecciones.lider.materno
+    }</a></td>
         <td>${dataSecciones.votos_a}</td>
         <td>${dataSecciones.votos_b}</td>
         <td>${dataSecciones.total_a - dataSecciones.votos_a}</td>
@@ -192,7 +197,7 @@ var getVotosXSeccion = (function () {
     </tr>
 `;
 
-tableBody.insertAdjacentHTML('beforeend', row);
+    tableBody.insertAdjacentHTML("beforeend", row);
 
     dt = $("#kt_table_townhall").DataTable({
       searchDelay: 500,
@@ -227,3 +232,51 @@ tableBody.insertAdjacentHTML('beforeend', row);
 KTUtil.onDOMContentLoaded(function () {
   getVotosXSeccion.init();
 });
+
+function exportToExcel() {
+  if (!fetchedData) {
+    console.error("No hay datos aún.");
+    return;
+  }
+  const workbook = XLSX.utils.book_new();
+  const worksheet = XLSX.utils.json_to_sheet([]);
+
+  XLSX.utils.sheet_add_aoa(
+    worksheet,
+    [["Votos NG", "Votos X", "Faltan NG", "Lider", "Porcentaje"]],
+    { origin: "A1" }
+  );
+  let percent = 0;
+  if (fetchedData.total_a != 0) {
+    percent = (100 * fetchedData.votos_a) / fetchedData.total_a;
+  }
+  XLSX.utils.sheet_add_aoa(
+    worksheet,
+    [
+      [
+        fetchedData.numero,
+        fetchedData.votos_a,
+        fetchedData.votos_b,
+        fetchedData.total_a - fetchedData.votos_a,
+        fetchedData.lider.paterno +
+          " " +
+          fetchedData.lider.materno +
+          " " +
+          fetchedData.lider.nombre,
+        percent + "%",
+      ],
+    ],
+    { origin: -1 }
+  );
+
+  XLSX.utils.book_append_sheet(workbook, worksheet, "Votación");
+
+  const filename =
+    "Votación por Seccional " +
+    (new Date().getHours() % 12 || 12) +
+    "_" +
+    new Date().getMinutes().toString().padStart(2, "0") +
+    (new Date().getHours() >= 12 ? "PM" : "AM") +
+    ".xlsx";
+  XLSX.writeFile(workbook, filename);
+}
