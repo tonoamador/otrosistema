@@ -58,10 +58,10 @@ var KTSigninGeneral = (function () {
                     const token = JSON.parse(jsonPayload);
                     localStorage.setItem("token", JSON.stringify(token));
                     Swal.fire({
-                      text: "You have successfully logged in!",
+                      text: "Bienvenido, iniciaste sesión",
                       icon: "success",
                       buttonsStyling: !1,
-                      confirmButtonText: "Ok, got it!",
+                      confirmButtonText: "Aceptar",
                       customClass: { confirmButton: "btn btn-primary" },
                     }).then(function (e) {
                       if (e.isConfirmed) {
@@ -88,7 +88,7 @@ var KTSigninGeneral = (function () {
                         text: "Los datos ingresados son incorrectos, por favor intente de nuevo.",
                         icon: "error",
                         buttonsStyling: !1,
-                        confirmButtonText: "Ok, got it!",
+                        confirmButtonText: "Aceptar",
                         customClass: { confirmButton: "btn btn-primary" },
                       });
                     }
