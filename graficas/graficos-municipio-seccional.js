@@ -40,7 +40,6 @@ var getCasillasXMunicipio = (function () {
         },
       ];
 
-      // Store the fetched data
       fetchedData = i[0];
     },
   }).done(function (result) {});
