@@ -241,7 +241,7 @@ var getVotosXMunicipio = function () {
                     <td>${seccion.conteo_seccion_ng}</td>
                     <td>${seccion.conteo_seccion_og}</td>
                     <td>${seccion.faltan_seccion_ng}</td>
-                    <td><a href="grafica-votos-lider.html?id=${seccion.lider._id}">${seccion.lider.nombre+" "+seccion.lider.paterno+" "+seccion.lider.materno}</a></td>
+                    <td><a href="overview-lider.html?id=${seccion.lider._id}">${seccion.lider.nombre+" "+seccion.lider.paterno+" "+seccion.lider.materno}</a></td>
                     <td>
                         <div class="d-flex align-items-center w-200px w-sm-300px flex-column mt-3">
                             <div class="d-flex justify-content-between w-100 mt-auto mb-2">
