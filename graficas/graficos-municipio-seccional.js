@@ -7,6 +7,7 @@ const TownhallId = params.get("id");
 let e = document.querySelector("#townhall");
 e.setAttribute("data-id-townhall", TownhallId)
 
+
 var getCasillasXMunicipio = function () {
     var dataVotos
     var el = document.getElementById("townhall")
@@ -26,6 +27,9 @@ var getCasillasXMunicipio = function () {
             id: idTownHall,
         }),
         success: function (i) {
+            exportToExcel(idTownHall)
+            console.log(idTownHall)
+  
             e.innerHTML = i[0].nombre
             dataSecciones = i[0].secciones
             dataChart = [
@@ -245,15 +249,27 @@ KTUtil.onDOMContentLoaded( function () {
 })
 
 // Función para exportar a Excel
-function exportToExcel() {
-  const workbook = XLSX.utils.book_new();
-  const worksheet = XLSX.utils.json_to_sheet([
-    { Municipio: "Cosamaloapan", Abierta: 12, Cerrada: 15 },
-  ]);
-
-  XLSX.utils.book_append_sheet(workbook, worksheet, "Municipio");
-  XLSX.writeFile(workbook, "Gráfica Municipio.xlsx");
-}
+function exportToExcel(data) {
+    if (!data || !Array.isArray(data)) {
+      console.error("Los datos de la API son inválidos.");
+      console.log(data);
+      return;
+    }
+  
+    const workbook = XLSX.utils.book_new();
+  
+    // Crear una hoja de cálculo
+    const worksheetData = data.flatMap(municipio => municipio.secciones.map(seccion => ({
+      Municipio: municipio.nombre,
+      Seccion: seccion.numero,
+    })));
+  
+    const worksheet = XLSX.utils.json_to_sheet(worksheetData);
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Datos Casillas");
+  
+    // Guardar el archivo
+    XLSX.writeFile(workbook, "Datos_Casillas.xlsx");
+  }
 // Función para exportar a PDF
 function exportToPDF() {
   const canvas = document.getElementById("graficos-municipio");

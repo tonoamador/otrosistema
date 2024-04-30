@@ -50,6 +50,7 @@ var getVotosXMunicipio = function () {
         
     })
 
+
     
     am5.ready(function() {
 
@@ -256,7 +257,7 @@ KTUtil.onDOMContentLoaded( function () {
 function exportToExcel() {
   const workbook = XLSX.utils.book_new();
   const worksheet = XLSX.utils.json_to_sheet([
-    { Municipio: "Cosamaloapan", Abierta: 12, Cerrada: 15 },
+    { Municipio: dataTownhall, Abierta: 12, Cerrada: 15 },
   ]);
 
   XLSX.utils.book_append_sheet(workbook, worksheet, "Municipio");
@@ -276,7 +277,7 @@ function exportToPDF() {
 
 // Función para exportar a PNG
 function exportToPNG() {
-    const canvas = document.getElementById('graficos-municipio');
+    const canvas = document.getElementById('kt_amcharts_1');
     const imageURL = canvas.toDataURL('image/png');
     const link = document.createElement('a');
     link.href = imageURL;
