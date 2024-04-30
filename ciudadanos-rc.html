@@ -30,6 +30,11 @@ License: For each use you must have a valid license purchased only from above li
 		<!--begin::Global Stylesheets Bundle(mandatory for all pages)-->
 		<link href="assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
 		<link href="assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
+		<style>
+			.hidden{
+				display: none;
+			}
+		</style>
 		<!--end::Global Stylesheets Bundle-->
 		<script>// Frame-busting to prevent site from being loaded within a frame without permission (click-jacking) if (window.top != window.self) { window.top.location.replace(window.self.location.href); }</script>
 	</head>
@@ -207,7 +212,7 @@ License: For each use you must have a valid license purchased only from above li
 										<!--begin::Card body-->
 										<div class="card-body pt-0">
 											<!--begin::Datatable-->
-											<table id="rc-table" class="table align-middle table-row-dashed fs-table gy-5">
+											<table id="rc-table" class="table hidden align-middle table-row-dashed fs-table gy-5">
 												<thead>
 												<tr class="text-start text-gray-500 fw-bold text-uppercase gs-0">
 													<th class="w-10px pe-2">
@@ -5943,6 +5948,24 @@ License: For each use you must have a valid license purchased only from above li
 		<script src="assets/js/custom/utilities/modals/upgrade-plan.js"></script>
 		<script src="assets/js/custom/utilities/modals/users-search.js"></script>
 		<script src="api/ciudadanos-rc-api.js"></script>
+
+		<script>
+		$(document).ready(function(){
+		// Función para mostrar u ocultar los datos según el contenido del campo de entrada
+		function toggleDataVisibility() {
+			if ($('input[data-kt-docs-table-filter="search"]').val().trim() !== '') {
+			$('#rc-table').removeClass('hidden');
+			} else {
+			$('#rc-table').addClass('hidden');
+			}
+		}
+		
+		// Detecta cambios en el campo de entrada
+		$('input[data-kt-docs-table-filter="search"]').on('input', function() {
+			toggleDataVisibility();
+		});
+		});
+</script>
 		
 
 		<!--end::Custom Javascript-->

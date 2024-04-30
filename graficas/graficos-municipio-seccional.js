@@ -27,8 +27,7 @@ var getCasillasXMunicipio = function () {
             id: idTownHall,
         }),
         success: function (i) {
-            exportToExcel(i[0])
-  
+            console.log(i[0]);
             e.innerHTML = i[0].nombre
             dataSecciones = i[0].secciones
             dataChart = [
