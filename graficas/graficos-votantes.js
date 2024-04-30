@@ -24,7 +24,6 @@ var getVotosXMunicipio = function () {
         //     id: idTownHall,
         // }),
         success: function (i) {
-            console.log(i.municipios)
             dataTownhall = i.municipios
             dataChart = [
                 {

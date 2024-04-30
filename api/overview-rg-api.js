@@ -30,7 +30,6 @@ function fetchData() {
       return response.json();
     })
     .then((posts) => {
-      console.log(localStorage.getItem('token'))
       document.querySelector("#nombreOVMov").innerHTML =
         posts.paterno + " " + posts.materno + " " + posts.nombre;
       document.querySelector("#direccionOVMov").innerHTML =

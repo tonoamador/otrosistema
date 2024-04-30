@@ -48,9 +48,7 @@ var KTDatatablesServerSide = (function () {
         dataSrc: true,
         contentType: "application/json",
         data: function (d) {
-          console.log(d);
           var stringify = JSON.stringify({ id: idRc });
-          console.log(stringify);
           return stringify;
         },
       },

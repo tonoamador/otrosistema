@@ -4,7 +4,6 @@
 var KTDatatablesServerSide = (function () {
   // Shared variables
   const token = JSON.parse(localStorage.getItem("token"));
-  console.log(token)
   if (!token || token.user_type !== "admin" || isTokenExpired(token)) {
     window.location.replace("index.html");
   }

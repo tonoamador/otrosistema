@@ -26,7 +26,6 @@ var getVotosXSeccion = (function () {
       id: idTownHall,
     }),
     success: function (i) {
-      console.log(i);
       e.innerHTML = i.numero;
       dataSecciones = i;
       dataChart = [

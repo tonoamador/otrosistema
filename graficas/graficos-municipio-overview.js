@@ -33,9 +33,7 @@ function handleClick(event, array) {
     var index = array[0]._index;
     var datasetIndex = array[0]._datasetIndex;
     var value = myChart.data.datasets[datasetIndex].data[index];
-    console.log(
-      "Haz hecho clic en la barra " + (index + 1) + " con un valor de " + value
-    );
+  
     // Aquí puedes realizar cualquier acción que desees con los datos de la barra clicada
   }
 }
