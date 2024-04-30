@@ -7,7 +7,6 @@ const TownhallId = params.get("id");
 let e = document.querySelector("#townhall");
 e.setAttribute("data-id-townhall", TownhallId);
 
-// Define a variable to store the fetched data
 let fetchedData;
 var getCasillasXMunicipio = (function () {
   var el = document.getElementById("townhall");

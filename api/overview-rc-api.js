@@ -16,15 +16,13 @@ function isTokenExpired(token) {
   const currentTime = Date.now() / 1000;
   return token.exp < currentTime;
 }
-$(function() {
-  $("#sameNavbar").load("./navbar.html");
-});
-document.querySelector("#nombre").textContent =
+
+document.querySelector("#nombre").innerHTML =
   token.paterno + " " + token.materno + " " + token.nombre;
-document.querySelector("#seccion").textContent = token.casilla.seccion.numero;
-document.querySelector("#municipio").textContent =
+document.querySelector("#seccion").innerHTML = token.casilla.seccion.numero;
+document.querySelector("#municipio").innerHTML =
   token.casilla.seccion.municipio.nombre;
-document.querySelector("#casilla").textContent = token.casilla.nombre;
+document.querySelector("#casilla").innerHTML = token.casilla.nombre;
 if (window.location.hash) {
   const params = new URLSearchParams(window.location.search);
   const idRc = params.get("id");
