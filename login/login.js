@@ -57,30 +57,20 @@ var KTSigninGeneral = (function () {
 
                     const token = JSON.parse(jsonPayload);
                     localStorage.setItem("token", JSON.stringify(token));
-                    Swal.fire({
-                      text: "Bienvenido, iniciaste sesión",
-                      icon: "success",
-                      buttonsStyling: !1,
-                      confirmButtonText: "Aceptar",
-                      customClass: { confirmButton: "btn btn-primary" },
-                    }).then(function (e) {
-                      if (e.isConfirmed) {
-                        var redirectUrl = "index.html";
-                        switch (token.user_type) {
-                          case "rc":
-                            redirectUrl = "overview-rc.html";
-                            break;
-                            case "admin":
-                            redirectUrl = "ficha-ciudadano.html";
-                            break;
-                        }
-                        var additionalParams = "";
+                    var redirectUrl = "index.html";
+                    switch (token.user_type) {
+                      case "rc":
+                        redirectUrl = "overview-rc.html";
+                        break;
+                        case "admin":
+                        redirectUrl = "ficha-ciudadano.html";
+                        break;
+                    }
+                    var additionalParams = "";
 
-                        if (redirectUrl) {
-                          location.href = redirectUrl + additionalParams;
-                        }
-                      }
-                    });
+                    if (redirectUrl) {
+                      location.href = redirectUrl + additionalParams;
+                    }
                   })
                   .catch(function (error) {
                     {
