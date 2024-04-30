@@ -23,10 +23,7 @@ document.querySelector("#seccion").innerHTML = token.casilla.seccion.numero;
 document.querySelector("#municipio").innerHTML =
   token.casilla.seccion.municipio.nombre;
 document.querySelector("#casilla").innerHTML = token.casilla.nombre;
-if (window.location.hash) {
-  const params = new URLSearchParams(window.location.search);
-  const idRc = params.get("id");
-}
+
 
 
 
