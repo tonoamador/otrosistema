@@ -244,7 +244,7 @@ function exportToExcel() {
   XLSX.utils.book_append_sheet(workbook, worksheet, "Casillas");
 
   const filename =
-    "Estatus de Casillas " +
+    "Estatus Casillas General " +
     (new Date().getHours() % 12 || 12) +
     "_" +
     new Date().getMinutes().toString().padStart(2, "0") +
