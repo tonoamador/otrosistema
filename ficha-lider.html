@@ -6655,27 +6655,7 @@ License: For each use you must have a valid license purchased only from above li
 	<script src="assets/js/custom/utilities/modals/upgrade-plan.js"></script>
 	<script src="assets/js/custom/utilities/modals/users-search.js"></script>
 	<script src="api/ficha-lider-api-rest.js"></script>
-	<script>
-		document.addEventListener("DOMContentLoaded", function () {
-			function loadContent(elementId, filePath) {
-				var xhr = new XMLHttpRequest();
-				xhr.onreadystatechange = function () {
-					if (xhr.readyState === XMLHttpRequest.DONE) {
-						if (xhr.status === 200) {
-							document.getElementById(elementId).innerHTML = xhr.responseText;
-						} else {
-							console.error("Error al cargar: " + filePath + " - " + xhr.status);
-						}
-					}
-				};
-				xhr.open("GET", filePath, true);
-				xhr.send();
-			}
-
-			loadContent("menu", "menu.html");
-			loadContent("submenu", "submenu.html");
-		});
-	</script>
+	<script src="api/imports.js"></script>
 
 	<!--end::Custom Javascript-->
 	<!--end::Javascript-->
