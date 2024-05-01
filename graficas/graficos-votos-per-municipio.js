@@ -243,7 +243,7 @@ var getVotosXMunicipio = (function () {
                     <td>${seccion.conteo_seccion_ng}</td>
                     <td>${seccion.conteo_seccion_og}</td>
                     <td>${seccion.faltan_seccion_ng}</td>
-                    <td><a href="overview-lider.html?=${seccion.lider._id}">${
+                    <td><a href="grafica-votantes-lider.html?=${seccion.lider._id}">${
         seccion.lider.nombre +
         " " +
         seccion.lider.paterno +
