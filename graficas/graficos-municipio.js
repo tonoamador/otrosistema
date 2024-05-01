@@ -143,6 +143,7 @@ var getVotosXMunicipio = (function () {
       let percent = 0;
       if (townhall.total_casillas != 0) {
         percent = (100 * townhall.abiertas_total) / townhall.total_casillas;
+        percent=percent.toFixed(2)
       }
 
       let classPercent = "bg-light";

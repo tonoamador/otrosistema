@@ -155,6 +155,7 @@ var getCasillasXMunicipio = (function () {
       let percent = 0;
       if (seccion.total_seccion != 0) {
         percent = (100 * seccion.abiertas_seccion) / seccion.total_seccion;
+        percent=percent.toFixed(2)
       }
       let classPercent = "bg-light";
       if (percent < 50) {

@@ -180,6 +180,7 @@ var getVotosXMunicipio = (function () {
       let percent = 0;
       if (townhall.esperados_ng != 0) {
         percent = (100 * townhall.conteo_ng) / townhall.esperados_ng;
+        percent=percent.toFixed(2)
       }
 
       // var classPercent = percent = 0 ? "bg-light" : percent < 50 ? "bg-warning" : percent >=50 ? "bg-success" : "bg-light";

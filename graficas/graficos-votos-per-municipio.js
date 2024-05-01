@@ -223,8 +223,8 @@ var getVotosXMunicipio = (function () {
     dataSecciones.forEach((seccion) => {
       let percent = 0;
       if (seccion.esperados_seccion_ng != 0) {
-        percent =
-          (100 * seccion.conteo_seccion_ng) / seccion.esperados_seccion_ng;
+        percent = (100 * seccion.conteo_seccion_ng) / seccion.esperados_seccion_ng;
+        percent=percent.toFixed(2)
       }
 
       // var classPercent = percent = 0 ? "bg-light" : percent < 50 ? "bg-warning" : percent >=50 ? "bg-success" : "bg-light";
