@@ -66,7 +66,7 @@ function fetchData() {
         },
         {
           votos: "No han votado",
-          value: posts.total_a,
+          value: posts.total_a-posts.votos_a,
         },
         {
           votos: "Total Votos General",

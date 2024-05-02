@@ -8,6 +8,8 @@ var KTDatatablesServerSide = (function () {
   var source;
   var filterPayment;
   const token = JSON.parse(localStorage.getItem("token"));
+  
+  var idCasilla = token.casilla._id
   function isTokenExpired(token) {
     const currentTime = Date.now() / 1000;
     return token.exp < currentTime;
@@ -24,59 +26,49 @@ var KTDatatablesServerSide = (function () {
   var table;
   var dt;
   var filterPayment;
-  let idRc = "66198d46c80fd64bb56036a4";
 
   var getData = function () {
     $.ajax({
       url: "https://hcpboca.ddns.net:3050/api/getCiudadanosByCasilla",
-      dataType: "JSON",
-      method: "POST",
+      contentType: "application/json",
+      type: "POST",
+      data: JSON.stringify({
+        id: idCasilla
+      }),
+      success: data => {
+        displayData(data)
+        // data.forEach((d) => {
+        //   console.log(d._id)
+        //   displayData(d)
+        // })
+      }
     });
   };
 
-  // Private functions
-  var initDatatable = function () {
-    dt = $("#rc-table").DataTable({
-      searchDelay: 500,
-      processing: true,
-      serverSide: true,
-      order: [[1, "desc"]],
-      // stateSave: true,
-      ajax: {
-        type: "POST",
-        url: "https://hcpboca.ddns.net:3050/api/getCiudadanosByCasilla",
-        dataSrc: true,
-        contentType: "application/json",
-        data: function (d) {
-          var stringify = JSON.stringify({ id: idRc });
-          return stringify;
-        },
-      },
-      columns: [
-        { data: "_id" },
-        // { data: null,
-        //     render: function (data, type, row) {
-        //         // return row.paterno + ' ' + row.materno + ' ' + row.nombre;
-        //       return row._id
-        //     }
-        // }
-      ],
+  function displayData(posts) {
+    const tableBody = document.querySelector("#contenido-tabla");
+  
+    // Limpiar cualquier fila existente en la tabla
+    tableBody.innerHTML = "";
+  
+    // Iterar sobre los posts y agregarlos a la tabla
+    posts.forEach((post) => {
+      const row = `
+              
+          
+          <tr>
+              <td></td>
+              <td>${post.paterno + " " + post.materno + " " + post.nombre}</td>
+              <td>${post._id}</td>
+          </tr>          
+      <!--end::Table body-->
+              
+          `;
+      tableBody.innerHTML += row;
+  
+      $("#kt_customers_table").DataTable()
     });
-
-    table = dt.$;
-
-    // Re-init functions on every table re-draw -- more info: https://datatables.net/reference/event/draw
-    dt.on("draw", function () {
-      // initToggleToolbar();
-      // toggleToolbars();
-      // handleDeleteRows();
-      KTMenu.createInstances();
-    });
-
-    // dt.on('xhr', function (e, settings, json, xhr) {
-    //     console.log(table.ajax. + ' row(s) where loaded');
-    // });
-  };
+  }
 
   // Search Datatable --- official docs reference: https://datatables.net/reference/api/search()
   var handleSearchDatatable = function () {
@@ -328,7 +320,8 @@ var KTDatatablesServerSide = (function () {
   // Public methods
   return {
     init: function () {
-      initDatatable();
+      getData();
+      // initDatatable();
       handleSearchDatatable();
       // initToggleToolbar();
       // handleFilterDatatable();
