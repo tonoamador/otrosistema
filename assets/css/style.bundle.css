@@ -60456,7 +60456,7 @@ body {
     }
 
     [data-kt-app-header-secondary-enabled=true] {
-        --bs-app-header-secondary-height: 94px
+/*        --bs-app-header-secondary-height: 94px*//*aqui*/
     }
 
     [data-kt-app-header-secondary-enabled=true][data-kt-app-header-sticky=on] {
