@@ -13,8 +13,8 @@ function isTokenExpired(token) {
 }
 function fetchData() {
   const params = new URLSearchParams(window.location.search);
-  const id = params.get("");
-  fetch("https://hcpboca.ddns.net:3050/api/getRcs/", {
+  const id = params.get("id");
+  fetch("https://hcpboca.ddns.net:3050/api/getRc/", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -43,8 +43,11 @@ function fetchData() {
         ", " +
         posts.c_postal;
       document.querySelector("#telefonoOVMov").innerHTML = posts.telefono;
-
-      displayData(posts.rcs);
+      document.querySelector("#casilla").innerHTML = posts.casilla.nombre;
+      document.querySelector("#rg").innerHTML = posts.rg.paterno + " " + posts.rg.materno + " " + posts.rg.nombre;
+      document.querySelector("#rg").setAttribute('href', 'overview-rg.html?='+posts.rg._id);
+      document.querySelector("#seccion").innerHTML = posts.casilla.seccion.numero;
+      displayData(posts.casilla);
     })
     .catch((error) => {
       console.error("Error fetching data:", error);
@@ -58,7 +61,7 @@ function displayData(posts) {
   tableBody.innerHTML = "";
 
   // Iterar sobre los posts y agregarlos a la tabla
-  posts.forEach((post) => {
+  posts.ciudadanos.forEach((post) => {
     const row = `
             
         
@@ -91,34 +94,11 @@ function displayData(posts) {
                   post.telefono
                 }</a>
             </td>
-
-            <td>
-            <a href="#" class="text-gray-600 text-hover-primary mb-1">${[
-              ...new Set(
-                post.casilla.flatMap((casillaItem) =>
-                  casillaItem.seccion.map((section) => section.numero)
-                )
-              ),
-            ].join(", ")}</a>
-            </td>
-            <td>
-            <a href="#" class="text-gray-600 text-hover-primary mb-1">${[
-              ...new Set(post.casilla.map((x) => x.nombre)),
-            ].join(", ")}</a>
-            </td>
-            <td>
-            <a href="https://www.google.com/maps/search/?api=1&query=${[
-              ...new Set(
-                post.casilla.flatMap((casillaItem) =>
-                  casillaItem.seccion.map(
-                    (section) => section.lat + "," + section.long
-                  )
-                )
-              ),
-            ].join(
-              ", "
-            )}" class="btn btn-icon btn-primary" target="_blank"><i class="fas fa-search-location fs-4 "></i></a>
-            </td>
+<td>
+<div class="badge badge-light-${
+  post.voto ? "success" : "danger"
+}">${post.voto ? "Votó" : "Sin voto"}</div>
+</td>
         </tr>
     <!--end::Table body-->
             
