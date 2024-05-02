@@ -63,7 +63,7 @@ var KTSigninGeneral = (function () {
                         redirectUrl = "overview-rc.html";
                         break;
                         case "admin":
-                        redirectUrl = "ficha-ciudadano.html";
+                        redirectUrl = "main.html";
                         break;
                     }
                     var additionalParams = "";

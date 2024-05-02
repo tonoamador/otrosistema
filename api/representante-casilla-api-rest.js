@@ -39,7 +39,7 @@ var KTDatatablesServerSide = (function () {
         {
           data: null,
           render: function (data, type, row) {
-            return `<a href="overview-rc.html?id=${row._id}" class="text-gray-600 mb-1 text-hover-primary">${row.paterno} ${row.materno} ${row.nombre}</a>`;
+            return `<a href="overview-rc-admin.html?id=${row._id}" class="text-gray-600 mb-1 text-hover-primary">${row.paterno} ${row.materno} ${row.nombre}</a>`;
           },
         },
         {
@@ -80,6 +80,12 @@ var KTDatatablesServerSide = (function () {
           data: null,
           render: function (data, type, row) {
             return [...new Set(row.municipios.map((x) => x.nombre))].join(", ");
+          },
+        },
+        {
+          data: null,
+          render: function (data, type, row) {
+            return '<a href="overview-rg.html?='+row.rg._id+'" class="text-gray-600 mb-1 text-hover-primary">'+row.rg.paterno+' '+row.rg.materno+' '+row.rg.nombre+ '</a>'
           },
         },
         {

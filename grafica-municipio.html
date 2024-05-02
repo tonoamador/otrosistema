@@ -35,6 +35,8 @@ License: For each use you must have a valid license purchased only from above li
 	<link href="assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
 	<link href="assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+	<link rel="stylesheet" href="assets/css/estilos.css">
+
 	<!--end::Global Stylesheets Bundle-->
 	<script>// Frame-busting to prevent site from being loaded within a frame without permission (click-jacking) if (window.top != window.self) { window.top.location.replace(window.self.location.href); }</script>
 </head>
@@ -56,6 +58,7 @@ License: For each use you must have a valid license purchased only from above li
 			<!--begin::Header-->
 			<div id="kt_app_header" class="app-header">
 				<div class="app-header-primary">
+
 					<div class="app-container container-fluid d-flex align-items-stretch justify-content-between"
 						id="kt_app_header_primary_container">
 						<div class="d-flex flex-stack flex-grow-1">
@@ -65,7 +68,7 @@ License: For each use you must have a valid license purchased only from above li
 										id="kt_app_sidebar_mobile_toggle">
 										<i class="ki-outline ki-abstract-14 fs-2"></i>
 									</button>
-									<a href="index.html">
+									<a href="main.html">
 										<img alt="Logo" src="assets/media/logos/default-large.svg" class="mh-25px" />
 									</a>
 								</div>
@@ -100,6 +103,14 @@ License: For each use you must have a valid license purchased only from above li
 										data-kt-menu="true">
 
 									</div>
+									<div class="app-header-secondary app-header-mobile-drawer" data-kt-drawer="true"
+				data-kt-drawer-name="app-header-secondary" data-kt-drawer-activate="{default: true, lg: false}"
+				data-kt-drawer-overlay="true" data-kt-drawer-width="250px" data-kt-drawer-direction="start"
+				data-kt-drawer-toggle="#kt_header_secondary_mobile_toggle" data-kt-swapper="true"
+				data-kt-swapper-mode="{default: 'append', lg: 'append'}"
+				data-kt-swapper-parent="{default: '#kt_app_body', lg: '#kt_app_header'}">
+
+			</div>
 								</div>
 
 							</div>
