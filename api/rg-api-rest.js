@@ -41,7 +41,7 @@ var KTDatatablesServerSide = function () {
                 { data: null},
                 { data: null,
                     render: function (data, type, row) {
-                        return `<a href="overview-rc.html?=${row._id}" class="text-gray-600 mb-1 text-hover-primary">${row.paterno} ${row.materno} ${row.nombre}</a>`;
+                        return `<a href="overview-rg.html?=${row._id}" class="text-gray-600 mb-1 text-hover-primary">${row.paterno} ${row.materno} ${row.nombre}</a>`;
                     }
                 },
                 { data: null,
