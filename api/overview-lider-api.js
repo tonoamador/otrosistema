@@ -2,13 +2,9 @@ document.addEventListener("DOMContentLoaded", fetchData);
 const token = JSON.parse(localStorage.getItem("token"));
 
 var am5 = am5;
-var dataChart
+var dataChart;
 
-if (
-  !token ||
-  (token.user_type !== "admin") ||
-  isTokenExpired(token)
-) {
+if (!token || token.user_type !== "admin" || isTokenExpired(token)) {
   window.location.replace("index.html");
 }
 function isTokenExpired(token) {
@@ -66,18 +62,18 @@ function fetchData() {
           votos: "Total Votos General",
           value: posts.total_votos,
         },
-      ]
+      ];
 
       am5.ready(function () {
         // Create root element
         // https://www.amcharts.com/docs/v5/getting-started/#Root_element
         var root = am5.Root.new("kt_amcharts_1");
-    
+
         // Set themes
         // https://www.amcharts.com/docs/v5/concepts/themes/
-    
+
         root.setThemes([am5themes_Animated.new(root)]);
-    
+
         // Create chart
         // https://www.amcharts.com/docs/v5/charts/xy-chart/
         var chart = root.container.children.push(
@@ -89,26 +85,26 @@ function fetchData() {
             paddingLeft: 0,
           })
         );
-    
+
         // Add cursor
         // https://www.amcharts.com/docs/v5/charts/xy-chart/cursor/
         var cursor = chart.set("cursor", am5xy.XYCursor.new(root, {}));
         cursor.lineY.set("visible", false);
-    
+
         // Create axes
         // https://www.amcharts.com/docs/v5/charts/xy-chart/axes/
         var xRenderer = am5xy.AxisRendererX.new(root, {
           minGridDistance: 30,
           minorGridEnabled: true,
         });
-    
+
         xRenderer.labels.template.setAll({
           rotation: -50,
           centerY: am5.p50,
           centerX: am5.p100,
           paddingRight: 15,
         });
-    
+
         var xAxis = chart.xAxes.push(
           am5xy.CategoryAxis.new(root, {
             maxDeviation: 0,
@@ -117,9 +113,9 @@ function fetchData() {
             tooltip: am5.Tooltip.new(root, {}),
           })
         );
-    
+
         xRenderer.grid.template.set("visible", false);
-    
+
         var yRenderer = am5xy.AxisRendererY.new(root, {});
         var yAxis = chart.yAxes.push(
           am5xy.ValueAxis.new(root, {
@@ -129,11 +125,11 @@ function fetchData() {
             renderer: yRenderer,
           })
         );
-    
+
         yRenderer.grid.template.setAll({
           strokeDasharray: [2, 2],
         });
-    
+
         // Create series
         // https://www.amcharts.com/docs/v5/charts/xy-chart/series/
         var series = chart.series.push(
@@ -147,7 +143,7 @@ function fetchData() {
             //   tooltip: am5.Tooltip.new(root, { dy: -25, labelText: "{valueY, valueX} {valueX}" })
           })
         );
-    
+
         series.columns.template.setAll({
           cornerRadiusTL: 5,
           cornerRadiusTR: 5,
@@ -157,15 +153,15 @@ function fetchData() {
           tooltipY: 0,
           strokeOpacity: 0,
         });
-    
+
         series.columns.template.adapters.add("fill", (fill, target) => {
           return chart.get("colors").getIndex(series.columns.indexOf(target));
         });
-    
+
         series.columns.template.adapters.add("stroke", (stroke, target) => {
           return chart.get("colors").getIndex(series.columns.indexOf(target));
         });
-    
+
         // Add Label bullet
         series.bullets.push(function () {
           return am5.Bullet.new(root, {
@@ -179,10 +175,10 @@ function fetchData() {
             }),
           });
         });
-    
+
         xAxis.data.setAll(dataChart);
         series.data.setAll(dataChart);
-    
+
         // Make stuff animate on load
         // https://www.amcharts.com/docs/v5/concepts/animations/
         series.appear(1000);
@@ -212,9 +208,11 @@ function displayData(posts) {
                 </div>
             </td>
             <td>
-                <a href="overview-movilizador.html?=${post._id}" class="text-gray-600 text-hover-primary mb-1">${
-                  post.paterno + " " + post.materno + " " + post.nombre
-                }</a>
+                <a href="overview-movilizador.html?=${
+                  post._id
+                }" class="text-gray-600 text-hover-primary mb-1">${
+      post.paterno + " " + post.materno + " " + post.nombre
+    }</a>
             </td>
             <td>
                 <a href="#" class="text-gray-600 text-hover-primary mb-1">${
@@ -235,12 +233,12 @@ function displayData(posts) {
                 }</a>
             </td>
             <td>
-                <p class="text-gray-600 mb-1">${
-                  post.seccion[0] ? post.seccion[0].numero : ""
-                }</p>
+                <p class="text-gray-600 mb-1">${[
+                  ...new Set(post.seccion.map((seccion) => seccion.numero)),
+                ]}</p>
             </td>
             <td>
-                <p class="text-gray-600 mb-1">${post.municipio[0]?post.municipio[0].nombre:""}</p>
+                <p class="text-gray-600 mb-1">${post.municipio.nombre}</p>
             </td>
         </tr>
     <!--end::Table body-->
@@ -248,6 +246,6 @@ function displayData(posts) {
         `;
     tableBody.innerHTML += row;
 
-    $("#kt_customers_table").DataTable()
+    $("#kt_customers_table").DataTable();
   });
 }
