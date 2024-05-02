@@ -9,7 +9,7 @@ var KTDatatablesServerSide = (function () {
   var filterPayment;
   const token = JSON.parse(localStorage.getItem("token"));
   
-  var idCasilla = token.casilla._id
+  
   function isTokenExpired(token) {
     const currentTime = Date.now() / 1000;
     return token.exp < currentTime;
@@ -21,11 +21,9 @@ var KTDatatablesServerSide = (function () {
     token == undefined
   ) {
     window.location.replace("index.html");
-  }
-
-  var table;
-  var dt;
-  var filterPayment;
+  } else{
+    var idCasilla = token.casilla._id
+  } 
 
   var getData = function () {
     $.ajax({
@@ -41,6 +39,7 @@ var KTDatatablesServerSide = (function () {
         //   console.log(d._id)
         //   displayData(d)
         // })
+        initDatatable();
       }
     });
   };
@@ -65,8 +64,23 @@ var KTDatatablesServerSide = (function () {
               
           `;
       tableBody.innerHTML += row;
-  
-      $("#kt_customers_table").DataTable()
+    });
+  }
+
+  var initDatatable = function () {
+    dt = $("#rc-table").DataTable({
+      searchDelay: 500,
+      processing: true,
+      order: [[1, "desc"]],
+      serverSide: false,
+      drawCallback: function () {
+        $('.dt-toolbar').parent().addClass('hidden')
+      }
+      // stateSave: true,
+    })
+    table = dt.$;
+    dt.on("draw", function () {
+      KTMenu.createInstances();
     });
   }
 
@@ -320,8 +334,8 @@ var KTDatatablesServerSide = (function () {
   // Public methods
   return {
     init: function () {
+      
       getData();
-      // initDatatable();
       handleSearchDatatable();
       // initToggleToolbar();
       // handleFilterDatatable();
