@@ -57,7 +57,7 @@ var KTSigninGeneral = (function () {
 
                     const token = JSON.parse(jsonPayload);
                     localStorage.setItem("token", JSON.stringify(token));
-                    var redirectUrl = "index.html";
+                    var redirectUrl = "main.html";
                     switch (token.user_type) {
                       case "rc":
                         redirectUrl = "overview-rc.html";

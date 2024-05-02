@@ -22,3 +22,7 @@ document.addEventListener("DOMContentLoaded", function () {
     loadContent("submenu", "submenu.html");
   }
 });
+function doSomething() {
+  localStorage.clear();
+  window.location.replace("index.html");
+}
