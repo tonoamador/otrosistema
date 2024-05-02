@@ -36,7 +36,9 @@ var KTDatatablesServerSide = function () {
             ajax: {
                 type: "POST",
                 url: "https://hcpboca.ddns.net:3050/api/getMovilizadores/",
-                dataSrc: "",
+                dataSrc: function (json) {
+                    return json[0].movilizadores;
+                },
             },
             
             columns: [
