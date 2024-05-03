@@ -1,5 +1,5 @@
 "use strict";
-import { serverUrl } from "../api/config.js";
+var serverUrl ="https://hcpboca.ddns.net:3050/";
 var KTSigninGeneral = (function () {
   var t, e, r;
   return {
