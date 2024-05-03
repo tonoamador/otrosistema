@@ -131,7 +131,6 @@ const KTDatatablesServerSide = (() => {
   return {
     init: () => {
       initDatatable();
-
       handleSearchDatatable();
       validateToken();
     },
