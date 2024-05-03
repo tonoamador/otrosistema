@@ -1,7 +1,7 @@
 "use strict";
 var am5 = am5;
 $.noConflict();
-
+var serverUrl = window.serverUrl;
 let fetchedData;
 var getVotosXMunicipio = (function () {
   var dataChart;
@@ -10,7 +10,7 @@ var getVotosXMunicipio = (function () {
   let dt;
 
   $.ajax({
-    url: "https://hcpboca.ddns.net:3050/api/getTotalCasillasAbiertas/",
+    url: serverUrl + "api/getTotalCasillasAbiertas/",
     dataType: "JSON",
     method: "POST",
     async: false,

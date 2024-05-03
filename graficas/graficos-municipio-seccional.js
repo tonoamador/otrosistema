@@ -1,5 +1,6 @@
 "use strict";
 var am5 = am5;
+var serverUrl = window.serverUrl;
 $.noConflict();
 
 const params = new URLSearchParams(window.location.search);
@@ -17,7 +18,7 @@ var getCasillasXMunicipio = (function () {
   let dt;
 
   $.ajax({
-    url: "https://hcpboca.ddns.net:3050/api/getMunicipioCasillasAbiertas/",
+    url: serverUrl + "api/getMunicipioCasillasAbiertas/",
     dataType: "JSON",
     method: "POST",
     async: false,

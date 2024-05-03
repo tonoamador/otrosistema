@@ -1,5 +1,6 @@
 "use strict";
 var am5 = am5;
+var serverUrl = window.serverUrl;
 $.noConflict();
 let fetchedData;
 const params = new URLSearchParams(window.location.search);
@@ -17,7 +18,7 @@ var getVotosXMunicipio = (function () {
   let dt;
 
   $.ajax({
-    url: "https://hcpboca.ddns.net:3050/api/getVotosMunicipio/",
+    url: serverUrl + "api/getVotosMunicipio/",
     dataType: "JSON",
     method: "POST",
     async: false,

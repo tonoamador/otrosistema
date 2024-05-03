@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", fetchData);
+var serverUrl = window.serverUrl;
 const token = JSON.parse(localStorage.getItem("token"));
 if (
   !token ||
@@ -14,7 +15,7 @@ function isTokenExpired(token) {
 function fetchData() {
   const params = new URLSearchParams(window.location.search);
   const id = params.get("");
-  fetch("https://hcpboca.ddns.net:3050/api/getRg/", {
+  fetch(serverUrl + "api/getRg/", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
