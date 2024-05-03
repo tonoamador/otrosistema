@@ -1,5 +1,5 @@
 "use strict";
-
+import { serverUrl } from "../api/config.js";
 var KTSigninGeneral = (function () {
   var t, e, r;
   return {
@@ -34,7 +34,7 @@ var KTSigninGeneral = (function () {
               e.setAttribute("data-kt-indicator", "on"),
                 (e.disabled = !0),
                 axios
-                  .post("https://hcpboca.ddns.net:3050/api/login/", {
+                  .post(serverUrl + "api/login/", {
                     username: t.querySelector('[name="username"]').value,
                     password: t.querySelector('[name="password"]').value,
                   })

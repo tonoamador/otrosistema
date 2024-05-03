@@ -42,9 +42,9 @@ const KTDatatablesServerSide = (() => {
       columns: [
         { data: null },
         {
-          data: "_id",
-          render: (id, { paterno, materno, nombre }) =>
-            `<a href="overview-movilizador.html?=${id}" class="text-gray-600 mb-1 text-hover-primary">${paterno} ${materno} ${nombre}</a>`,
+          data: null,
+          render: ({ _id, paterno, materno, nombre }) =>
+            `<a href="overview-movilizador.html?=${_id}" class="text-gray-600 mb-1 text-hover-primary">${paterno} ${materno} ${nombre}</a>`,
         },
         {
           data: null,
