@@ -17,7 +17,6 @@
 	<link href="assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
 	<link href="assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
 	<!--end::Global Stylesheets Bundle-->
-	<script>// Frame-busting to prevent site from being loaded within a frame without permission (click-jacking) if (window.top != window.self) { window.top.location.replace(window.self.location.href); }</script>
 </head>
 <!--end::Head-->
 <!--begin::Body-->
@@ -27,7 +26,7 @@
 	data-kt-app-header-secondary-enabled="true" data-kt-app-sidebar-enabled="true" data-kt-app-sidebar-fixed="true"
 	data-kt-app-sidebar-push-toolbar="true" data-kt-app-sidebar-push-footer="true" data-kt-app-toolbar-enabled="true"
 	class="app-default">
-	<!--begin::App-->
+	<!--begin::Theme mode setup on page load-->
 	<div class="d-flex flex-column flex-root app-root" id="kt_app_root">
 		<!--begin::Page-->
 		<div class="app-page flex-column" id="kt_app_page">
@@ -72,7 +71,6 @@
 
 			</div>
 			<!--end::Header primary-->
-			<!--begin::Header secondary-->
 
 		</div>
 		<!--end::Header-->
@@ -103,10 +101,14 @@
 							</span>
 							<!--end:Menu link-->
 							<!--begin:Menu sub-->
-							<div id="menu" class="menu-sub menu-sub-accordion menu-state-gray-900 menu-fit open"></div>
+							<div id="menu" class="menu-sub menu-sub-accordion menu-state-gray-900 menu-fit open">
+
+							</div>
 							<!--end:Menu sub-->
 						</div>
+						<!--end:Menu item-->
 
+						<!--begin:Menu item-->
 					</div>
 					<!--end::Menu-->
 				</div>
@@ -123,13 +125,13 @@
 						<div id="kt_app_toolbar_container"
 							class="app-container container-fluid d-flex align-items-stretch">
 							<!--begin::Toolbar wrapper-->
-							<div class="app-toolbar-wrapper d-flex flex-stack flex-wrap gap-1 w-10">
+							<div class="app-toolbar-wrapper d-flex flex-stack flex-wrap gap-4 w-100">
 								<!--begin::Page title-->
 								<div class="page-title d-flex flex-column justify-content-center gap-1 me-3">
 									<!--begin::Title-->
 									<h1
 										class="page-heading d-flex flex-column justify-content-center text-gray-900 fw-bold fs-3 m-0">
-										Ciudadanos</h1>
+										Movilizadores</h1>
 									<!--end::Title-->
 
 								</div>
@@ -145,7 +147,6 @@
 					<div id="kt_app_content" class="app-content flex-column-fluid">
 						<!--begin::Content container-->
 						<div id="kt_app_content_container" class="app-container container-fluid">
-							<!--begin::Card-->
 							<div class="card">
 								<!--begin::Card header-->
 								<div class="card-header border-0 pt-6 no-flex">
@@ -184,12 +185,8 @@
 												<th>DIRECCIÓN</th>
 												<th>TELEFONO</th>
 												<th>SECCIONAL</th>
-												<th>CASILLA</th>
 												<th>MUNICIPIO</th>
-												<th>MOVILIZADOR</th>
 												<th>LIDER</th>
-												<th>VOTÓ/NO VOTÓ</th>
-
 											</tr>
 										</thead>
 										<tbody class="text-gray-600 fw-semibold">
@@ -200,7 +197,6 @@
 								<!--end::Card body-->
 							</div>
 							<!--end::Card-->
-
 						</div>
 						<!--end::Content container-->
 					</div>
@@ -228,49 +224,11 @@
 		</div>
 		<!--end::Wrapper-->
 	</div>
-	<!--end::App-->
-	<!--begin::Drawers-->
-
-	<!--begin::Modals-->
-
-	<!--begin::Modal - Users Search-->
-	<div class="modal fade" tabindex="-1" id="modal_editar">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h3 class="modal-title">Editar datos del Ciudadano</h3>
-
-					<!--begin::Close-->
-					<div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal"
-						aria-label="Close">
-						<i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
-					</div>
-					<!--end::Close-->
-				</div>
-
-				<div class="modal-body">
-					<label for="apellido_paterno">Apellido Paterno</label>
-					<input type="text" name="text_input" class="form-control form-control-solid mb-3 mb-lg-0"
-						placeholder="" value="" />
-					<label for="apellido_materno">Apellido Materno</label>
-					<input type="text" name="text_input" class="form-control form-control-solid mb-3 mb-lg-0"
-						placeholder="" value="" />
-					<label for="nombre">Nombre(s)</label>
-					<input type="text" name="text_input" class="form-control form-control-solid mb-3 mb-lg-0"
-						placeholder="" value="" />
-
-
-				</div>
-
-				<div class="modal-footer">
-					<button type="button" class="btn btn-light" data-bs-dismiss="modal">Cerrar</button>
-					<button type="button" class="btn btn-primary">Guardar cambios</button>
-				</div>
-			</div>
-		</div>
+	<!--end::Page-->
 	</div>
-	<!--end::Modal - Users Search-->
-	<!--end::Modals-->
+	<!--end::App-->
+
+
 	<!--begin::Javascript-->
 	<!--begin::Global Javascript Bundle(mandatory for all pages)-->
 	<script src="assets/plugins/global/plugins.bundle.js"></script>
@@ -280,11 +238,8 @@
 	<script src="assets/plugins/custom/datatables/datatables.bundle.js"></script>
 	<!--end::Vendors Javascript-->
 	<!--begin::Custom Javascript(used for this page only)-->
-
-	<script src="api/ciudadanos.js"></script>
-	<script src="api/imports.js">
-
-	</script>
+	<script src="api/movilizadores.js"></script>
+	<script src="api/imports.js"></script>
 
 	<!--end::Custom Javascript-->
 	<!--end::Javascript-->
