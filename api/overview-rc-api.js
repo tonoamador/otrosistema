@@ -24,7 +24,9 @@ document.querySelector("#municipio").innerHTML =
   token.casilla.seccion.municipio.nombre;
 document.querySelector("#casilla").innerHTML = token.casilla.nombre;
 
-
+if(token.casilla.open){
+  window.location.replace("ciudadanos-rc.html")
+}
 
 
 function OpenBox() {

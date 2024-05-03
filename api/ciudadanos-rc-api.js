@@ -1,13 +1,51 @@
 "use strict";
+var dt
+var list = document.querySelector("#data-citizen")
+
+var getCitizen = function () {
+  let idCitizen
+  let nameCitizen
+  let e = document.getElementById("btn-send-vote")
+  // let modalData = document.getElementById("data-citizen")
+  idCitizen = e.getAttribute("data-citizen-id")
+  nameCitizen = e.getAttribute("data-citizen-name")
+
+  Swal.fire({
+    title: "Enviar registro del votante:",
+    html: "<p class='fs-1'>"+nameCitizen+"</p>",
+    showCancelButton: true,
+    confirmButtonText: "Contar Voto",
+    cancelButtonText: "Cancelar",
+    customClass: {
+      confirmButton: "btn btn-success",
+      cancelButton: "btn btn-primary"
+    }, 
+    preConfirm: async () => {
+      try {
+        const url = "https://hcpboca.ddns.net:3050/api/setVoto/"
+        const response = await fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            id: idCitizen,
+          })
+        })
+        console.log(response.ok)
+      } catch {
+
+      }
+    }    
+  })
+}
 
 // Class definition
 var KTDatatablesServerSide = (function () {
   // Shared variables
-  var table;
-  var dt;
-  var source;
-  var filterPayment;
-  const token = JSON.parse(localStorage.getItem("token"));
+  var filterPayment
+  var citizensArray
+  const token = JSON.parse(localStorage.getItem("token"))
   
   
   function isTokenExpired(token) {
@@ -26,6 +64,7 @@ var KTDatatablesServerSide = (function () {
   } 
 
   var getData = function () {
+    
     $.ajax({
       url: "https://hcpboca.ddns.net:3050/api/getCiudadanosByCasilla",
       contentType: "application/json",
@@ -34,12 +73,44 @@ var KTDatatablesServerSide = (function () {
         id: idCasilla
       }),
       success: data => {
-        displayData(data)
-        // data.forEach((d) => {
-        //   console.log(d._id)
-        //   displayData(d)
-        // })
-        initDatatable();
+        
+        // citizensArray = data
+        // console.log(citizensArray)
+        
+        list.innerHTML=""
+        data.forEach((d) => {
+          // var btnClass = "btn-primary"
+          // var btnText = "Contar Voto"
+          var btnCount = `<button onclick="getCitizen()" id="btn-send-vote" data-citizen-id="${d._id}" data-citizen-name="${d.paterno + " " + d.materno + " " +d.nombre}" class="btn btn-sm btn-primary fs-5 fw-bold">Contar Voto</button>`
+          if(d.voto){
+            btnCount = `<div class="badge badge-light-success disabled fs-5 fw-bold">Votó</button>`
+          }
+          const row = `
+          <li data-name="${d.paterno + " " + d.materno + " " +d.nombre}">
+              <div class="d-flex flex-stack item" id="${d._id}">
+                <div class="symbol symbol-40px me-5">
+                  <img src="assets/media/avatars/300-2.jpg" class="h-50 align-self-center" alt="" />
+                </div>
+                <div class="d-flex align-items-center flex-row-fluid flex-wrap">
+                  <div class="flex-grow-1 me-2">
+                    <p class="text-gray-800 text-hover-primary fs-6 fw-bold">${d.paterno + " " + d.materno + " " +d.nombre}</p>
+                    
+                  </div>
+                  <div class="button-send">
+                    ${btnCount}
+                  </div>
+                  
+                </div>
+              </div>
+              <div class="separator separator-dashed my-4"></div>
+          </li>
+          `
+            list.innerHTML += row;
+          // if(!d.voto){
+          //   list.innerHTML += row;
+          // }
+          
+        })
       }
     });
   };
@@ -52,13 +123,19 @@ var KTDatatablesServerSide = (function () {
   
     // Iterar sobre los posts y agregarlos a la tabla
     posts.forEach((post) => {
+      var btnClass = "btn-primary"
+      var btnText = "Contar Voto"
+      if(post.voto){
+        btnClass = "btn-success disabled"
+        btnText = "Votó"
+      }
       const row = `
               
           
           <tr>
               <td></td>
               <td>${post.paterno + " " + post.materno + " " + post.nombre}</td>
-              <td>${post._id}</td>
+              <td><button id="openModalVote" onclick="getCitizen()" data-citizen-id="${post._id}" data-citizen-name="${post.paterno+ " " +post.materno+ " " +post.nombre}" class="btn ${btnClass}" data-bs-toggle="modal" data-bs-target="#kt_modal_vote">${btnText}</button></td>
           </tr>          
       <!--end::Table body-->
               
@@ -67,32 +144,34 @@ var KTDatatablesServerSide = (function () {
     });
   }
 
-  var initDatatable = function () {
-    dt = $("#rc-table").DataTable({
-      searchDelay: 500,
-      processing: true,
-      order: [[1, "desc"]],
-      serverSide: false,
-      drawCallback: function () {
-        $('.dt-toolbar').parent().addClass('hidden')
-      }
-      // stateSave: true,
-    })
-    table = dt.$;
-    dt.on("draw", function () {
-      KTMenu.createInstances();
-    });
-  }
+
+
+  // var initDatatable = function () {
+  //   dt = $("#rc-table").DataTable({
+  //     searchDelay: 500,
+  //     processing: true,
+  //     order: [[1, "desc"]],
+  //     serverSide: false,
+  //     drawCallback: function () {
+  //       $('.dt-toolbar').parent().addClass('hidden')
+  //     }
+  //     // stateSave: true,
+  //   })
+  //   table = dt.$;
+  //   dt.on("draw", function () {
+  //     KTMenu.createInstances();
+  //   });
+  // }
 
   // Search Datatable --- official docs reference: https://datatables.net/reference/api/search()
-  var handleSearchDatatable = function () {
-    const filterSearch = document.querySelector(
-      '[data-kt-docs-table-filter="search"]'
-    );
-    filterSearch.addEventListener("keyup", function (e) {
-      dt.search(e.target.value).draw();
-    });
-  };
+  // var handleSearchDatatable = function () {
+  //   const filterSearch = document.querySelector(
+  //     '[data-kt-docs-table-filter="search"]'
+  //   );
+  //   filterSearch.addEventListener("keyup", function (e) {
+  //     dt.search(e.target.value).draw();
+  //   });
+  // };
 
   // Filter Datatable
   var handleFilterDatatable = () => {
@@ -336,7 +415,7 @@ var KTDatatablesServerSide = (function () {
     init: function () {
       
       getData();
-      handleSearchDatatable();
+      // handleSearchDatatable();
       // initToggleToolbar();
       // handleFilterDatatable();
       // handleDeleteRows();

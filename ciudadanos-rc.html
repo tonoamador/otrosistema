@@ -35,7 +35,24 @@ License: For each use you must have a valid license purchased only from above li
 	<link href="assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
 	<style>
 		.hidden {
-			display: none;
+			display: none !important;
+		}
+		.data-list li {
+			list-style: none;
+		}
+
+		.fadeInOut {
+			.transition-duration(0, 200ms);
+			.transition-property(visibility, opacity);
+			.transition-delay(0);
+
+			&.hidden {
+				visibility: hidden !important;
+				.opacity(0);
+				.transition-duration(200ms, 0);
+				.transition-property(opacity, visibility);
+				.transition-delay(0, 200ms);
+			}
 		}
 	</style>
 	<!--end::Global Stylesheets Bundle-->
@@ -200,8 +217,7 @@ License: For each use you must have a valid license purchased only from above li
 												<i class="ki-duotone ki-magnifier fs-1 position-absolute ms-6"
 													style="font-size: 1.5rem!important;"><span
 														class="path1"></span><span class="path2"></span></i>
-												<input type="text" style="font-size: 2rem!important;"
-													data-kt-docs-table-filter="search"
+												<input id="search" type="text" style="font-size: 2rem!important;" data-list=".data-list"
 													class="form-control form-control-solid w-250px ps-15"
 													placeholder="Buscar" />
 											</div>
@@ -244,9 +260,9 @@ License: For each use you must have a valid license purchased only from above li
 									</div>
 									<!--end::Card header-->
 									<!--begin::Card body-->
-									<div class="card-body pt-0">
+									<div class="card-body pt-7 px-0">
 										<!--begin::Datatable-->
-										<table id="rc-table"
+										<!--<table id="rc-table"
 											class="table hidden align-middle table-row-dashed fs-table gy-5">
 											<thead>
 												<tr class="text-start text-gray-500 fw-bold text-uppercase gs-0">
@@ -266,10 +282,51 @@ License: For each use you must have a valid license purchased only from above li
 											</thead>
 											<tbody class="text-gray-600 fw-semibold" id="contenido-tabla">
 											</tbody>
-										</table>
+										</table>-->
 										<!--end::Datatable-->
+										<!--begin::Social widget 1-->
+										<div class="card mb-5 mb-xl-8" id="listOfCitizen">
+											<!--begin::Header-->
+											<div class="card-header border-0 pt-5">
+												<h3 class="card-title align-items-start flex-column">
+													<span class="card-label fw-bold text-gray-900">Lista de ciudadanos</span>
+													<!--<span class="text-muted mt-1 fw-semibold fs-7" id="card-number"><i id="count">8</i> resultados</span>-->
+												</h3>
+											</div>
+											<!--end::Header-->
+											<!--begin::Body-->
+											<!--<div class="card-body pt-5 data-list" id="data-citizen">
+												
+											</div>-->
+											<ul class="card-body pt-5 data-list hidden" id="data-citizen">
+
+											</ul>
+											<!--end::Body-->
+										</div>
+										<!--end::Social widget 1-->
 									</div>
 									<!--end::Card body-->
+
+									<!--<div class="modal fade" tabindex="-1" id="kt_modal_vote">
+										<div class="modal-dialog">
+											<div class="modal-content">
+												<div class="modal-header">
+													<h3 class="modal-tittle">Enviar registro votante</h3>
+
+													<div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+														<i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+													</div>
+												</div>
+												<div class="modal-body" id="data-citizen" data-citizen-id="">
+													<p data-citizen-name></p>
+												</div>
+												<div class="modal-footer">
+													<button class="btn btn-light" data-bs-dismiss="modal">Cerrar</button>
+													<button class="btn btn-success" id="sendVote">Contar voto</button>
+												</div>
+											</div>
+										</div>
+									</div>-->
 								</div>
 								<!--end::Card-->
 								<!--begin::Modals-->
@@ -6633,24 +6690,68 @@ License: For each use you must have a valid license purchased only from above li
 	<script src="assets/js/custom/utilities/modals/share-earn.js"></script>
 	<script src="assets/js/custom/utilities/modals/upgrade-plan.js"></script>
 	<script src="assets/js/custom/utilities/modals/users-search.js"></script>
+	<script src="assets/js/jquery.hideseek.min.js"></script>
 	<script src="api/ciudadanos-rc-api.js"></script>
 
 	<script>
 		$(document).ready(function () {
 			// Función para mostrar u ocultar los datos según el contenido del campo de entrada
 			function toggleDataVisibility() {
-				if ($('input[data-kt-docs-table-filter="search"]').val().trim() !== '') {
-					$('#rc-table').removeClass('hidden');
+				if ($('#search').val().trim() !== '') {
+					$('.data-list').removeClass('hidden');
 					
 				} else {
-					$('#rc-table').addClass('hidden');
+					$('.data-list').addClass('hidden');
 				}
 			}
 
+			$("#search").keyup(function() {
+				toggleDataVisibility()
+			})
+
+			$("#search").hideseek({
+				ignore_accents: true,
+				nodata: 'No hay coincidencias',
+				attribute: 'data-name'
+			})
+
 			// Detecta cambios en el campo de entrada
-			$('input[data-kt-docs-table-filter="search"]').on('input', function () {
-				toggleDataVisibility();
-			});
+			// $("#search").keyup(function() {
+			// 	var filter = $(this).val(), count = 0
+			// 	$("#count").text("")
+				
+			// 	$('#data-citizen .item').each(function(){
+					
+			// 		// var textFilter = $(this).text().match(/\W/gi)
+			// 		var textFilter = $(this).text().search(new RegExp(filter, "Wgi"))
+			// 		if(textFilter > 0){
+			// 			console.log(textFilter)
+			// 		}
+					
+			// 		// if(textFilter != null){
+			// 		// 	console.log(textFilter)
+			// 		// }				
+					
+			// 		if($(this).text().search(new RegExp(filter, "gi")) < 0) {
+			// 			$(this).fadeOut()
+			// 			$(this).addClass("hidden")
+			// 		}else{
+			// 			$(this).removeClass("hidden")
+			// 			$(this).show()
+			// 			count++
+			// 		}
+			// 	})
+
+			// 	//Update the count
+			// 	var numberItems = count
+			// 	$("#count").text(count);
+			// 	if(count < 1) {
+			// 		$("#count").text("0")
+			// 	} else {
+			// 		$("#count").text(count)
+			// 	}
+			// 	toggleDataVisibility();
+			// });
 		});
 	</script>
 	<script src="api/imports.js"></script>
