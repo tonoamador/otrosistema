@@ -1,1 +1,0 @@
-export const serverUrl = 'https://172.18.1.238:3050/';

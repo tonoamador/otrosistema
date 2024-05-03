@@ -1,72 +1,85 @@
 "use strict";
 
-import { serverUrl } from "./config.js";
+var serverUrl = window.serverUrl;
 
 const KTDatatablesServerSide = (() => {
-  const dt = $("#rc-table").DataTable({
-    searchDelay: 500,
-    processing: true,
-    serverSide: false,
-    order: [[1, "desc"]],
-    stateSave: true,
-    select: {
-      style: "multi",
-      selector: 'td:first-child input[type="checkbox"]',
-      className: "row-selected",
-    },
-    ajax: {
-      type: "POST",
-      url: `${serverUrl}api/getCiudadanos/`,
-      dataSrc: "",
-    },
-    columns: [
-      { data: null },
-      {
-        data: null,
-        render: ({ paterno, materno, nombre }) =>
-          `${paterno} ${materno} ${nombre}`,
+  let dt;
+  const initDatatable = () => {
+    dt = $("#rc-table").DataTable({
+      searchDelay: 500,
+      processing: true,
+      serverSide: false,
+      order: [[1, "desc"]],
+      stateSave: true,
+      select: {
+        style: "multi",
+        selector: 'td:first-child input[type="checkbox"]',
+        className: "row-selected",
       },
-      {
-        data: null,
-        render: ({ calle, direccion_ext, direccion_int, colonia, c_postal }) =>
-          `${calle} ${direccion_ext} ${direccion_int}, ${colonia}, ${c_postal}`,
+      ajax: {
+        type: "POST",
+        url: `${serverUrl}api/getCiudadanos/`,
+        dataSrc: "",
       },
-      { data: "telefono" },
-      {
-        data: null,
-        render: ({ seccion }) => seccion.map(({ numero }) => numero).join(", "),
-      },
-      { data: "casilla.nombre" },
-      {
-        data: null,
-        render: ({ municipio }) =>
-          [...new Set(municipio.map(({ nombre }) => nombre))].join(", "),
-      },
-      {
-        data: null,
-        render: ({ movilizador }) => generateLinkHTML(movilizador),
-      },
-      {
-        data: null,
-        render: ({ lider }) => generateLinkHTML(lider),
-      },
-      {
-        data: null,
-        render: ({ voto }) => generateBadgeHTML(voto),
-      },
-    ],
-    columnDefs: [
-      {
-        targets: 0,
-        orderable: false,
-        render: (data) => `
+      columns: [
+        { data: null },
+        {
+          data: null,
+          render: ({ paterno, materno, nombre }) =>
+            `${paterno} ${materno} ${nombre}`,
+        },
+        {
+          data: null,
+          render: ({
+            calle,
+            direccion_ext,
+            direccion_int,
+            colonia,
+            c_postal,
+          }) =>
+            `${calle} ${direccion_ext} ${direccion_int}, ${colonia}, ${c_postal}`,
+        },
+        { data: "telefono" },
+        {
+          data: null,
+          render: ({ seccion }) =>
+            seccion.map(({ numero }) => numero).join(", "),
+        },
+        { data: "casilla.nombre" },
+        {
+          data: null,
+          render: ({ municipio }) =>
+            [...new Set(municipio.map(({ nombre }) => nombre))].join(", "),
+        },
+        {
+          data: null,
+          render: ({ movilizador }) => generateLinkHTML(movilizador),
+        },
+        {
+          data: null,
+          render: ({ lider }) => generateLinkHTML(lider),
+        },
+        {
+          data: null,
+          render: ({ voto }) => generateBadgeHTML(voto),
+        },
+      ],
+      columnDefs: [
+        {
+          targets: 0,
+          orderable: false,
+          render: (data) => `
           <div class="form-check form-check-sm form-check-custom form-check-solid">
             <input class="form-check-input" type="checkbox" value="${data}" />
           </div>`,
-      },
-    ],
-  });
+        },
+      ],
+    });
 
+    dt.on("draw", () => {
+      KTMenu.createInstances();
+    });
+  };
   const handleSearchDatatable = () => {
     const filterSearch = document.querySelector(
       '[data-kt-docs-table-filter="search"]'
@@ -84,10 +97,6 @@ const KTDatatablesServerSide = (() => {
   };
 
   const isTokenExpired = (token) => token.exp < Date.now() / 1000;
-
-  dt.on("draw", () => {
-    KTMenu.createInstances();
-  });
 
   const generateLinkHTML = (items) => {
     return `<a href="overview-${getType(items)}.html?=${getIds(
@@ -121,6 +130,8 @@ const KTDatatablesServerSide = (() => {
 
   return {
     init: () => {
+      initDatatable();
+
       handleSearchDatatable();
       validateToken();
     },

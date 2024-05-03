@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", fetchData);
 const token = JSON.parse(localStorage.getItem("token"));
-var am5 = am5
-import { serverUrl } from "./config.js";
+var am5 = am5;
+var serverUrl = window.serverUrl;
 if (
   !token ||
   (token.user_type !== "admin") ||

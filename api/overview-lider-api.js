@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", fetchData);
 const token = JSON.parse(localStorage.getItem("token"));
-import { serverUrl } from "./config.js";
+var serverUrl = window.serverUrl;
 var am5 = am5;
 var dataChart;
 

@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
+  window.serverUrl = 'https://172.18.1.238:3050/';
   function loadContent(elementId, filePath) {
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function () {

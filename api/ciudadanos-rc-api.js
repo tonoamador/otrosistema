@@ -1,5 +1,5 @@
 "use strict";
-import { serverUrl } from "./config.js";
+var serverUrl = window.serverUrl;
 var KTDatatablesServerSide = (function () {
   const token = JSON.parse(localStorage.getItem("token"));
   

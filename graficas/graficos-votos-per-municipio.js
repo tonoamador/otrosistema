@@ -1,6 +1,6 @@
 "use strict";
 var am5 = am5;
-import { serverUrl } from "../api/config.js";
+var serverUrl = window.serverUrl;
 $.noConflict();
 let fetchedData;
 const params = new URLSearchParams(window.location.search);

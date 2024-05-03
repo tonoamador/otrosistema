@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", fetchData);
-import { serverUrl } from "./config.js";
+var serverUrl = window.serverUrl;
 const token = JSON.parse(localStorage.getItem("token"));
 if (
   !token ||

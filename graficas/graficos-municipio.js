@@ -1,7 +1,7 @@
 "use strict";
 var am5 = am5;
 $.noConflict();
-import { serverUrl } from "../api/config.js";
+var serverUrl = window.serverUrl;
 let fetchedData;
 var getVotosXMunicipio = (function () {
   var dataChart;
