@@ -1,5 +1,7 @@
 "use strict";
+
 import { serverUrl } from "./config.js";
+
 const KTDatatablesServerSide = (() => {
   const dt = $("#rc-table").DataTable({
     searchDelay: 500,
@@ -14,7 +16,7 @@ const KTDatatablesServerSide = (() => {
     },
     ajax: {
       type: "POST",
-      url: serverUrl + "api/getCiudadanos/",
+      url: `${serverUrl}api/getCiudadanos/`,
       dataSrc: "",
     },
     columns: [
@@ -42,46 +44,23 @@ const KTDatatablesServerSide = (() => {
       },
       {
         data: null,
-        render: ({ movilizador }) =>
-          `<a href="overview-movilizador.html?=${[
-            ...new Set(movilizador.map(({ _id }) => _id)),
-          ].join(", ")}" class="text-gray-600 mb-1 text-hover-primary">${[
-            ...new Set(
-              movilizador.map(
-                ({ paterno, materno, nombre }) =>
-                  `${paterno} ${materno} ${nombre}`
-              )
-            ),
-          ].join(", ")}</a>`,
+        render: ({ movilizador }) => generateLinkHTML(movilizador),
       },
       {
         data: null,
-        render: ({ lider }) =>
-          `<a href="overview-lider.html?=${[
-            ...new Set(lider.map(({ _id }) => _id)),
-          ].join(", ")}" class="text-gray-600 mb-1 text-hover-primary">${[
-            ...new Set(
-              lider.map(
-                ({ paterno, materno, nombre }) =>
-                  `${paterno} ${materno} ${nombre}`
-              )
-            ),
-          ].join(", ")}</a>`,
+        render: ({ lider }) => generateLinkHTML(lider),
       },
       {
         data: null,
-        render: ({ voto }) =>
-          `<div class="badge badge-light-${voto ? "success" : "danger"}">${
-            voto ? "Votó" : "Sin voto"
-          }</div>`,
+        render: ({ voto }) => generateBadgeHTML(voto),
       },
     ],
     columnDefs: [
       {
         targets: 0,
         orderable: false,
-        render: (data) =>
-          `<div class="form-check form-check-sm form-check-custom form-check-solid">
+        render: (data) => `
+          <div class="form-check form-check-sm form-check-custom form-check-solid">
             <input class="form-check-input" type="checkbox" value="${data}" />
           </div>`,
       },
@@ -109,6 +88,36 @@ const KTDatatablesServerSide = (() => {
   dt.on("draw", () => {
     KTMenu.createInstances();
   });
+
+  const generateLinkHTML = (items) => {
+    return `<a href="overview-${getType(items)}.html?=${getIds(
+      items
+    )}" class="text-gray-600 mb-1 text-hover-primary">${getNames(items)}</a>`;
+  };
+
+  const getType = (items) =>
+    items.length > 0
+      ? items[0]._id.startsWith("movilizador")
+        ? "movilizador"
+        : "lider"
+      : "";
+
+  const getIds = (items) =>
+    [...new Set(items.map(({ _id }) => _id))].join(", ");
+
+  const getNames = (items) =>
+    [
+      ...new Set(
+        items.map(
+          ({ paterno, materno, nombre }) => `${paterno} ${materno} ${nombre}`
+        )
+      ),
+    ].join(", ");
+
+  const generateBadgeHTML = (voto) =>
+    `<div class="badge badge-light-${voto ? "success" : "danger"}">${
+      voto ? "Votó" : "Sin voto"
+    }</div>`;
 
   return {
     init: () => {

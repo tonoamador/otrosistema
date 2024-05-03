@@ -1,17 +1,19 @@
 "use strict";
-const token = JSON.parse(localStorage.getItem("token"));
-import { serverUrl } from "./config.js";
-var KTDatatablesServerSide = (function () {
-  if (!token || token.user_type !== "admin" || isTokenExpired(token)) {
-    window.location.replace("index.html");
-  }
-  function isTokenExpired(token) {
-    const currentTime = Date.now() / 1000;
-    return token.exp < currentTime;
-  }
-  var dt;
 
-  var initDatatable = function () {
+import { serverUrl } from "./config.js";
+
+const token = JSON.parse(localStorage.getItem("token"));
+
+const isTokenExpired = (token) => token && token.exp < Date.now() / 1000;
+
+if (!token || token.user_type !== "admin" || isTokenExpired(token)) {
+  window.location.replace("index.html");
+}
+
+const KTDatatablesServerSide = (() => {
+  let dt;
+
+  const initDatatable = () => {
     dt = $("#rc-table").DataTable({
       searchDelay: 500,
       processing: true,
@@ -25,12 +27,9 @@ var KTDatatablesServerSide = (function () {
       },
       ajax: {
         type: "POST",
-        url: serverUrl + "api/getLideres/",
-        dataSrc: function (json) {
-          return json[0].lideres;
-        },
+        url: `${serverUrl}api/getLideres/`,
+        dataSrc: (json) => json?.[0]?.lideres ?? [],
       },
-
       columns: [
         { data: null },
         {
@@ -53,49 +52,48 @@ var KTDatatablesServerSide = (function () {
         {
           data: null,
           render: ({ seccion }) =>
-            [...new Set(seccion.map((x) => x.numero))].join(", "),
+            [...new Set(seccion.map(({ numero }) => numero))].join(", "),
         },
         {
           data: null,
           render: ({ municipios }) =>
-            [...new Set(municipios.map((x) => x.nombre))].join(", "),
+            [...new Set(municipios.map(({ nombre }) => nombre))].join(", "),
         },
       ],
       columnDefs: [
         {
           targets: 0,
           orderable: false,
-          render: function (data) {
-            return `
-                            <div class="form-check form-check-sm form-check-custom form-check-solid">
-                                <input class="form-check-input" type="checkbox" value="${data}" />
-                            </div>`;
-          },
+          render: (data) => `
+            <div class="form-check form-check-sm form-check-custom form-check-solid">
+              <input class="form-check-input" type="checkbox" value="${data}" />
+            </div>`,
         },
       ],
     });
 
-    dt.on("draw", function () {
+    dt.on("draw", () => {
       KTMenu.createInstances();
     });
   };
-  var handleSearchDatatable = function () {
+
+  const handleSearchDatatable = () => {
     const filterSearch = document.querySelector(
       '[data-kt-docs-table-filter="search"]'
     );
-    filterSearch.addEventListener("keyup", function (e) {
+    filterSearch.addEventListener("keyup", (e) => {
       dt.search(e.target.value).draw();
     });
   };
 
   return {
-    init: function () {
+    init: () => {
       initDatatable();
       handleSearchDatatable();
     },
   };
 })();
 
-KTUtil.onDOMContentLoaded(function () {
+KTUtil.onDOMContentLoaded(() => {
   KTDatatablesServerSide.init();
 });

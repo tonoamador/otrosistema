@@ -1,14 +1,10 @@
 "use strict";
-import { serverUrl } from "./config.js";
-// Improved token retrieval and expiration check
-const getToken = () => {
-  const tokenString = localStorage.getItem("token");
-  return tokenString ? JSON.parse(tokenString) : {};
-};
 
-const isTokenExpired = (token) => {
-  return token && token.exp < Date.now() / 1000;
-};
+import { serverUrl } from "./config.js";
+
+const getToken = () => JSON.parse(localStorage.getItem("token") || "{}");
+
+const isTokenExpired = (token) => token && token.exp < Date.now() / 1000;
 
 const token = getToken();
 
@@ -33,7 +29,7 @@ const KTDatatablesServerSide = (() => {
       },
       ajax: {
         type: "POST",
-        url: serverUrl + "api/getMovilizadores/",
+        url: `${serverUrl}api/getMovilizadores/`,
         error: (xhr, error) => {
           console.error("Error fetching data:", error);
         },
@@ -60,15 +56,16 @@ const KTDatatablesServerSide = (() => {
         { data: "telefono" },
         {
           data: "seccion",
-          render: (seccion) => seccion.map((x) => x.numero).join(", "),
+          render: (seccion) => seccion.map(({ numero }) => numero).join(", "),
         },
         { data: "municipio.nombre" },
         {
           data: "lider",
           render: (lider) => {
-            const uniqueLiderIds = [...new Set(lider.map((x) => x._id))];
+            const uniqueLiderIds = [...new Set(lider.map(({ _id }) => _id))];
             const liderNames = lider.map(
-              (x) => `${x.paterno} ${x.materno} ${x.nombre}`
+              ({ paterno, materno, nombre }) =>
+                `${paterno} ${materno} ${nombre}`
             );
             const uniqueLiderNames = [...new Set(liderNames)];
             return `<a href="overview-lider.html?=${uniqueLiderIds.join(
@@ -113,7 +110,6 @@ const KTDatatablesServerSide = (() => {
   };
 })();
 
-// Document ready function
 document.addEventListener("DOMContentLoaded", () => {
   KTDatatablesServerSide.init();
 });
