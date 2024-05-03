@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", fetchData);
 const token = JSON.parse(localStorage.getItem("token"));
-
+import { serverUrl } from "./config.js";
 var am5 = am5;
 var dataChart;
 
@@ -14,7 +14,7 @@ function isTokenExpired(token) {
 function fetchData() {
   const params = new URLSearchParams(window.location.search);
   const id = params.get("");
-  fetch("https://hcpboca.ddns.net:3050/api/getLider/", {
+  fetch(serverUrl + "api/getLider/", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

@@ -1,0 +1,1 @@
+export const serverUrl = 'https://hcpboca.ddns.net:3050/';

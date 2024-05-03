@@ -1,5 +1,6 @@
 "use strict";
 const token = JSON.parse(localStorage.getItem("token"));
+import { serverUrl } from "./config.js";
 // Class definition
 var KTDatatablesServerSide = function () {
     // Shared variables
@@ -33,7 +34,7 @@ var KTDatatablesServerSide = function () {
             },
             ajax: {
                 type: "POST",
-                url: "https://hcpboca.ddns.net:3050/api/getRgs/",
+                url: serverUrl + "api/getRgs/",
                 dataSrc: "",
             },
             

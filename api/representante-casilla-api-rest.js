@@ -1,5 +1,5 @@
 "use strict";
-
+import { serverUrl } from "./config.js";
 // Class definition
 var KTDatatablesServerSide = (function () {
   // Shared variables
@@ -30,7 +30,7 @@ var KTDatatablesServerSide = (function () {
       },
       ajax: {
         type: "POST",
-        url: "https://hcpboca.ddns.net:3050/api/getRcs/",
+        url: serverUrl + "api/getRcs/",
         dataSrc: "",
       },
 

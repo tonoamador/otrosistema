@@ -1,5 +1,5 @@
 "use strict";
-
+import { serverUrl } from "./config.js";
 // Improved token retrieval and expiration check
 const getToken = () => {
   const tokenString = localStorage.getItem("token");
@@ -33,7 +33,7 @@ const KTDatatablesServerSide = (() => {
       },
       ajax: {
         type: "POST",
-        url: "https://hcpboca.ddns.net:3050/api/getMovilizadores/",
+        url: serverUrl + "api/getMovilizadores/",
         error: (xhr, error) => {
           console.error("Error fetching data:", error);
         },
@@ -43,12 +43,18 @@ const KTDatatablesServerSide = (() => {
         { data: null },
         {
           data: "_id",
-          render: (id, type, { paterno, materno, nombre }) =>
+          render: (id, { paterno, materno, nombre }) =>
             `<a href="overview-movilizador.html?=${id}" class="text-gray-600 mb-1 text-hover-primary">${paterno} ${materno} ${nombre}</a>`,
         },
         {
           data: null,
-          render: ({ calle, direccion_ext, direccion_int, colonia, c_postal }) =>
+          render: ({
+            calle,
+            direccion_ext,
+            direccion_int,
+            colonia,
+            c_postal,
+          }) =>
             `${calle} ${direccion_ext} ${direccion_int}, ${colonia}, ${c_postal}`,
         },
         { data: "telefono" },
@@ -61,9 +67,15 @@ const KTDatatablesServerSide = (() => {
           data: "lider",
           render: (lider) => {
             const uniqueLiderIds = [...new Set(lider.map((x) => x._id))];
-            const liderNames = lider.map((x) => `${x.paterno} ${x.materno} ${x.nombre}`);
+            const liderNames = lider.map(
+              (x) => `${x.paterno} ${x.materno} ${x.nombre}`
+            );
             const uniqueLiderNames = [...new Set(liderNames)];
-            return `<a href="overview-lider.html?=${uniqueLiderIds.join(", ")}" class="text-gray-600 mb-1 text-hover-primary">${uniqueLiderNames.join(", ")}</a>`;
+            return `<a href="overview-lider.html?=${uniqueLiderIds.join(
+              ", "
+            )}" class="text-gray-600 mb-1 text-hover-primary">${uniqueLiderNames.join(
+              ", "
+            )}</a>`;
           },
         },
       ],
@@ -85,7 +97,9 @@ const KTDatatablesServerSide = (() => {
   };
 
   const handleSearchDatatable = () => {
-    const filterSearch = document.querySelector('[data-kt-docs-table-filter="search"]');
+    const filterSearch = document.querySelector(
+      '[data-kt-docs-table-filter="search"]'
+    );
     filterSearch.addEventListener("keyup", (e) => {
       dt.search(e.target.value).draw();
     });

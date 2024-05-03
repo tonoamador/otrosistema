@@ -1,7 +1,7 @@
 const toastElement = document.getElementById("kt_docs_toast_toggle");
 const toast = bootstrap.Toast.getOrCreateInstance(toastElement);
 var state = false;
-
+import { serverUrl } from "./config.js";
 //Funcion Login
 const token = JSON.parse(localStorage.getItem("token"));
 if (
@@ -24,13 +24,10 @@ document.querySelector("#municipio").innerHTML =
   token.casilla.seccion.municipio.nombre;
 document.querySelector("#casilla").innerHTML = token.casilla.nombre;
 
-
-
-
 function OpenBox() {
   const id = token.casilla._id;
   $.ajax({
-    url: `https://hcpboca.ddns.net:3050/api/openCasilla/${id}`,
+    url: `${serverUrl}api/openCasilla/${id}`,
     dataType: "JSON",
     method: "POST",
     async: false,

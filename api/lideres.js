@@ -1,6 +1,6 @@
 "use strict";
 const token = JSON.parse(localStorage.getItem("token"));
-
+import { serverUrl } from "./config.js";
 var KTDatatablesServerSide = (function () {
   if (!token || token.user_type !== "admin" || isTokenExpired(token)) {
     window.location.replace("index.html");
@@ -25,7 +25,7 @@ var KTDatatablesServerSide = (function () {
       },
       ajax: {
         type: "POST",
-        url: "https://hcpboca.ddns.net:3050/api/getLideres/",
+        url: serverUrl + "api/getLideres/",
         dataSrc: function (json) {
           return json[0].lideres;
         },

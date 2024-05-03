@@ -1,5 +1,5 @@
 "use strict";
-
+import { serverUrl } from "./config.js";
 var KTDatatablesServerSide = (function () {
   const token = JSON.parse(localStorage.getItem("token"));
   
@@ -16,7 +16,7 @@ var KTDatatablesServerSide = (function () {
 
   const getData = () => {
     $.ajax({
-      url: "https://hcpboca.ddns.net:3050/api/getCiudadanosByCasilla",
+      url: serverUrl + "api/getCiudadanosByCasilla",
       contentType: "application/json",
       type: "POST",
       data: JSON.stringify({ id: idCasilla }),

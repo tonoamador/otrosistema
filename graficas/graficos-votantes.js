@@ -1,7 +1,7 @@
 "use strict";
 var am5 = am5;
 $.noConflict();
-
+import { serverUrl } from "../api/config.js";
 // let DataTable = $("#kt_table_townhall").DataTable({});
 let fetchedData;
 
@@ -15,7 +15,7 @@ var getVotosXMunicipio = (function () {
   let dt;
 
   $.ajax({
-    url: "https://hcpboca.ddns.net:3050/api/getVotosGeneral/",
+    url: serverUrl + "api/getVotosGeneral/",
     dataType: "JSON",
     method: "POST",
     async: false,

@@ -1,5 +1,5 @@
 "use strict";
-
+import { serverUrl } from "./config.js";
 const KTDatatablesServerSide = (() => {
   const dt = $("#rc-table").DataTable({
     searchDelay: 500,
@@ -14,7 +14,7 @@ const KTDatatablesServerSide = (() => {
     },
     ajax: {
       type: "POST",
-      url: "https://hcpboca.ddns.net:3050/api/getCiudadanos/",
+      url: serverUrl + "api/getCiudadanos/",
       dataSrc: "",
     },
     columns: [

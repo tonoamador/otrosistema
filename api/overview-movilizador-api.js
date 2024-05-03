@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", fetchData);
 const token = JSON.parse(localStorage.getItem("token"));
 var am5 = am5
-
+import { serverUrl } from "./config.js";
 if (
   !token ||
   (token.user_type !== "admin") ||
@@ -16,7 +16,7 @@ function isTokenExpired(token) {
 function fetchData() {
   const params = new URLSearchParams(window.location.search);
   const id = params.get("");
-  fetch("https://hcpboca.ddns.net:3050/api/getMovilizador/", {
+  fetch(serverUrl + "api/getMovilizador/", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
