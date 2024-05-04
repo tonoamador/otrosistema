@@ -1,4 +1,19 @@
 "use strict";
+
+//Funcion Login
+const token = JSON.parse(localStorage.getItem("token"));
+if (!token || (token.user_type !== "rc" && token.user_type !== "admin") || isTokenExpired(token)) {
+  window.location.replace("index.html");
+} else if (token.user_type !== "admin") {
+  window.location.replace("index.html");
+}
+
+function isTokenExpired(token) {
+  let currentTime = Date.now() / 1000;
+  currentTime=currentTime.toFixed(0)
+  return token.exp < currentTime;
+}
+
 var am5 = am5;
 var serverUrl = window.serverUrl;
 $.noConflict();

@@ -1,14 +1,21 @@
 "use strict";
 
-var serverUrl = window.serverUrl;
-const { user_type: userType, exp: tokenExp } =
-JSON.parse(localStorage.getItem("token")) || {};
-
-const isTokenExpired = (exp) => exp < Date.now() / 1000;
-
-if (!userType === "admin" || isTokenExpired(tokenExp)) {
-window.location.replace("index.html");
+//Funcion Login
+const token = JSON.parse(localStorage.getItem("token"));
+if (!token || (token.user_type !== "rc" && token.user_type !== "admin") || isTokenExpired(token)) {
+  window.location.replace("index.html");
+} else if (token.user_type !== "admin") {
+  window.location.replace("index.html");
 }
+
+function isTokenExpired(token) {
+  let currentTime = Date.now() / 1000;
+  currentTime=currentTime.toFixed(0)
+  return token.exp < currentTime;
+}
+
+var serverUrl = window.serverUrl;
+
 const KTDatatablesServerSide = (() => {
   let dt;
 

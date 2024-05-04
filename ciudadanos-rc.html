@@ -40,20 +40,6 @@ License: For each use you must have a valid license purchased only from above li
 		.data-list li {
 			list-style: none;
 		}
-
-		.fadeInOut {
-			.transition-duration(0, 200ms);
-			.transition-property(visibility, opacity);
-			.transition-delay(0);
-
-			&.hidden {
-				visibility: hidden !important;
-				.opacity(0);
-				.transition-duration(200ms, 0);
-				.transition-property(opacity, visibility);
-				.transition-delay(0, 200ms);
-			}
-		}
 	</style>
 	<!--end::Global Stylesheets Bundle-->
 	<script>// Frame-busting to prevent site from being loaded within a frame without permission (click-jacking) if (window.top != window.self) { window.top.location.replace(window.self.location.href); }</script>
