@@ -289,6 +289,11 @@ License: For each use you must have a valid license purchased only from above li
 											</ul>
 											<!--end::Body-->
 										</div>
+										<div class="card mt-5">
+											<div class="card-body">
+												<button class="btn btn-info">Enviar voto X</button>
+											</div>
+										</div>
 										<!--end::Social widget 1-->
 									</div>
 									<!--end::Card body-->
@@ -6700,6 +6705,9 @@ License: For each use you must have a valid license purchased only from above li
 				ignore_accents: true,
 				nodata: 'No hay coincidencias',
 				attribute: 'data-name'
+			})
+			$("#search").on("_after_nodata", function() {
+				console.log("No existe perro")
 			})
 
 			// Detecta cambios en el campo de entrada

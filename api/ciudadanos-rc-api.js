@@ -3,13 +3,13 @@ var serverUrl = window.serverUrl;
 var dt
 var list = document.querySelector("#data-citizen")
 
-var getCitizen = function () {
+var getCitizen = function (e) {
   let idCitizen
   let nameCitizen
-  let e = document.getElementById("btn-send-vote")
-  // let modalData = document.getElementById("data-citizen")
+  // let e = document.getElementById("btn-send-vote")
   idCitizen = e.getAttribute("data-citizen-id")
   nameCitizen = e.getAttribute("data-citizen-name")
+  let btnHtml = $('#'+idCitizen+' .button-send')
 
   Swal.fire({
     title: "Enviar registro del votante:",
@@ -45,7 +45,7 @@ var getCitizen = function () {
         `)
       }
     },
-    allowOutsideClick: () => !Swal.isLoading()   
+    // allowOutsideClick: () => !Swal.isLoading()   
   }).then((result) => {
     if(result.isConfirmed) {
       Swal.fire({
@@ -53,6 +53,10 @@ var getCitizen = function () {
         title: "Voto registrado",
         customClass: {
           confirmButton: "btn-primary"
+        }
+      }).then((result) => {
+        if(result.isConfirmed) {
+          btnHtml.html(`<div class="badge badge-light-success disabled fs-5 fw-bold">Votó</div>`)
         }
       })
     }
@@ -88,9 +92,9 @@ var KTDatatablesServerSide = (function () {
         data.forEach((d) => {
           // var btnClass = "btn-primary"
           // var btnText = "Contar Voto"
-          var btnCount = `<button onclick="getCitizen()" id="btn-send-vote" data-citizen-id="${d._id}" data-citizen-name="${d.paterno + " " + d.materno + " " +d.nombre}" class="btn btn-sm btn-primary fs-5 fw-bold">Contar Voto</button>`
+          var btnCount = `<button onclick="getCitizen(this)" id="btn-send-vote" data-citizen-id="${d._id}" data-citizen-name="${d.paterno + " " + d.materno + " " +d.nombre}" class="btn btn-sm btn-primary fs-5 fw-bold">Contar Voto</button>`
           if(d.voto){
-            btnCount = `<div class="badge badge-light-success disabled fs-5 fw-bold">Votó</button>`
+            btnCount = `<div class="badge badge-light-success disabled fs-5 fw-bold">Votó</div>`
           }
           const row = `
           <li data-name="${d.paterno + " " + d.materno + " " +d.nombre}">
