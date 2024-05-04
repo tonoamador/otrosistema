@@ -122,8 +122,13 @@ var getVotosXMunicipio = (function () {
       strokeOpacity: 0,
     });
 
-    series.columns.template.adapters.add("fill", (fill, target) => {
-      return chart.get("colors").getIndex(series.columns.indexOf(target));
+    var customColors = [
+      am5.color("#00FF001"), // Verde
+      am5.color("#808080"), // Gris
+    ];
+    series.columns.template.adapters.add("fill", function(fill, target) {
+      var index = series.columns.indexOf(target); // Obtiene el índice de la columna
+      return customColors[index % customColors.length]; // Asigna el color de la paleta basado en el índice
     });
 
     series.columns.template.adapters.add("stroke", (stroke, target) => {
