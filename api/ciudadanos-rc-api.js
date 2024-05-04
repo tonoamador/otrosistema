@@ -33,11 +33,29 @@ var getCitizen = function () {
             id: idCitizen,
           })
         })
-        console.log(response.ok)
-      } catch {
-
+        if (!response.ok){
+          return Swal.showValidationMessage(`
+            ${JSON.stringify(await response.json())}
+          `)
+        }
+        return response.json()
+      } catch (error) {
+        Swal.showValidationMessage(`
+          Request failed: ${error}
+        `)
       }
-    }    
+    },
+    allowOutsideClick: () => !Swal.isLoading()   
+  }).then((result) => {
+    if(result.isConfirmed) {
+      Swal.fire({
+        icon: "success",
+        title: "Voto registrado",
+        customClass: {
+          confirmButton: "btn-primary"
+        }
+      })
+    }
   })
 }
 
