@@ -47,6 +47,7 @@ var KTDatatablesServerSide = (function () {
   var filterPayment
   var citizensArray
   const token = JSON.parse(localStorage.getItem("token"))
+  const idCasilla = token.casilla._id
   
   function isTokenExpired(token) {
     const currentTime = Date.now() / 1000;
