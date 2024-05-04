@@ -1,5 +1,5 @@
+window.serverUrl = 'https://hcpboca.ddns.net:3050/';
 document.addEventListener("DOMContentLoaded", function () {
-  window.serverUrl = 'https://hcpboca.ddns.net:3050/';
   function loadContent(elementId, filePath) {
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function () {

@@ -198,7 +198,7 @@ var getVotosXMunicipio = (function () {
         percent=percent.toFixed(2)
       }
 
-      // var classPercent = percent = 0 ? "bg-light" : percent < 50 ? "bg-warning" : percent >=50 ? "bg-success" : "bg-light";
+      
       let classPercent = "bg-light";
       if (percent < 50) {
         classPercent = "bg-warning";
