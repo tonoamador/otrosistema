@@ -63,6 +63,34 @@ var getCitizen = function (e) {
   })
 }
 
+var sendVoteX = function (e) {
+  $.ajax({
+    url: serverUrl + "api/CreateUser",
+    contentType: "application/json",
+    type: "PUT",
+    data: JSON.stringify({
+      user_type: "ciudadano_otro",
+      __t: "ciudadano"
+    }),
+    beforeSend: function () {
+        // Activate indicator
+      e.setAttribute("data-kt-indicator", "on");
+    },
+    success: function(result, status){
+      if(status == "success"){
+        // Disable indicator after 1 seconds
+        setTimeout(function() {
+          e.removeAttribute("data-kt-indicator");
+          $("#btn-vote-x").addClass("hidden")
+          $("#search").focus(function() {
+            $("#search").val("").trigger("keyup")
+          })
+        }, 1000);
+      }
+    }
+  })
+}
+
 // Class definition
 var KTDatatablesServerSide = (function () {
   // Shared variables
@@ -70,6 +98,9 @@ var KTDatatablesServerSide = (function () {
   var citizensArray
   const token = JSON.parse(localStorage.getItem("token"))
   const idCasilla = token.casilla._id
+  const nameCasilla = token.casilla.nombre
+
+  $("[data-casilla-name]").text(nameCasilla)
   
   function isTokenExpired(token) {
     const currentTime = Date.now() / 1000;

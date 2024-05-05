@@ -278,26 +278,46 @@ function exportToExcel() {
   const workbook = XLSX.utils.book_new();
   const worksheet = XLSX.utils.json_to_sheet([]);
 
+  var wscols = [
+    {wch: 13}, // "characters"
+    {wch: 10}, // "characters"
+    {wch: 11}, // "characters"
+    {wch: 10}, // "characters"
+    {wch: 9}, // "characters"
+    {wch: 14}, // "characters"
+    {wch: 13}, // "characters"
+    // {wpx: 50}, // "pixels"
+];
+
+worksheet["!cols"] = wscols;
+worksheet['!autofilter'] = { ref: "A1:G1" };
+
   XLSX.utils.sheet_add_aoa(
     worksheet,
-    [["Municipio", "Votos OG", "Votos NG", "No han votado", "Votos actuales"]],
+    [["Municipio", "Seccional", "Casilla", "Votos OG", "Votos NG", "No han votado", "Votos Totales"]],
     { origin: "A1" }
   );
  
   fetchedData.forEach((municipio) => {
-    XLSX.utils.sheet_add_aoa(
-      worksheet,
-      [
-        [
-          municipio.nombre,
-          municipio.conteo_og,
-          municipio.conteo_ng,
-          municipio.faltan_ng,
-          municipio.conteo_total,
-        ],
-      ],
-      { origin: -1 }
-    );
+    municipio.secciones.forEach((seccion) => {
+      seccion.casilla.forEach((casilla) => {
+        XLSX.utils.sheet_add_aoa(
+          worksheet,
+          [
+            [
+              municipio.nombre,
+              seccion.numero,
+              casilla.nombre,
+              casilla.conteo_casilla_og,
+              casilla.conteo_casilla_ng,
+              casilla.faltan_casilla_ng,
+              casilla.conteo_casilla_og+casilla.conteo_casilla_ng,
+            ],
+          ],
+          { origin: -1 }
+        );
+      })
+    })
   });
 
   XLSX.utils.book_append_sheet(workbook, worksheet, "Casillas");

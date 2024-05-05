@@ -83,102 +83,107 @@ var getVotosXSeccion = (function () {
 
     // Add legend
     
-    var legend = chart.children.push(
-      am5.Legend.new(root, {
-        centerX: am5.p50,
-        x: am5.p50
-      })
-    );
+    var legend = chart.children.push(am5.Legend.new(root, {
+      centerX: am5.p50,
+      x: am5.p50
+    }))
 
     // Create axes
-    
-    var xRenderer = am5xy.AxisRendererX.new(root, {
-      cellStartLocation: 0.1,
-      cellEndLocation: 0.9,
-      minorGridEnabled: true
-    })
-
-    var xAxis = chart.xAxes.push(am5xy.CategoryAxis.new(root, {
+    var yAxis = chart.yAxes.push(am5xy.CategoryAxis.new(root, {
       categoryField: "casilla",
-      renderer: xRenderer,
-      tooltip: am5.Tooltip.new(root, {})
-    }));
-
-    xRenderer.grid.template.setAll({
-      location: 1
-    })
-
-    xAxis.data.setAll(dataChart);
-
-    var yAxis = chart.yAxes.push(am5xy.ValueAxis.new(root, {
       renderer: am5xy.AxisRendererY.new(root, {
-        strokeOpacity: 0.1
+        inversed: true,
+        cellStartLocation: 0.1,
+        cellEndLocation: 0.9,
+        minorGridEnabled: true
       })
     }));
 
+    yAxis.data.setAll(dataChart);
+
+    var xAxis = chart.xAxes.push(am5xy.ValueAxis.new(root, {
+      renderer: am5xy.AxisRendererX.new(root, {
+        strokeOpacity: 0.1,
+        minGridDistance: 50
+      }),
+      min: 0
+    }));
 
     // Add series
-    // https://www.amcharts.com/docs/v5/charts/xy-chart/series/
-    function makeSeries(name, fieldName) {
+    function createSeries(field, name, color) {
       var series = chart.series.push(am5xy.ColumnSeries.new(root, {
         name: name,
         xAxis: xAxis,
         yAxis: yAxis,
-        valueYField: fieldName,
-        categoryXField: "casilla"
+        valueXField: field,
+        categoryYField: "casilla",
+        sequencedInterpolation: true,
+        tooltip: am5.Tooltip.new(root, {
+          pointerOrientation: "horizontal",
+          labelText: "[bold]{name}[/]\n{categoryY}: {valueX}"
+        }),
+        fill: am5.color(color)
       }));
-
+    
       series.columns.template.setAll({
-        tooltipText: "{name}, {categoryX}: {valueY}",
-        width: am5.percent(90),
-        tooltipY: 0,
+        height: am5.p100,
         strokeOpacity: 0
       });
-
-      // Add Label bullet
+    
+    
       series.bullets.push(function () {
         return am5.Bullet.new(root, {
-          locationY: 1,
+          locationX: 1,
+          locationY: 0.5,
           sprite: am5.Label.new(root, {
-            text: "{valueYWorking.formatNumber('#.')}",
-            fill: root.interfaceColors.get("alternativeText"),
-            centerY: 0,
-            centerX: am5.p50,
+            centerY: am5.p50,
+            text: "{valueX}",
             populateText: true
           })
         });
       });
-
+    
+      series.bullets.push(function () {
+        return am5.Bullet.new(root, {
+          locationX: 1,
+          locationY: 0.5,
+          sprite: am5.Label.new(root, {
+            centerX: am5.p100,
+            centerY: am5.p50,
+            text: "{name}",
+            fill: am5.color(0xffffff),
+            populateText: true
+          })
+        });
+      });
+    
       series.data.setAll(dataChart);
-
-      // Make stuff animate on load
-      // https://www.amcharts.com/docs/v5/concepts/animations/
       series.appear();
-
-      series.bullets.push(function () {
-        return am5.Bullet.new(root, {
-          locationY: 0,
-          sprite: am5.Label.new(root, {
-            text: "{valueY}",
-            fill: root.interfaceColors.get("alternativeText"),
-            centerY: 0,
-            centerX: am5.p50,
-            populateText: true
-          })
-        });
-      });
-
-      legend.data.push(series);
+    
+      return series;
     }
 
-    makeSeries("Total Votos X", "votos_x");
-    makeSeries("Total Votos NG", "votos_ng");
-    makeSeries("No han votado", "votos_no");
-    makeSeries("Conteo Total", "votos_total");
+    createSeries("votos_x", "Votos X", "#FFFF00");
+    createSeries("votos_ng", "Votos NG", "#FF00FF");
+    createSeries("votos_no", "Votos Faltantes", "#808080");
+    createSeries("votos_total", "Votos Totales", "#000000");
 
+    // Add legend
+    var legend = chart.children.push(am5.Legend.new(root, {
+      centerX: am5.p50,
+      x: am5.p50
+    }));
+
+    legend.data.setAll(chart.series.values);
+
+    // Add cursor
+    var cursor = chart.set("cursor", am5xy.XYCursor.new(root, {
+      behavior: "zoomY"
+    }));
+    cursor.lineY.set("forceHidden", true);
+    cursor.lineX.set("forceHidden", true);
 
     // Make stuff animate on load
-    // https://www.amcharts.com/docs/v5/concepts/animations/
     chart.appear(1000, 100);
   });
 
@@ -269,6 +274,19 @@ function exportToExcel() {
   }
   const workbook = XLSX.utils.book_new();
   const worksheet = XLSX.utils.json_to_sheet([]);
+
+  var wscols = [
+    {wch: 13}, // "characters"
+    {wch: 10}, // "characters"
+    {wch: 11}, // "characters"
+    {wch: 10}, // "characters"
+    {wch: 9}, // "characters"
+    {wch: 14}, // "characters"
+    // {wpx: 50}, // "pixels"
+  ];
+
+  worksheet["!cols"] = wscols;
+  worksheet['!autofilter'] = { ref: "A1:G1" };
 
   XLSX.utils.sheet_add_aoa(
     worksheet,

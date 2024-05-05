@@ -205,7 +205,7 @@ License: For each use you must have a valid license purchased only from above li
 														class="path1"></span><span class="path2"></span></i>
 												<input id="search" type="text" style="font-size: 2rem!important;" data-list=".data-list"
 													class="form-control form-control-solid ps-15"
-													placeholder="Buscar" />
+													placeholder="Buscar" autocomplete="off" />
 											</div>
 											<!--end::Search-->
 
@@ -289,9 +289,17 @@ License: For each use you must have a valid license purchased only from above li
 											</ul>
 											<!--end::Body-->
 										</div>
-										<div class="card mt-5">
+										<div class="card mt-5 hidden" id="btn-vote-x">
 											<div class="card-body">
-												<button class="btn btn-info w-100 fs-1">Enviar voto X</button>
+												<button class="btn btn-info w-100 fs-1" onclick="sendVoteX(this)">
+													<span class="indicator-label">
+														Enviar voto X
+													</span>
+													<span class="indicator-progress">
+														Enviando espera... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+													</span>
+													
+												</button>
 											</div>
 										</div>
 										<!--end::Social widget 1-->
@@ -6704,10 +6712,20 @@ License: For each use you must have a valid license purchased only from above li
 			$("#search").hideseek({
 				ignore_accents: true,
 				nodata: 'No hay coincidencias',
-				attribute: 'data-name'
+				attribute: 'data-name',
 			})
+
+			$("#search").on("_after", function() {
+				let noResults = document.querySelector(".no-results")
+				if(!noResults){
+					$("#btn-vote-x").addClass("hidden")
+					
+				}
+			})
+			
 			$("#search").on("_after_nodata", function() {
-				console.log("No existe perro")
+				$("#btn-vote-x").removeClass("hidden")
+				
 			})
 
 			// Detecta cambios en el campo de entrada

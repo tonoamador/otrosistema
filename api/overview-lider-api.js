@@ -3,6 +3,7 @@ const token = JSON.parse(localStorage.getItem("token"));
 var serverUrl = window.serverUrl;
 var am5 = am5;
 var dataChart;
+let dt
 
 if (!token || token.user_type !== "admin" || isTokenExpired(token)) {
   window.location.replace("index.html");
@@ -13,7 +14,7 @@ function isTokenExpired(token) {
 }
 function fetchData() {
   const params = new URLSearchParams(window.location.search);
-  const id = params.get("");
+  const id = params.get("id");
   fetch(serverUrl + "api/getLider/", {
     method: "POST",
     headers: {
@@ -196,6 +197,15 @@ function fetchData() {
     });
 }
 
+const handleSearchDatatable = () => {
+  const filterSearch = document.querySelector(
+    '[data-kt-docs-table-filter="search"]'
+  );
+  filterSearch.addEventListener("keyup", (e) => {
+    dt.search(e.target.value).draw();
+  });
+};
+
 function displayData(posts) {
   const tableBody = document.querySelector("#contenido-tabla");
 
@@ -251,7 +261,9 @@ function displayData(posts) {
             
         `;
     tableBody.innerHTML += row;
-
-    $("#kt_customers_table").DataTable();
   });
+
+  dt = $("#kt_customers_table").DataTable();
+  handleSearchDatatable()
+
 }

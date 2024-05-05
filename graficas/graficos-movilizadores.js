@@ -270,9 +270,9 @@ var getVotosxMovilizadores = (function () {
 
         dataMov[0].movilizadores.forEach((mov) => {
             
-            mov.seccion.forEach((seccion) => {
-                if(seccion.esperados != 0){
-                    percent = (100 * seccion.votaron) / seccion.esperados
+            // mov.seccion.forEach((seccion) => {
+                if(mov.esperados != 0){
+                    percent = (100 * mov.votaron) / mov.esperados
                     percent = percent.toFixed(2)
                 }
                 let classPercent = "bg-light";
@@ -286,9 +286,9 @@ var getVotosxMovilizadores = (function () {
                 const row = `
                     <tr>
                         <td><a href="overview-movilizador.html?id=${mov._id}">${mov.nombre} ${mov.paterno} ${mov.materno}</a></td>
-                        <td><a href="grafica-votos-seccional.html?id=${seccion._id}">${seccion.numero}</a></td>
-                        <td>${seccion.votaron}</td>
-                        <td>${seccion.no_votaron}</td>
+                        <td>${[...new Set(mov.seccion.map(({ numero }) => numero))].join(", ")}</td>
+                        <td>${mov.votaron}</td>
+                        <td>${mov.no_votaron}</td>
                         <td><a href="overview-lider.html?id=${mov.lider[0]._id}">${mov.lider[0].nombre} ${mov.lider[0].paterno} ${mov.lider[0].materno}</a></td>
                         <td>
                             <div class="d-flex align-items-center w-200px w-sm-300px flex-column mt-3">
@@ -304,7 +304,7 @@ var getVotosxMovilizadores = (function () {
                     </tr>
                 `
                 tableBody.innerHTML += row
-            })
+            // })
         })
 
         dt = $("#kt_table_townhall").DataTable({
@@ -350,33 +350,48 @@ function exportToExcel() {
   
     const workbook = XLSX.utils.book_new();
     const worksheet = XLSX.utils.json_to_sheet([]);
+    var wscols = [
+        {wch: 13}, // "characters"
+        {wch: 10}, // "characters"
+        {wch: 11}, // "characters"
+        {wch: 12}, // "characters"
+        {wch: 15}, // "characters"
+        {wch: 10}, // "characters"
+        {wch: 14}, // "characters"
+        {wch: 16}, // "characters"
+        {wch: 21}, // "characters"
+        // {wpx: 50}, // "pixels"
+    ];
+
+    worksheet["!cols"] = wscols;
+    worksheet['!autofilter'] = { ref: "A1:I1" };
   
     XLSX.utils.sheet_add_aoa(
       worksheet,
-      [["Municipio", "Seccional", "Lider", "Votos NG", "No han votado", "Votos Esperados"]],
+      [["Municipio", "Seccional", "Casilla", "Movilizador", "Lider", "Votos NG", "No han votado", "Votos Esperados", "Porcentaje al momento"]],
       { origin: "A1" }
     );
    
     fetchedData[0].movilizadores.forEach((dataMov) => {
         dataMov.seccion.forEach((seccion) => {
-            XLSX.utils.sheet_add_aoa(
-                worksheet,
-                [
+            seccion.casillas.forEach((casilla) => {
+                XLSX.utils.sheet_add_aoa(
+                    worksheet,
                     [
-                        dataLead.municipios[0].nombre,
-                        seccion.numero,
-                        dataLead.nombre+" "+dataLead.materno,
-                        seccion.votaron,
-                        seccion.no_votaron,
-                        seccion.esperados
-                        // dataLead.votaron,
-                        // dataLead.conteo_ng,
-                        // dataLead.faltan_ng,
-                        // dataLead.conteo_total,
+                        [
+                            dataMov.municipio.nombre,
+                            seccion.numero,
+                            casilla.nombre,
+                            dataMov.paterno+" "+dataMov.materno+" "+dataMov.nombre,
+                            dataMov.lider[0].paterno+" "+dataMov.lider[0].materno+" "+dataMov.lider[0].nombre,
+                            casilla.votaron,
+                            casilla.no_votaron,
+                            casilla.esperados
+                        ],
                     ],
-                ],
-                { origin: -1 }
-            );
+                    { origin: -1 }
+                );
+            })
         })
     });
   
@@ -389,5 +404,5 @@ function exportToExcel() {
       new Date().getMinutes().toString().padStart(2, "0") +
       (new Date().getHours() >= 12 ? "PM" : "AM") +
       ".xlsx";
-    XLSX.writeFile(workbook, filename);
+      XLSX.writeFile(workbook, filename, {cellStyles: true});
 }

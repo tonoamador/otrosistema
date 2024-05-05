@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", fetchData);
 const token = JSON.parse(localStorage.getItem("token"));
 var am5 = am5;
 var serverUrl = window.serverUrl;
+let dt
 if (
   !token ||
   (token.user_type !== "admin") ||
@@ -208,6 +209,15 @@ function fetchData() {
     });
 }
 
+const handleSearchDatatable = () => {
+  const filterSearch = document.querySelector(
+    '[data-kt-docs-table-filter="search"]'
+  );
+  filterSearch.addEventListener("keyup", (e) => {
+    dt.search(e.target.value).draw();
+  });
+};
+
 function displayData(posts) {
   const tableBody = document.querySelector("#contenido-tabla");
 
@@ -261,6 +271,8 @@ function displayData(posts) {
         `;
     tableBody.innerHTML += row;
 
-    $("#kt_customers_table").DataTable();
+    
   });
+  dt = $("#kt_customers_table").DataTable();
+  handleSearchDatatable()
 }

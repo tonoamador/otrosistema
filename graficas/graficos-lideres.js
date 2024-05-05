@@ -269,39 +269,37 @@ var getVotosxLideres = (function () {
         let percent = 0
 
         dataLead[0].lideres.forEach((lead) => {
-            lead.seccion.forEach((seccion) => {
-                if(seccion.esperados != 0){
-                    percent = (100 * seccion.votaron) / seccion.esperados
-                    percent = percent.toFixed(2)
-                }
-                let classPercent = "bg-light";
-                if (percent < 50) {
-                    classPercent = "bg-warning";
-                } else if (percent >= 50) {
-                    classPercent = "bg-success";
-                }
+            if(lead.esperados != 0){
+                percent = (100 * lead.votaron) / lead.esperados
+                percent = percent.toFixed(2)
+            }
+            let classPercent = "bg-light";
+            if (percent < 50) {
+                classPercent = "bg-warning";
+            } else if (percent >= 50) {
+                classPercent = "bg-success";
+            }
 
-                const row = `
-                    <tr>
-                        <td><a href="overview-lider.html?id=${lead._id}">${lead.nombre} ${lead.paterno} ${lead.materno}</a></td>
-                        <td><a href="grafica-votos-seccional.html?id=${seccion._id}">${seccion.numero}</a></td>
-                        <td>${seccion.votaron}</td>
-                        <td>${seccion.no_votaron}</td>
-                        <td>
-                            <div class="d-flex align-items-center w-200px w-sm-300px flex-column mt-3">
-                                <div class="d-flex justify-content-between w-100 mt-auto mb-2">
-                                    
-                                    <span class="fw-bold fs-6">${percent}%</span>
-                                </div>
-                                <div class="h-5px mx-3 w-100 bg-secondary mb-3">
-                                    <div class="${classPercent} rounded h-5px" role="progressbar" style="width: ${percent}%;" aria-valuenow="${percent}" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
+            const row = `
+                <tr>
+                    <td><a href="overview-lider.html?id=${lead._id}">${lead.nombre} ${lead.paterno} ${lead.materno}</a></td>
+                    <td>${[...new Set(lead.seccion.map(({ numero }) => numero))].join(", ")}</td>
+                    <td>${lead.votaron}</td>
+                    <td>${lead.no_votaron}</td>
+                    <td>
+                        <div class="d-flex align-items-center w-200px w-sm-300px flex-column mt-3">
+                            <div class="d-flex justify-content-between w-100 mt-auto mb-2">
+                                
+                                <span class="fw-bold fs-6">${percent}%</span>
                             </div>
-                        </td>
-                    </tr>
-                `
-                tableBody.innerHTML += row
-            })
+                            <div class="h-5px mx-3 w-100 bg-secondary mb-3">
+                                <div class="${classPercent} rounded h-5px" role="progressbar" style="width: ${percent}%;" aria-valuenow="${percent}" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            `
+            tableBody.innerHTML += row
         })
 
         dt = $("#kt_table_townhall").DataTable({
@@ -347,33 +345,45 @@ function exportToExcel() {
   
     const workbook = XLSX.utils.book_new();
     const worksheet = XLSX.utils.json_to_sheet([]);
+    var wscols = [
+        {wch: 13}, // "characters"
+        {wch: 8}, // "characters"
+        {wch: 11}, // "characters"
+        {wch: 15}, // "characters"
+        {wch: 8}, // "characters"
+        {wch: 12}, // "characters"
+        {wch: 14}, // "characters"
+        {wch: 20}, // "characters"
+        // {wpx: 50}, // "pixels"
+    ];
+    worksheet["!cols"] = wscols;
+    worksheet['!autofilter'] = { ref: "A1:H1" };
   
     XLSX.utils.sheet_add_aoa(
       worksheet,
-      [["Municipio", "Seccional", "Lider", "Votos NG", "No han votado", "Votos Esperados"]],
+      [["Municipio", "Seccional", "Casilla", "Lider", "Votos NG", "No han votado", "Votos Esperados", "Porcentaje al momento"]],
       { origin: "A1" }
     );
    
     fetchedData[0].lideres.forEach((dataLead) => {
         dataLead.seccion.forEach((seccion) => {
-            XLSX.utils.sheet_add_aoa(
-                worksheet,
-                [
+            seccion.casillas.forEach((casilla) => {
+                XLSX.utils.sheet_add_aoa(
+                    worksheet,
                     [
-                        dataLead.municipios[0].nombre,
-                        seccion.numero,
-                        dataLead.nombre+" "+dataLead.materno,
-                        seccion.votaron,
-                        seccion.no_votaron,
-                        seccion.esperados
-                        // dataLead.votaron,
-                        // dataLead.conteo_ng,
-                        // dataLead.faltan_ng,
-                        // dataLead.conteo_total,
+                        [
+                            dataLead.municipios[0].nombre,
+                            seccion.numero,
+                            casilla.nombre,
+                            dataLead.paterno+" "+dataLead.materno+" "+dataLead.nombre,
+                            casilla.votaron,
+                            casilla.no_votaron,
+                            casilla.esperados
+                        ],
                     ],
-                ],
-                { origin: -1 }
-            );
+                    { origin: -1 }
+                );
+            })
         })
     });
   
@@ -386,5 +396,5 @@ function exportToExcel() {
       new Date().getMinutes().toString().padStart(2, "0") +
       (new Date().getHours() >= 12 ? "PM" : "AM") +
       ".xlsx";
-    XLSX.writeFile(workbook, filename);
+    XLSX.writeFile(workbook, filename, {cellStyles: true});
 }

@@ -330,32 +330,49 @@ function exportToExcel() {
   const workbook = XLSX.utils.book_new();
   const worksheet = XLSX.utils.json_to_sheet([]);
 
+  var wscols = [
+    {wch: 13}, // "characters"
+    {wch: 10}, // "characters"
+    {wch: 11}, // "characters"
+    {wch: 10}, // "characters"
+    {wch: 9}, // "characters"
+    {wch: 14}, // "characters"
+    {wch: 13}, // "characters"
+    // {wpx: 50}, // "pixels"
+  ];
+
+  worksheet["!cols"] = wscols;
+  worksheet['!autofilter'] = { ref: "A1:H1" };
+
   XLSX.utils.sheet_add_aoa(
     worksheet,
-    [["Seccional", "Votos NG", "Votos X", "Faltan NG", "Lider", "Porcentaje"]],
+    [["Municipio", "Seccional", "Casilla", "Lider", "Votos NG", "Votos X", "Faltan NG", "Porcentaje"]],
     { origin: "A1" }
   );
 
   fetchedData.secciones.forEach((seccion) => {
-    let percent = 0;
-      if (seccion.esperados_seccion_ng != 0) {
-        percent =
-          (100 * seccion.conteo_seccion_ng) / seccion.esperados_seccion_ng;
-      }
-    XLSX.utils.sheet_add_aoa(
-      worksheet,
-      [
+    seccion.casilla.forEach((casilla) => {
+      // let percent = 0;
+      // if (seccion.esperados_seccion_ng != 0) {
+      //   percent =
+      //     (100 * seccion.conteo_seccion_ng) / seccion.esperados_seccion_ng;
+      // }
+      XLSX.utils.sheet_add_aoa(
+        worksheet,
         [
-          seccion.numero,
-          seccion.conteo_seccion_ng,
-          seccion.conteo_seccion_og,
-          seccion.faltan_seccion_ng,
-          seccion.lider.paterno+" "+seccion.lider.materno+" "+seccion.lider.nombre,
-          percent+"%"
+          [
+            fetchedData.nombre,
+            seccion.numero,
+            casilla.nombre,
+            seccion.lider.paterno+" "+seccion.lider.materno+" "+seccion.lider.nombre,
+            casilla.conteo_casilla_ng,
+            casilla.conteo_casilla_og,
+            casilla.faltan_casilla_ng,
+          ],
         ],
-      ],
-      { origin: -1 }
-    );
+        { origin: -1 }
+      );
+    })
   });
 
   XLSX.utils.book_append_sheet(workbook, worksheet, "Votación");
