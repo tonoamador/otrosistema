@@ -1,29 +1,29 @@
 "use strict";
 var serverUrl = window.serverUrl;
-var dt
-var list = document.querySelector("#data-citizen")
+var dt;
+var list = document.querySelector("#data-citizen");
 
 var getCitizen = function (e) {
-  let idCitizen
-  let nameCitizen
+  let idCitizen;
+  let nameCitizen;
   // let e = document.getElementById("btn-send-vote")
-  idCitizen = e.getAttribute("data-citizen-id")
-  nameCitizen = e.getAttribute("data-citizen-name")
-  let btnHtml = $('#'+idCitizen+' .button-send')
+  idCitizen = e.getAttribute("data-citizen-id");
+  nameCitizen = e.getAttribute("data-citizen-name");
+  let btnHtml = $("#" + idCitizen + " .button-send");
 
   Swal.fire({
     title: "Enviar registro del votante:",
-    html: "<p class='fs-1'>"+nameCitizen+"</p>",
+    html: "<p class='fs-1'>" + nameCitizen + "</p>",
     showCancelButton: true,
     confirmButtonText: "Contar Voto",
     cancelButtonText: "Cancelar",
     customClass: {
       confirmButton: "btn btn-success",
-      cancelButton: "btn btn-primary"
-    }, 
+      cancelButton: "btn btn-primary",
+    },
     preConfirm: async () => {
       try {
-        const url = "https://hcpboca.ddns.net:3050/api/setVoto/"
+        const url = "https://hcpboca.ddns.net:3050/api/setVoto/";
         const response = await fetch(url, {
           method: "POST",
           headers: {
@@ -31,53 +31,60 @@ var getCitizen = function (e) {
           },
           body: JSON.stringify({
             id: idCitizen,
-          })
-        })
-        if (!response.ok){
+          }),
+        });
+        if (!response.ok) {
           return Swal.showValidationMessage(`
             ${JSON.stringify(await response.json())}
-          `)
+          `);
         }
-        return response.json()
+        return response.json();
       } catch (error) {
         Swal.showValidationMessage(`
           Request failed: ${error}
-        `)
+        `);
       }
     },
-    // allowOutsideClick: () => !Swal.isLoading()   
+    // allowOutsideClick: () => !Swal.isLoading()
   }).then((result) => {
-    if(result.isConfirmed) {
+    if (result.isConfirmed) {
       Swal.fire({
         icon: "success",
         title: "Voto registrado",
         customClass: {
-          confirmButton: "btn-primary"
-        }
+          confirmButton: "btn-primary",
+        },
       }).then((result) => {
-        if(result.isConfirmed) {
-          btnHtml.html(`<div class="badge badge-light-success disabled fs-5 fw-bold">Votó</div>`)
+        if (result.isConfirmed) {
+          btnHtml.html(
+            `<div class="badge badge-light-success disabled fs-5 fw-bold">Votó</div>`
+          );
         }
-      })
+      });
     }
-  })
-}
+  });
+};
 
 var sendVoteX = function (e) {
+  const token = JSON.parse(localStorage.getItem("token"));
+  const idCasilla = token.casilla._id;
+  console.log(idCasilla);
   $.ajax({
     url: serverUrl + "api/CreateUser",
     contentType: "application/json",
     type: "PUT",
     data: JSON.stringify({
       user_type: "ciudadano_otro",
-      __t: "ciudadano"
+      __t: "ciudadano",
+      casilla_id: idCasilla,
+      voto: true,
     }),
     beforeSend: function () {
-        // Activate indicator
+      // Activate indicator
       e.setAttribute("data-kt-indicator", "on");
     },
-    success: function(result, status){
-      if(status == "success"){
+    success: function (result, status) {
+      if (status == "success") {
         // Disable indicator after 1 seconds
         Swal.fire({
           icon: "success",
@@ -98,55 +105,59 @@ var sendVoteX = function (e) {
         })
         
       }
-    }
-  })
-}
+    },
+  });
+};
 
 // Class definition
 var KTDatatablesServerSide = (function () {
   // Shared variables
-  var filterPayment
-  var citizensArray
-  const token = JSON.parse(localStorage.getItem("token"))
-  const idCasilla = token.casilla._id
-  const nameCasilla = token.casilla.nombre
+  var filterPayment;
+  var citizensArray;
+  const token = JSON.parse(localStorage.getItem("token"));
+  const idCasilla = token.casilla._id;
+  const nameCasilla = token.casilla.nombre;
 
-  $("[data-casilla-name]").text(nameCasilla)
-  
+  $("[data-casilla-name]").text(nameCasilla);
+
   function isTokenExpired(token) {
     const currentTime = Date.now() / 1000;
     return token && token.exp < currentTime;
   }
 
   var getData = function () {
-    
     $.ajax({
       url: serverUrl + "api/getCiudadanosByCasilla",
       contentType: "application/json",
       type: "POST",
       data: JSON.stringify({ id: idCasilla }),
-      success: data => {
-        
+      success: (data) => {
         // citizensArray = data
         // console.log(citizensArray)
-        
-        list.innerHTML=""
+
+        list.innerHTML = "";
         data.forEach((d) => {
           // var btnClass = "btn-primary"
           // var btnText = "Contar Voto"
-          var btnCount = `<button onclick="getCitizen(this)" id="btn-send-vote" data-citizen-id="${d._id}" data-citizen-name="${d.paterno + " " + d.materno + " " +d.nombre}" class="btn btn-sm btn-primary fs-5 fw-bold">Contar Voto</button>`
-          if(d.voto){
-            btnCount = `<div class="badge badge-light-success disabled fs-5 fw-bold">Votó</div>`
+          var btnCount = `<button onclick="getCitizen(this)" id="btn-send-vote" data-citizen-id="${
+            d._id
+          }" data-citizen-name="${
+            d.paterno + " " + d.materno + " " + d.nombre
+          }" class="btn btn-sm btn-primary fs-5 fw-bold">Contar Voto</button>`;
+          if (d.voto) {
+            btnCount = `<div class="badge badge-light-success disabled fs-5 fw-bold">Votó</div>`;
           }
           const row = `
-          <li data-name="${d.paterno + " " + d.materno + " " +d.nombre}">
+          <li data-name="${d.paterno + " " + d.materno + " " + d.nombre}">
               <div class="d-flex flex-stack item" id="${d._id}">
                 <div class="symbol symbol-40px me-5">
                   <img src="assets/media/avatars/300-2.jpg" class="h-50 align-self-center" alt="" />
                 </div>
                 <div class="d-flex align-items-center flex-row-fluid flex-wrap">
                   <div class="flex-grow-1 me-2">
-                    <p class="text-gray-800 text-hover-primary fs-6 fw-bold">${d.paterno + " " + d.materno + " " +d.nombre}</p>
+                    <p class="text-gray-800 text-hover-primary fs-6 fw-bold">${
+                      d.paterno + " " + d.materno + " " + d.nombre
+                    }</p>
                     
                   </div>
                   <div class="button-send">
@@ -157,14 +168,13 @@ var KTDatatablesServerSide = (function () {
               </div>
               <div class="separator separator-dashed my-4"></div>
           </li>
-          `
-            list.innerHTML += row;
+          `;
+          list.innerHTML += row;
           // if(!d.voto){
           //   list.innerHTML += row;
           // }
-          
-        })
-      }
+        });
+      },
     });
   };
 
@@ -172,11 +182,11 @@ var KTDatatablesServerSide = (function () {
     const tableBody = document.querySelector("#contenido-tabla");
     tableBody.innerHTML = "";
     posts.forEach((post) => {
-      var btnClass = "btn-primary"
-      var btnText = "Contar Voto"
-      if(post.voto){
-        btnClass = "btn-success disabled"
-        btnText = "Votó"
+      var btnClass = "btn-primary";
+      var btnText = "Contar Voto";
+      if (post.voto) {
+        btnClass = "btn-success disabled";
+        btnText = "Votó";
       }
       const row = `
               
@@ -184,7 +194,11 @@ var KTDatatablesServerSide = (function () {
           <tr>
               <td></td>
               <td>${post.paterno + " " + post.materno + " " + post.nombre}</td>
-              <td><button id="openModalVote" onclick="getCitizen()" data-citizen-id="${post._id}" data-citizen-name="${post.paterno+ " " +post.materno+ " " +post.nombre}" class="btn ${btnClass}" data-bs-toggle="modal" data-bs-target="#kt_modal_vote">${btnText}</button></td>
+              <td><button id="openModalVote" onclick="getCitizen()" data-citizen-id="${
+                post._id
+              }" data-citizen-name="${
+        post.paterno + " " + post.materno + " " + post.nombre
+      }" class="btn ${btnClass}" data-bs-toggle="modal" data-bs-target="#kt_modal_vote">${btnText}</button></td>
           </tr>          
       <!--end::Table body-->
               
@@ -192,8 +206,6 @@ var KTDatatablesServerSide = (function () {
       tableBody.innerHTML += row;
     });
   };
-
-
 
   // var initDatatable = function () {
   //   dt = $("#rc-table").DataTable({
@@ -223,7 +235,9 @@ var KTDatatablesServerSide = (function () {
   // };
 
   const handleDeleteRows = () => {
-    const deleteButtons = document.querySelectorAll('[data-kt-docs-table-filter="delete_row"]');
+    const deleteButtons = document.querySelectorAll(
+      '[data-kt-docs-table-filter="delete_row"]'
+    );
     deleteButtons.forEach((d) => {
       d.addEventListener("click", function (e) {
         e.preventDefault();

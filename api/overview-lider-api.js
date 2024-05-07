@@ -3,7 +3,7 @@ const token = JSON.parse(localStorage.getItem("token"));
 var serverUrl = window.serverUrl;
 var am5 = am5;
 var dataChart;
-let dt
+let dt, dt1;
 
 if (!token || token.user_type !== "admin" || isTokenExpired(token)) {
   window.location.replace("index.html");
@@ -44,7 +44,26 @@ function fetchData() {
         ", " +
         posts.c_postal;
       document.querySelector("#telefonoOVLid").innerHTML = posts.telefono;
-      displayData(posts.movilizadores);
+      // Assuming posts is an object containing movilizadores array
+      if (
+        posts &&
+        posts.movilizadores &&
+        Array.isArray(posts.movilizadores) &&
+        posts.movilizadores.length > 0 &&
+        posts.movilizadores[0] != null
+      ) {
+        displayData(posts.movilizadores);
+      } 
+      if (
+        posts &&
+        posts.ciudadanos_extra &&
+        Array.isArray(posts.ciudadanos_extra) &&
+        posts.ciudadanos_extra.length > 0 &&
+        posts.ciudadanos_extra[0] != null
+      ) {
+        displayData1(posts.ciudadanos_extra);
+      } 
+      handleSearchDatatable();
 
       dataChart = [
         {
@@ -155,12 +174,12 @@ function fetchData() {
           strokeOpacity: 0,
         });
         var customColors = [
-          am5.color("#FFFF00"),  // Amarillo
+          am5.color("#FFFF00"), // Amarillo
           am5.color("#FF00FF"), // Magenta
           am5.color("#808080"), // Gris
           am5.color("#000000"), // Negro
         ];
-        series.columns.template.adapters.add("fill", function(fill, target) {
+        series.columns.template.adapters.add("fill", function (fill, target) {
           var index = series.columns.indexOf(target); // Obtiene el índice de la columna
           return customColors[index % customColors.length]; // Asigna el color de la paleta basado en el índice
         });
@@ -203,6 +222,13 @@ const handleSearchDatatable = () => {
   );
   filterSearch.addEventListener("keyup", (e) => {
     dt.search(e.target.value).draw();
+  });
+
+  const filterSearch1 = document.querySelector(
+    '[data-kt-ciudadanos-table-filter="search"]'
+  );
+  filterSearch1.addEventListener("keyup", (e) => {
+    dt1.search(e.target.value).draw();
   });
 };
 
@@ -254,7 +280,11 @@ function displayData(posts) {
                 ]}</p>
             </td>
             <td>
-                <p class="text-gray-600 mb-1">${post.municipio.nombre}</p>
+                <p class="text-gray-600 mb-1">${[
+                  ...new Set(
+                    post.municipio.map((municipio) => municipio.nombre)
+                  ),
+                ]}</p>
             </td>
         </tr>
     <!--end::Table body-->
@@ -264,6 +294,73 @@ function displayData(posts) {
   });
 
   dt = $("#kt_customers_table").DataTable();
-  handleSearchDatatable()
+
+}
+function displayData1(posts) {
+  const tableBody1 = document.querySelector("#contenido-tabla1");
+
+  // Limpiar cualquier fila existente en la tabla
+  tableBody1.innerHTML = "";
+
+  // Iterar sobre los posts y agregarlos a la tabla
+  posts.forEach((post) => {
+    const row = `
+            
+        
+        <tr>
+            <td>
+                <div class="form-check form-check-sm form-check-custom form-check-solid">
+                    <input class="form-check-input" type="checkbox" value="1" />
+                </div>
+            </td>
+            <td>
+                <a href="overview-movilizador.html?=${
+                  post._id
+                }" class="text-gray-600 text-hover-primary mb-1">${
+      post.paterno + " " + post.materno + " " + post.nombre
+    }</a>
+            </td>
+            <td>
+                <a href="#" class="text-gray-600 text-hover-primary mb-1">${
+                  post.calle +
+                  " " +
+                  post.direccion_ext +
+                  " " +
+                  post.direccion_int +
+                  ", " +
+                  post.colonia +
+                  ", " +
+                  post.c_postal
+                }</a>
+            </td>
+            <td>
+                <a href="#" class="text-gray-600 text-hover-primary mb-1">${
+                  post.telefono
+                }</a>
+            </td>
+            <td>
+                <p class="text-gray-600 mb-1">${post.casilla.nombre}</p>
+            </td>
+            <td>
+                <p class="text-gray-600 mb-1">${post.casilla.seccion.numero}</p>
+            </td>
+            <td>
+                <p class="text-gray-600 mb-1">${post.casilla.seccion.municipio.nombre}</p>
+            </td>
+            <td>
+            <!--begin::Badges-->
+            <div class="badge badge-light-${
+              post.voto ? "success" : "danger"
+            }">${post.voto ? "Votó" : "Sin voto"}</div>
+            <!--end::Badges-->
+        </td>
+        </tr>
+    <!--end::Table body-->
+            
+        `;
+    tableBody1.innerHTML += row;
+  });
+
+  dt1 = $("#kt_ciudadanos_table").DataTable();
 
 }

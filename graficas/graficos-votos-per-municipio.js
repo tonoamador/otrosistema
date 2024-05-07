@@ -10,7 +10,11 @@ e.setAttribute("data-id-townhall", TownhallId);
 
 //Funcion Login
 const token = JSON.parse(localStorage.getItem("token"));
-if (!token || (token.user_type !== "rc" && token.user_type !== "admin") || isTokenExpired(token)) {
+if (
+  !token ||
+  (token.user_type !== "rc" && token.user_type !== "admin") ||
+  isTokenExpired(token)
+) {
   window.location.replace("index.html");
 } else if (token.user_type !== "admin") {
   window.location.replace("index.html");
@@ -18,7 +22,7 @@ if (!token || (token.user_type !== "rc" && token.user_type !== "admin") || isTok
 
 function isTokenExpired(token) {
   let currentTime = Date.now() / 1000;
-  currentTime=currentTime.toFixed(0)
+  currentTime = currentTime.toFixed(0);
   return token.exp < currentTime;
 }
 
@@ -156,12 +160,12 @@ var getVotosXMunicipio = (function () {
     });
 
     var customColors = [
-      am5.color("#FFFF00"),  // Amarillo
+      am5.color("#FFFF00"), // Amarillo
       am5.color("#FF00FF"), // Magenta
       am5.color("#808080"), // Gris
       am5.color("#000000"), // Negro
     ];
-    series.columns.template.adapters.add("fill", function(fill, target) {
+    series.columns.template.adapters.add("fill", function (fill, target) {
       var index = series.columns.indexOf(target); // Obtiene el índice de la columna
       return customColors[index % customColors.length]; // Asigna el color de la paleta basado en el índice
     });
@@ -245,8 +249,9 @@ var getVotosXMunicipio = (function () {
     dataSecciones.forEach((seccion) => {
       let percent = 0;
       if (seccion.esperados_seccion_ng != 0) {
-        percent = (100 * seccion.conteo_seccion_ng) / seccion.esperados_seccion_ng;
-        percent=percent.toFixed(2)
+        percent =
+          (100 * seccion.conteo_seccion_ng) / seccion.esperados_seccion_ng;
+        percent = percent.toFixed(2);
       }
 
       // var classPercent = percent = 0 ? "bg-light" : percent < 50 ? "bg-warning" : percent >=50 ? "bg-success" : "bg-light";
@@ -265,7 +270,9 @@ var getVotosXMunicipio = (function () {
                     <td>${seccion.conteo_seccion_ng}</td>
                     <td>${seccion.conteo_seccion_og}</td>
                     <td>${seccion.faltan_seccion_ng}</td>
-                    <td><a href="grafica-votantes-lider.html?=${seccion.lider._id}">${
+                    <td><a href="overview-lider.html?id=${
+                      seccion.lider._id
+                    }">${
         seccion.lider.nombre +
         " " +
         seccion.lider.paterno +
@@ -331,22 +338,33 @@ function exportToExcel() {
   const worksheet = XLSX.utils.json_to_sheet([]);
 
   var wscols = [
-    {wch: 13}, // "characters"
-    {wch: 10}, // "characters"
-    {wch: 11}, // "characters"
-    {wch: 10}, // "characters"
-    {wch: 9}, // "characters"
-    {wch: 14}, // "characters"
-    {wch: 13}, // "characters"
+    { wch: 13 }, // "characters"
+    { wch: 10 }, // "characters"
+    { wch: 11 }, // "characters"
+    { wch: 10 }, // "characters"
+    { wch: 9 }, // "characters"
+    { wch: 14 }, // "characters"
+    { wch: 13 }, // "characters"
     // {wpx: 50}, // "pixels"
   ];
 
   worksheet["!cols"] = wscols;
-  worksheet['!autofilter'] = { ref: "A1:H1" };
+  worksheet["!autofilter"] = { ref: "A1:H1" };
 
   XLSX.utils.sheet_add_aoa(
     worksheet,
-    [["Municipio", "Seccional", "Casilla", "Lider", "Votos NG", "Votos X", "Faltan NG", "Porcentaje"]],
+    [
+      [
+        "Municipio",
+        "Seccional",
+        "Casilla",
+        "Lider",
+        "Votos NG",
+        "Votos X",
+        "Faltan NG",
+        "Porcentaje",
+      ],
+    ],
     { origin: "A1" }
   );
 
@@ -364,7 +382,11 @@ function exportToExcel() {
             fetchedData.nombre,
             seccion.numero,
             casilla.nombre,
-            seccion.lider.paterno+" "+seccion.lider.materno+" "+seccion.lider.nombre,
+            seccion.lider.paterno +
+              " " +
+              seccion.lider.materno +
+              " " +
+              seccion.lider.nombre,
             casilla.conteo_casilla_ng,
             casilla.conteo_casilla_og,
             casilla.faltan_casilla_ng,
@@ -372,7 +394,7 @@ function exportToExcel() {
         ],
         { origin: -1 }
       );
-    })
+    });
   });
 
   XLSX.utils.book_append_sheet(workbook, worksheet, "Votación");
