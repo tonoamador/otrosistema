@@ -208,7 +208,7 @@ var getVotosXSeccion = (function () {
 
     const row = `
     <tr>
-    <td><a href="overview-lider.html?=${dataSeccion[0].lider._id}">${
+    <td><a href="overview-lider.html?id=${dataSeccion[0].lider._id}">${
       dataSeccion[0].lider.nombre +
       " " +
       dataSeccion[0].lider.paterno +
