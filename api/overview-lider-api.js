@@ -3,7 +3,7 @@ const token = JSON.parse(localStorage.getItem("token"));
 var serverUrl = window.serverUrl;
 var am5 = am5;
 var dataChart;
-let dt;
+let dt, dt1;
 
 if (!token || token.user_type !== "admin" || isTokenExpired(token)) {
   window.location.replace("index.html");
@@ -45,7 +45,6 @@ function fetchData() {
         posts.c_postal;
       document.querySelector("#telefonoOVLid").innerHTML = posts.telefono;
       // Assuming posts is an object containing movilizadores array
-      console.log(posts);
       if (
         posts &&
         posts.movilizadores &&
@@ -54,9 +53,17 @@ function fetchData() {
         posts.movilizadores[0] != null
       ) {
         displayData(posts.movilizadores);
-      } else {
-        console.log("No valid data to display");
-      }
+      } 
+      if (
+        posts &&
+        posts.ciudadanos_extra &&
+        Array.isArray(posts.ciudadanos_extra) &&
+        posts.ciudadanos_extra.length > 0 &&
+        posts.ciudadanos_extra[0] != null
+      ) {
+        displayData1(posts.ciudadanos_extra);
+      } 
+      handleSearchDatatable();
 
       dataChart = [
         {
@@ -216,6 +223,13 @@ const handleSearchDatatable = () => {
   filterSearch.addEventListener("keyup", (e) => {
     dt.search(e.target.value).draw();
   });
+
+  const filterSearch1 = document.querySelector(
+    '[data-kt-ciudadanos-table-filter="search"]'
+  );
+  filterSearch1.addEventListener("keyup", (e) => {
+    dt1.search(e.target.value).draw();
+  });
 };
 
 function displayData(posts) {
@@ -280,5 +294,73 @@ function displayData(posts) {
   });
 
   dt = $("#kt_customers_table").DataTable();
-  handleSearchDatatable();
+
+}
+function displayData1(posts) {
+  const tableBody1 = document.querySelector("#contenido-tabla1");
+
+  // Limpiar cualquier fila existente en la tabla
+  tableBody1.innerHTML = "";
+
+  // Iterar sobre los posts y agregarlos a la tabla
+  posts.forEach((post) => {
+    const row = `
+            
+        
+        <tr>
+            <td>
+                <div class="form-check form-check-sm form-check-custom form-check-solid">
+                    <input class="form-check-input" type="checkbox" value="1" />
+                </div>
+            </td>
+            <td>
+                <a href="overview-movilizador.html?=${
+                  post._id
+                }" class="text-gray-600 text-hover-primary mb-1">${
+      post.paterno + " " + post.materno + " " + post.nombre
+    }</a>
+            </td>
+            <td>
+                <a href="#" class="text-gray-600 text-hover-primary mb-1">${
+                  post.calle +
+                  " " +
+                  post.direccion_ext +
+                  " " +
+                  post.direccion_int +
+                  ", " +
+                  post.colonia +
+                  ", " +
+                  post.c_postal
+                }</a>
+            </td>
+            <td>
+                <a href="#" class="text-gray-600 text-hover-primary mb-1">${
+                  post.telefono
+                }</a>
+            </td>
+            <td>
+                <p class="text-gray-600 mb-1">${post.casilla.nombre}</p>
+            </td>
+            <td>
+                <p class="text-gray-600 mb-1">${post.casilla.seccion.numero}</p>
+            </td>
+            <td>
+                <p class="text-gray-600 mb-1">${post.casilla.seccion.municipio.nombre}</p>
+            </td>
+            <td>
+            <!--begin::Badges-->
+            <div class="badge badge-light-${
+              post.voto ? "success" : "danger"
+            }">${post.voto ? "Votó" : "Sin voto"}</div>
+            <!--end::Badges-->
+        </td>
+        </tr>
+    <!--end::Table body-->
+            
+        `;
+    tableBody1.innerHTML += row;
+  });
+
+  dt1 = $("#kt_ciudadanos_table").DataTable();
+
 }
