@@ -99,14 +99,15 @@ const KTDatatablesServerSide = (() => {
   const isTokenExpired = (token) => token.exp < Date.now() / 1000;
 
   const generateLinkHTML = (items) => {
-    return `<a href="overview-${getType(items)}.html?=${getIds(
+    console.log(items)
+    return `<a href="overview-${getType(items)}.html?id=${getIds(
       items
     )}" class="text-gray-600 mb-1 text-hover-primary">${getNames(items)}</a>`;
   };
 
   const getType = (items) =>
     items.length > 0
-      ? items[0]._id.startsWith("movilizador")
+      ? items[0].user_type.startsWith("movilizador")
         ? "movilizador"
         : "lider"
       : "";
