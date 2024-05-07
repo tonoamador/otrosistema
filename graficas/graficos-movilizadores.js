@@ -395,7 +395,7 @@ console.log(dataMov)
               dataMov.seccion.numero,
               casilla.nombre,
               dataMov.paterno + " " + dataMov.materno + " " + dataMov.nombre,
-              dataMov.lide.paterno +
+              dataMov.lider.paterno +
                 " " +
                 dataMov.lider.materno +
                 " " +
