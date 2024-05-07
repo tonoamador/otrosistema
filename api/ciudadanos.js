@@ -39,7 +39,10 @@ const KTDatatablesServerSide = (() => {
           }) =>
             `${calle} ${direccion_ext} ${direccion_int}, ${colonia}, ${c_postal}`,
         },
-        { data: "telefono" },
+        { 
+          data: null,
+          render: ({ telefono }) => phoneCheck(telefono)
+        },
         {
           data: null,
           render: ({ seccion }) =>
@@ -103,6 +106,14 @@ const KTDatatablesServerSide = (() => {
       items
     )}" class="text-gray-600 mb-1 text-hover-primary">${getNames(items)}</a>`;
   };
+
+  const phoneCheck = (phone) => {
+    let phoneText = ""
+    if(phone){
+      phoneText = phone
+    }
+    return phoneText
+  }
 
   const getType = (items) =>
     items.length > 0

@@ -79,13 +79,24 @@ var sendVoteX = function (e) {
     success: function(result, status){
       if(status == "success"){
         // Disable indicator after 1 seconds
-        setTimeout(function() {
-          e.removeAttribute("data-kt-indicator");
-          $("#btn-vote-x").addClass("hidden")
-          $("#search").focus(function() {
-            $("#search").val("").trigger("keyup")
-          })
-        }, 1000);
+        Swal.fire({
+          icon: "success",
+          title: "Voto registrado",
+          customClass: {
+            confirmButton: "btn-primary"
+          }
+        }).then((result) => {
+          if(result.isConfirmed) {
+            setTimeout(function() {
+              e.removeAttribute("data-kt-indicator");
+              $("#btn-vote-x").addClass("hidden")
+              $("#search").focus(function() {
+                $("#search").val("").trigger("keyup")
+              })
+            }, 1000);
+          }
+        })
+        
       }
     }
   })
