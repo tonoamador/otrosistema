@@ -254,7 +254,9 @@ function displayData(posts) {
                 ]}</p>
             </td>
             <td>
-                <p class="text-gray-600 mb-1">${post.municipio.nombre}</p>
+                <p class="text-gray-600 mb-1">${[
+                  ...new Set(post.municipio.map((municipio) => municipio.nombre)),
+                ]}</p>
             </td>
         </tr>
     <!--end::Table body-->
