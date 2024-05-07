@@ -3,7 +3,7 @@ const token = JSON.parse(localStorage.getItem("token"));
 var serverUrl = window.serverUrl;
 var am5 = am5;
 var dataChart;
-let dt
+let dt;
 
 if (!token || token.user_type !== "admin" || isTokenExpired(token)) {
   window.location.replace("index.html");
@@ -44,7 +44,19 @@ function fetchData() {
         ", " +
         posts.c_postal;
       document.querySelector("#telefonoOVLid").innerHTML = posts.telefono;
-      displayData(posts.movilizadores);
+      // Assuming posts is an object containing movilizadores array
+      console.log(posts);
+      if (
+        posts &&
+        posts.movilizadores &&
+        Array.isArray(posts.movilizadores) &&
+        posts.movilizadores.length > 0 &&
+        posts.movilizadores[0] != null
+      ) {
+        displayData(posts.movilizadores);
+      } else {
+        console.log("No valid data to display");
+      }
 
       dataChart = [
         {
@@ -155,12 +167,12 @@ function fetchData() {
           strokeOpacity: 0,
         });
         var customColors = [
-          am5.color("#FFFF00"),  // Amarillo
+          am5.color("#FFFF00"), // Amarillo
           am5.color("#FF00FF"), // Magenta
           am5.color("#808080"), // Gris
           am5.color("#000000"), // Negro
         ];
-        series.columns.template.adapters.add("fill", function(fill, target) {
+        series.columns.template.adapters.add("fill", function (fill, target) {
           var index = series.columns.indexOf(target); // Obtiene el índice de la columna
           return customColors[index % customColors.length]; // Asigna el color de la paleta basado en el índice
         });
@@ -255,7 +267,9 @@ function displayData(posts) {
             </td>
             <td>
                 <p class="text-gray-600 mb-1">${[
-                  ...new Set(post.municipio.map((municipio) => municipio.nombre)),
+                  ...new Set(
+                    post.municipio.map((municipio) => municipio.nombre)
+                  ),
                 ]}</p>
             </td>
         </tr>
@@ -266,6 +280,5 @@ function displayData(posts) {
   });
 
   dt = $("#kt_customers_table").DataTable();
-  handleSearchDatatable()
-
+  handleSearchDatatable();
 }
