@@ -52,8 +52,8 @@ function fetchData() {
         posts.movilizadores.length > 0 &&
         posts.movilizadores[0] != null
       ) {
-        displayData(posts.movilizadores);
-      } 
+        displayData(posts);
+      }
       if (
         posts &&
         posts.ciudadanos_extra &&
@@ -61,8 +61,8 @@ function fetchData() {
         posts.ciudadanos_extra.length > 0 &&
         posts.ciudadanos_extra[0] != null
       ) {
-        displayData1(posts.ciudadanos_extra);
-      } 
+        displayData1(posts);
+      }
       handleSearchDatatable();
 
       dataChart = [
@@ -232,7 +232,8 @@ const handleSearchDatatable = () => {
   });
 };
 
-function displayData(posts) {
+function displayData(posts1) {
+  let posts = posts1.movilizadores;
   const tableBody = document.querySelector("#contenido-tabla");
 
   // Limpiar cualquier fila existente en la tabla
@@ -276,13 +277,15 @@ function displayData(posts) {
             </td>
             <td>
                 <p class="text-gray-600 mb-1">${[
-                  ...new Set(post.seccion.map((seccion) => seccion.numero)),
+                  ...new Set(post.secciones.map((seccion) => seccion.numero)),
                 ]}</p>
             </td>
             <td>
                 <p class="text-gray-600 mb-1">${[
                   ...new Set(
-                    post.municipio.map((municipio) => municipio.nombre)
+                    posts1.seccion.flatMap((seccion) =>
+                      seccion.municipio.flatMap((municipio) => municipio.nombre)
+                    )
                   ),
                 ]}</p>
             </td>
@@ -294,9 +297,9 @@ function displayData(posts) {
   });
 
   dt = $("#kt_customers_table").DataTable();
-
 }
-function displayData1(posts) {
+function displayData1(posts1) {
+  let posts = posts1.ciudadanos_extra;
   const tableBody1 = document.querySelector("#contenido-tabla1");
 
   // Limpiar cualquier fila existente en la tabla
@@ -304,6 +307,7 @@ function displayData1(posts) {
 
   // Iterar sobre los posts y agregarlos a la tabla
   posts.forEach((post) => {
+    console.log(post)
     const row = `
             
         
@@ -342,10 +346,20 @@ function displayData1(posts) {
                 <p class="text-gray-600 mb-1">${post.casilla.nombre}</p>
             </td>
             <td>
-                <p class="text-gray-600 mb-1">${post.casilla.seccion.numero}</p>
+                <p class="text-gray-600 mb-1">${[
+                  ...new Set(posts1.seccion.map((seccion) => seccion.numero)),
+                ]}</p>
             </td>
             <td>
-                <p class="text-gray-600 mb-1">${post.casilla.seccion.municipio.nombre}</p>
+                <p class="text-gray-600 mb-1">${
+                  [
+                    ...new Set(
+                      posts1.seccion.flatMap((seccion) =>
+                        seccion.municipio.flatMap((municipio) => municipio.nombre)
+                      )
+                    ),
+                  ]
+                }</p>
             </td>
             <td>
             <!--begin::Badges-->
@@ -362,5 +376,4 @@ function displayData1(posts) {
   });
 
   dt1 = $("#kt_ciudadanos_table").DataTable();
-
 }
