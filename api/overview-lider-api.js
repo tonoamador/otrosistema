@@ -67,20 +67,16 @@ function fetchData() {
 
       dataChart = [
         {
-          votos: "Total Votos X",
-          value: posts.votos_og,
-        },
-        {
           votos: "Total Votos NG",
           value: posts.votaron,
         },
         {
           votos: "No han votado",
-          value: posts.faltan,
+          value: posts.no_votaron,
         },
         {
-          votos: "Total Votos General",
-          value: posts.total_votos,
+          votos: "Experados",
+          value: posts.esperados,
         },
       ];
 
