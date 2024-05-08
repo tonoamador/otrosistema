@@ -270,15 +270,10 @@ var getVotosXMunicipio = (function () {
                     <td>${seccion.conteo_seccion_ng}</td>
                     <td>${seccion.conteo_seccion_og}</td>
                     <td>${seccion.faltan_seccion_ng}</td>
-                    <td><a href="overview-lider.html?id=${
-                      seccion.lider._id
-                    }">${
-        seccion.lider.nombre +
-        " " +
-        seccion.lider.paterno +
-        " " +
-        seccion.lider.materno
-      }</a></td>
+                    <td>
+  ${seccion.lider.map(lider => `<a href="overview-lider.html?id=${lider._id}">${lider.nombre} ${lider.paterno} ${lider.materno}</a>`).join(', ')}
+</td>
+
                     <td>
                         <div class="d-flex align-items-center w-200px w-sm-300px flex-column mt-3">
                             <div class="d-flex justify-content-between w-100 mt-auto mb-2">
