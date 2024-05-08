@@ -38,7 +38,7 @@ var getVotosxMovilizadores = (function () {
     success: function (i) {
       dataMov = i;
       fetchedData = i;
-      console.log(i);
+      
       i.forEach((mov) => {
         let percent = (100 * mov.votaron) / mov.esperados;
         percent = percent.toFixed(2);
@@ -358,13 +358,11 @@ function exportToExcel() {
     { wch: 15 }, // "characters"
     { wch: 10 }, // "characters"
     { wch: 14 }, // "characters"
-    { wch: 16 }, // "characters"
-    { wch: 21 }, // "characters"
     // {wpx: 50}, // "pixels"
   ];
 
   worksheet["!cols"] = wscols;
-  worksheet["!autofilter"] = { ref: "A1:I1" };
+  worksheet["!autofilter"] = { ref: "A1:G1" };
 
   XLSX.utils.sheet_add_aoa(
     worksheet,
@@ -375,39 +373,36 @@ function exportToExcel() {
         "Casilla",
         "Movilizador",
         "Lider",
-        "Votos NG",
-        "No han votado",
-        "Votos Esperados",
-        "Porcentaje al momento",
+        "Ciudanano",
+        "Votó/NoVotó"
       ],
     ],
     { origin: "A1" }
   );
 
   fetchedData.forEach((dataMov) => {
-console.log(dataMov)
-      dataMov.seccion.casillas.forEach((casilla) => {
+    // console.log(dataMov)
+      // dataMov.cuidadanos.forEach((cuidadano) => { 
         XLSX.utils.sheet_add_aoa(
           worksheet,
           [
             [
               dataMov.municipio.nombre,
               dataMov.seccion.numero,
-              casilla.nombre,
+              dataMov.seccion.casillas.nombre,
               dataMov.paterno + " " + dataMov.materno + " " + dataMov.nombre,
               dataMov.lider.paterno +
                 " " +
                 dataMov.lider.materno +
                 " " +
                 dataMov.lider.nombre,
-              casilla.votaron,
-              casilla.no_votaron,
-              casilla.esperados,
+              // cuidadano.paterno + " " + cuidadano.materno + " " + cuidadano.nombre,
+              // cuidadano.voto ? "Votó" : "No ha votado"
             ],
           ],
           { origin: -1 }
         );
-      });
+      // });
 
   });
 

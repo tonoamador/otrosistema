@@ -68,7 +68,7 @@ var getCitizen = function (e) {
 var sendVoteX = function (e) {
   const token = JSON.parse(localStorage.getItem("token"));
   const idCasilla = token.casilla._id;
-  console.log(idCasilla);
+  
   $.ajax({
     url: serverUrl + "api/CreateUser",
     contentType: "application/json",

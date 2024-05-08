@@ -36,7 +36,7 @@ var getVotosxLideres = (function () {
     async: false,
     contentType: "application/json; charset=utf-8",
     success: function (i) {
-      console.log(i);
+      
       dataLead = i;
       fetchedData = i;
       i[0].lideres.forEach((lead) => {
@@ -347,15 +347,13 @@ function exportToExcel() {
     { wch: 13 }, // "characters"
     { wch: 8 }, // "characters"
     { wch: 11 }, // "characters"
-    { wch: 15 }, // "characters"
-    { wch: 8 }, // "characters"
-    { wch: 12 }, // "characters"
-    { wch: 14 }, // "characters"
-    { wch: 20 }, // "characters"
+    { wch: 21 }, // "characters"
+    { wch: 25 }, // "characters"
+    { wch: 25 }, // "characters"
     // {wpx: 50}, // "pixels"
   ];
   worksheet["!cols"] = wscols;
-  worksheet["!autofilter"] = { ref: "A1:H1" };
+  worksheet["!autofilter"] = { ref: "A1:F1" };
 
   XLSX.utils.sheet_add_aoa(
     worksheet,
@@ -365,10 +363,8 @@ function exportToExcel() {
         "Seccional",
         "Casilla",
         "Lider",
-        "Votos NG",
-        "No han votado",
-        "Votos Esperados",
-        "Porcentaje al momento",
+        "Ciudadano",
+        "Votó/NoVotó"
       ],
     ],
     { origin: "A1" }
@@ -377,21 +373,22 @@ function exportToExcel() {
   fetchedData[0].lideres.forEach((dataLead) => {
     dataLead.seccion.forEach((seccion) => {
       seccion.casillas.forEach((casilla) => {
-        XLSX.utils.sheet_add_aoa(
-          worksheet,
-          [
+        casilla.ciudadanos.forEach((ciudadano) => {
+          XLSX.utils.sheet_add_aoa(
+            worksheet,
             [
-              dataLead.municipios[0].nombre,
-              seccion.numero,
-              casilla.nombre,
-              dataLead.paterno + " " + dataLead.materno + " " + dataLead.nombre,
-              casilla.votaron,
-              casilla.no_votaron,
-              casilla.esperados,
+              [
+                dataLead.municipios[0].nombre,
+                seccion.numero,
+                casilla.nombre,
+                dataLead.paterno + " " + dataLead.materno + " " + dataLead.nombre,
+                ciudadano.paterno + " " + ciudadano.materno + " " + ciudadano.nombre,
+                ciudadano.voto ? "Votó" : "No ha votado"
+              ],
             ],
-          ],
-          { origin: -1 }
-        );
+            { origin: -1 }
+          );
+        })
       });
     });
   });
