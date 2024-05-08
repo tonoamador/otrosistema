@@ -21,11 +21,11 @@ function isTokenExpired(token) {
 var am5 = am5;
 $.noConflict();
 var serverUrl = window.serverUrl;
-let fetchedData;
+let data;
 
 var getVotosxMovilizadores = (function () {
   var dataChart = [];
-  var dataMov;
+  var data;
   let table;
   let dt;
 
@@ -36,10 +36,10 @@ var getVotosxMovilizadores = (function () {
     async: false,
     contentType: "application/json; charset=utf-8",
     success: function (i) {
-      dataMov = i;
-      fetchedData = i;
+
+      data = i.movilizadores;
       
-      i.forEach((mov) => {
+      data.forEach((mov) => {
         let percent = (100 * mov.votaron) / mov.esperados;
         percent = percent.toFixed(2);
         percent = parseFloat(percent);
@@ -262,7 +262,7 @@ var getVotosxMovilizadores = (function () {
     //Iterar el JSON y dibujar las TR
     let percent = 0;
 
-    dataMov.forEach((mov) => {
+    data.forEach((mov) => {
       // mov.seccion.forEach((seccion) => {
       if (mov.esperados != 0) {
         percent = (100 * mov.votaron) / mov.esperados;
@@ -343,7 +343,7 @@ KTUtil.onDOMContentLoaded(function () {
 });
 
 function exportToExcel() {
-  if (!fetchedData) {
+  if (!data) {
     console.log("No hay datos aún.");
     return;
   }
@@ -380,22 +380,22 @@ function exportToExcel() {
     { origin: "A1" }
   );
 
-  fetchedData.forEach((dataMov) => {
-    // console.log(dataMov)
-      // dataMov.cuidadanos.forEach((cuidadano) => { 
+  data.forEach((data) => {
+    // console.log(data)
+      // data.cuidadanos.forEach((cuidadano) => { 
         XLSX.utils.sheet_add_aoa(
           worksheet,
           [
             [
-              dataMov.municipio.nombre,
-              dataMov.seccion.numero,
-              dataMov.seccion.casillas.nombre,
-              dataMov.paterno + " " + dataMov.materno + " " + dataMov.nombre,
-              dataMov.lider.paterno +
+              data.municipio.nombre,
+              data.seccion.numero,
+              data.seccion.casillas.nombre,
+              data.paterno + " " + data.materno + " " + data.nombre,
+              data.lider.paterno +
                 " " +
-                dataMov.lider.materno +
+                data.lider.materno +
                 " " +
-                dataMov.lider.nombre,
+                data.lider.nombre,
               // cuidadano.paterno + " " + cuidadano.materno + " " + cuidadano.nombre,
               // cuidadano.voto ? "Votó" : "No ha votado"
             ],
