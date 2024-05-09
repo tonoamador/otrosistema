@@ -28,7 +28,9 @@ const KTDatatablesServerSide = (() => {
       ajax: {
         type: "POST",
         url: `${serverUrl}api/getLideres/`,
-        dataSrc: (json) => json?.[0]?.lideres ?? [],
+        dataSrc: (json) => {
+          return json?.[0]?.lideres ?? [];
+        },
       },
       columns: [
         { data: null },
@@ -51,13 +53,27 @@ const KTDatatablesServerSide = (() => {
         { data: "telefono" },
         {
           data: null,
-          render: ({ seccion }) =>
-            [...new Set(seccion.map(({ numero }) => numero))].join(", "),
+          render: ({ movilizadores }) =>
+            [
+              ...new Set(
+                movilizadores.flatMap((m) =>
+                  m.secciones.flatMap((s) => s.numero)
+                )
+              ),
+            ].join(", "),
         },
         {
           data: null,
-          render: ({ municipios }) =>
-            [...new Set(municipios.map(({ nombre }) => nombre))].join(", "),
+          render: ({ movilizadores }) =>
+            [
+              ...new Set(
+                movilizadores.flatMap((m) =>
+                  m.secciones.flatMap((s) =>
+                    s.municipio.flatMap((m) => m.nombre)
+                  )
+                )
+              ),
+            ].join(", "),
         },
       ],
       columnDefs: [
