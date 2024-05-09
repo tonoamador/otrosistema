@@ -55,7 +55,6 @@ function fetchData() {
       document.querySelector("#telefonoLider").innerHTML =
         posts.lider[0]["telefono"];
       displayData(posts);
-console.log(posts)
       dataChart = [
         {
           votos: "No han votado",
