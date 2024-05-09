@@ -16,7 +16,7 @@ function isTokenExpired(token) {
 }
 function fetchData() {
   const params = new URLSearchParams(window.location.search);
-  const id = params.get("");
+  const id = params.get("id");
   fetch(serverUrl + "api/getMovilizador/", {
     method: "POST",
     headers: {
@@ -54,24 +54,20 @@ function fetchData() {
         posts.lider[0]["nombre"];
       document.querySelector("#telefonoLider").innerHTML =
         posts.lider[0]["telefono"];
-      displayData(posts.ciudadanos);
-
+      displayData(posts);
+console.log(posts)
       dataChart = [
         {
-          votos: "Total Votos X",
-          value: posts.votos_b,
-        },
-        {
-          votos: "Total Votos NG",
-          value: posts.votos_a,
-        },
-        {
           votos: "No han votado",
-          value: posts.total_a-posts.votos_a,
+          value: posts.no_votaron,
         },
         {
-          votos: "Total Votos General",
-          value: posts.total_votos,
+          votos: "Votaron",
+          value: posts.votaron,
+        },
+        {
+          votos: "Esperados",
+          value: posts.esperados,
         },
       ]
 
@@ -166,7 +162,7 @@ function fetchData() {
         });
     
         var customColors = [
-          am5.color("#FFFF00"),  // Amarillo
+          am5.color("#FFFF00"), // Amarillo
           am5.color("#FF00FF"), // Magenta
           am5.color("#808080"), // Gris
           am5.color("#000000"), // Negro
@@ -218,7 +214,9 @@ const handleSearchDatatable = () => {
   });
 };
 
-function displayData(posts) {
+function displayData(posts1) {
+  const posts = [...new Set(posts1.secciones.flatMap(s => s.casillas.flatMap(c => c.ciudadanos)))];
+
   const tableBody = document.querySelector("#contenido-tabla");
 
   // Limpiar cualquier fila existente en la tabla

@@ -41,14 +41,12 @@ var getVotosXSeccion = (function () {
       id: idTownHall,
     }),
     success: function (i) {
-      
       e.innerHTML = i[0].numero
       dataSeccion = i
 
       i[0].casilla.forEach(c => {
         dataChart.push({
           casilla : c.nombre,
-          votos_x : c.conteo_casilla_og,
           votos_ng: c.conteo_casilla_ng,
           votos_no: c.faltan_casilla_ng,
           votos_total: c.conteo_casilla_og+c.conteo_casilla_ng
