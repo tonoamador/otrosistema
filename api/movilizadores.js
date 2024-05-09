@@ -40,7 +40,7 @@ const KTDatatablesServerSide = (() => {
         {
           data: null,
           render: ({ _id, paterno, materno, nombre }) =>
-            `<a href="overview-movilizador.html?=${_id}" class="text-gray-600 mb-1 text-hover-primary">${paterno} ${materno} ${nombre}</a>`,
+            `<a href="overview-movilizador.html?id=${_id}" class="text-gray-600 mb-1 text-hover-primary">${paterno} ${materno} ${nombre}</a>`,
         },
         {
           data: null,
@@ -68,7 +68,7 @@ const KTDatatablesServerSide = (() => {
                 `${paterno} ${materno} ${nombre}`
             );
             const uniqueLiderNames = [...new Set(liderNames)];
-            return `<a href="overview-lider.html?=${uniqueLiderIds.join(
+            return `<a href="overview-lider.html?id=${uniqueLiderIds.join(
               ", "
             )}" class="text-gray-600 mb-1 text-hover-primary">${uniqueLiderNames.join(
               ", "

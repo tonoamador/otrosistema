@@ -279,9 +279,9 @@ function displayData(posts1) {
             <td>
                 <p class="text-gray-600 mb-1">${[
                   ...new Set(
-                    posts1.seccion.flatMap((seccion) =>
-                      seccion.municipio.flatMap((municipio) => municipio.nombre)
-                    )
+          
+                    post.secciones.flatMap((seccion) => seccion.numero)
+                   
                   ),
                 ]}</p>
             </td>
