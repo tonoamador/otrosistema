@@ -33,7 +33,9 @@ const KTDatatablesServerSide = (() => {
         error: (xhr, error) => {
           console.error("Error fetching data:", error);
         },
-        dataSrc: (json) => json?.[0]?.movilizadores ?? [],
+        dataSrc: (json) => {
+          return json?.[0]?.movilizadores ?? [];
+        },
       },
       columns: [
         { data: null },
@@ -55,10 +57,19 @@ const KTDatatablesServerSide = (() => {
         },
         { data: "telefono" },
         {
-          data: "seccion",
-          render: (seccion) => seccion.map(({ numero }) => numero).join(", "),
+          data: null,
+          render: ({ secciones }) =>
+            [...new Set(secciones.flatMap((s) => s.numero))].join(", "),
         },
-        { data: "municipio.nombre" },
+        {
+          data: null,
+          render: ({ secciones }) =>
+            [
+              ...new Set(
+                secciones.flatMap((s) => s.municipio.flatMap((m) => m.nombre))
+              ),
+            ].join(", "),
+        },
         {
           data: "lider",
           render: (lider) => {

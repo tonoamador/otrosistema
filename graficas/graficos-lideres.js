@@ -36,10 +36,9 @@ var getVotosxLideres = (function () {
     async: false,
     contentType: "application/json; charset=utf-8",
     success: function (i) {
-      
       dataLead = i;
       fetchedData = i;
-      console.log(i[0].lideres)
+      console.log(i[0].lideres);
       i[0].lideres.forEach((lead) => {
         let percent = (100 * lead.votaron) / lead.esperados;
         percent = percent.toFixed(2);
@@ -282,7 +281,11 @@ var getVotosxLideres = (function () {
         lead.nombre
       } ${lead.paterno} ${lead.materno}</a></td>
                     <td>${[
-                      ...new Set(lead.movilizadores.flatMap(m=>m.secciones.map(s=>s.numero))),
+                      ...new Set(
+                        lead.movilizadores.flatMap((m) =>
+                          m.secciones.map((s) => s.numero)
+                        )
+                      ),
                     ].join(", ")}</td>
                     <td>${lead.votaron}</td>
                     <td>${lead.no_votaron}</td>
@@ -365,7 +368,7 @@ function exportToExcel() {
         "Casilla",
         "Lider",
         "Ciudadano",
-        "Votó/NoVotó"
+        "Votó/NoVotó",
       ],
     ],
     { origin: "A1" }
@@ -382,14 +385,22 @@ function exportToExcel() {
                 dataLead.municipios[0].nombre,
                 seccion.numero,
                 casilla.nombre,
-                dataLead.paterno + " " + dataLead.materno + " " + dataLead.nombre,
-                ciudadano.paterno + " " + ciudadano.materno + " " + ciudadano.nombre,
-                ciudadano.voto ? "Votó" : "No ha votado"
+                dataLead.paterno +
+                  " " +
+                  dataLead.materno +
+                  " " +
+                  dataLead.nombre,
+                ciudadano.paterno +
+                  " " +
+                  ciudadano.materno +
+                  " " +
+                  ciudadano.nombre,
+                ciudadano.voto ? "Votó" : "No ha votado",
               ],
             ],
             { origin: -1 }
           );
-        })
+        });
       });
     });
   });
