@@ -39,6 +39,7 @@ var getVotosxLideres = (function () {
       
       dataLead = i;
       fetchedData = i;
+      console.log(i[0].lideres)
       i[0].lideres.forEach((lead) => {
         let percent = (100 * lead.votaron) / lead.esperados;
         percent = percent.toFixed(2);
@@ -281,7 +282,7 @@ var getVotosxLideres = (function () {
         lead.nombre
       } ${lead.paterno} ${lead.materno}</a></td>
                     <td>${[
-                      ...new Set(lead.seccion.map(({ numero }) => numero)),
+                      ...new Set(lead.movilizadores.flatMap(m=>m.secciones.map(s=>s.numero))),
                     ].join(", ")}</td>
                     <td>${lead.votaron}</td>
                     <td>${lead.no_votaron}</td>
