@@ -34,7 +34,7 @@ const KTDatatablesServerSide = (() => {
           console.error("Error fetching data:", error);
         },
         dataSrc: (json) => {
-          return json?.[0]?.movilizadores ?? [];
+          return json?.movilizadores ?? [];
         },
       },
       columns: [

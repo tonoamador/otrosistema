@@ -30,15 +30,14 @@ var getVotosxMovilizadores = (function () {
   let dt;
 
   $.ajax({
-    url: serverUrl + "api/getMovilizadoresGrafica",
+    url: serverUrl + "api/getMovilizadores",
     dataType: "JSON",
     method: "POST",
     async: false,
     contentType: "application/json; charset=utf-8",
     success: function (i) {
-
       data = i.movilizadores;
-      
+
       data.forEach((mov) => {
         let percent = (100 * mov.votaron) / mov.esperados;
         percent = percent.toFixed(2);
@@ -263,50 +262,50 @@ var getVotosxMovilizadores = (function () {
     let percent = 0;
 
     data.forEach((mov) => {
-      // mov.seccion.forEach((seccion) => {
-      if (mov.esperados != 0) {
-        percent = (100 * mov.votaron) / mov.esperados;
-        percent = percent.toFixed(2);
-      }
-      let classPercent = "bg-light";
-      if (percent < 50) {
-        classPercent = "bg-warning";
-      } else if (percent >= 50) {
-        classPercent = "bg-success";
-      }
-
-      const row = `
-                    <tr>
-                        <td><a href="overview-movilizador.html?id=${mov._id}">${
-        mov.nombre
-      } ${mov.paterno} ${mov.materno}</a></td>
-                        <td>${mov.seccion.numero}</td>
-                        <td>${mov.votaron}</td>
-                        <td>
-                        ${mov.faltan}
-                        </td>
-                        <td><a href="overview-lider.html?id=${
-                          mov.lider._id
-                        }">${mov.lider.nombre} ${mov.lider.paterno} ${
-        mov.lider.materno
-      }</a></td>
-                        <td>
-                            <div class="d-flex align-items-center w-200px w-sm-300px flex-column mt-3">
-                                <div class="d-flex justify-content-between w-100 mt-auto mb-2">
-                                    
-                                    <span class="fw-bold fs-6">${percent}%</span>
-                                </div>
-                                <div class="h-5px mx-3 w-100 bg-secondary mb-3">
-                                    <div class="${classPercent} rounded h-5px" role="progressbar" style="width: ${percent}%;" aria-valuenow="${percent}" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                            </div>
-                        </td>
+      mov.secciones.forEach((seccion) => {
+        if (seccion.esperados != 0) {
+          percent = (100 * seccion.votaron) / seccion.esperados;
+          percent = percent.toFixed(2);
+        }
+        let classPercent = "bg-light";
+        if (percent < 50) {
+          classPercent = "bg-warning";
+        } else if (percent >= 50) {
+          classPercent = "bg-success";
+        }
+        
+        const row = `
+        <tr>
+            <td><a href="overview-movilizador.html?id=${mov._id}">${mov.nombre} ${mov.paterno} ${mov.materno}</a></td>
+            <td>${seccion.numero}</td>
+            <td>${seccion.votaron}</td>
+            <td>
+            ${seccion.no_votaron}
+            </td>
+            <td><a href="overview-lider.html?id=${mov.lider[0]._id}">${mov.lider[0].paterno} ${mov.lider[0].materno} ${mov.lider[0].nombre}</a></td>
+            <td>
+                <div class="d-flex align-items-center w-200px w-sm-300px flex-column mt-3">
+                    <div class="d-flex justify-content-between w-100 mt-auto mb-2">
                         
-                    </tr>
-                `;
-      tableBody.innerHTML += row;
-      // })
-    });
+                        <span class="fw-bold fs-6">${percent}%</span>
+                    </div>
+                    <div class="h-5px mx-3 w-100 bg-secondary mb-3">
+                        <div class="${classPercent} rounded h-5px" role="progressbar" style="width: ${percent}%;" aria-valuenow="${percent}" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                </div>
+            </td>
+            
+        </tr>
+    `;
+        tableBody.innerHTML += row;
+ 
+      });
+
+       
+      });
+
+
+
 
     dt = $("#kt_table_townhall").DataTable({
       searchDelay: 500,
@@ -374,7 +373,7 @@ function exportToExcel() {
         "Movilizador",
         "Lider",
         "Ciudanano",
-        "Votó/NoVotó"
+        "Votó/NoVotó",
       ],
     ],
     { origin: "A1" }
@@ -382,28 +381,27 @@ function exportToExcel() {
 
   data.forEach((data) => {
     // console.log(data)
-      // data.cuidadanos.forEach((cuidadano) => { 
-        XLSX.utils.sheet_add_aoa(
-          worksheet,
-          [
-            [
-              data.municipio.nombre,
-              data.seccion.numero,
-              data.seccion.casillas.nombre,
-              data.paterno + " " + data.materno + " " + data.nombre,
-              data.lider.paterno +
-                " " +
-                data.lider.materno +
-                " " +
-                data.lider.nombre,
-              // cuidadano.paterno + " " + cuidadano.materno + " " + cuidadano.nombre,
-              // cuidadano.voto ? "Votó" : "No ha votado"
-            ],
-          ],
-          { origin: -1 }
-        );
-      // });
-
+    // data.cuidadanos.forEach((cuidadano) => {
+    XLSX.utils.sheet_add_aoa(
+      worksheet,
+      [
+        [
+          data.municipio.nombre,
+          data.seccion.numero,
+          data.seccion.casillas.nombre,
+          data.paterno + " " + data.materno + " " + data.nombre,
+          data.lider.paterno +
+            " " +
+            data.lider.materno +
+            " " +
+            data.lider.nombre,
+          // cuidadano.paterno + " " + cuidadano.materno + " " + cuidadano.nombre,
+          // cuidadano.voto ? "Votó" : "No ha votado"
+        ],
+      ],
+      { origin: -1 }
+    );
+    // });
   });
 
   XLSX.utils.book_append_sheet(workbook, worksheet, "Casillas");
