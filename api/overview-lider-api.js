@@ -247,7 +247,7 @@ function displayData(posts1) {
                 </div>
             </td>
             <td>
-                <a href="overview-movilizador.html?=${
+                <a href="overview-movilizador.html?id=${
                   post._id
                 }" class="text-gray-600 text-hover-primary mb-1">${
       post.paterno + " " + post.materno + " " + post.nombre
@@ -314,7 +314,7 @@ function displayData1(posts1) {
                 </div>
             </td>
             <td>
-                <a href="overview-movilizador.html?=${
+                <a href="overview-movilizador.html?id=${
                   post._id
                 }" class="text-gray-600 text-hover-primary mb-1">${
       post.paterno + " " + post.materno + " " + post.nombre

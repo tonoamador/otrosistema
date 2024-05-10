@@ -2,7 +2,11 @@
 
 //Funcion Login
 const token = JSON.parse(localStorage.getItem("token"));
-if (!token || (token.user_type !== "rc" && token.user_type !== "admin") || isTokenExpired(token)) {
+if (
+  !token ||
+  (token.user_type !== "rc" && token.user_type !== "admin") ||
+  isTokenExpired(token)
+) {
   window.location.replace("index.html");
 } else if (token.user_type !== "admin") {
   window.location.replace("index.html");
@@ -10,7 +14,7 @@ if (!token || (token.user_type !== "rc" && token.user_type !== "admin") || isTok
 
 function isTokenExpired(token) {
   let currentTime = Date.now() / 1000;
-  currentTime=currentTime.toFixed(0)
+  currentTime = currentTime.toFixed(0);
   return token.exp < currentTime;
 }
 
@@ -27,7 +31,7 @@ var dataSeccion;
 var getVotosXSeccion = (function () {
   var el = document.getElementById("townhall");
   var idTownHall = el.getAttribute("data-id-townhall");
-  var dataChart=[];
+  var dataChart = [];
   let table;
   let dt;
 
@@ -41,94 +45,99 @@ var getVotosXSeccion = (function () {
       id: idTownHall,
     }),
     success: function (i) {
-      e.innerHTML = i[0].numero
-      dataSeccion = i
+      e.innerHTML = i[0].numero;
+      dataSeccion = i;
 
-      i[0].casilla.forEach(c => {
+      i[0].casilla.forEach((c) => {
         dataChart.push({
-          casilla : c.nombre,
+          casilla: c.nombre,
           votos_ng: c.conteo_casilla_ng,
           votos_no: c.faltan_casilla_ng,
-          votos_total: c.conteo_casilla_og+c.conteo_casilla_ng
-        })
-      })
-      
+          votos_total: c.conteo_casilla_og + c.conteo_casilla_ng,
+        });
+      });
+
       fetchedData = i[0].casilla;
     },
   }).done(function (result) {});
 
   am5.ready(function () {
-    
     // Create root element
     var root = am5.Root.new("kt_amcharts_1");
 
     // Set themes
-    root.setThemes([
-      am5themes_Animated.new(root)
-    ]);
-    
-    // Create chart
-    
-    var chart = root.container.children.push(am5xy.XYChart.new(root, {
-      panX: false,
-      panY: false,
-      paddingLeft: 0,
-      wheelX: "panX",
-      wheelY: "zoomX",
-      layout: root.verticalLayout
-    }));
+    root.setThemes([am5themes_Animated.new(root)]);
 
+    // Create chart
+
+    var chart = root.container.children.push(
+      am5xy.XYChart.new(root, {
+        panX: false,
+        panY: false,
+        paddingLeft: 0,
+        wheelX: "panX",
+        wheelY: "zoomX",
+        layout: root.verticalLayout,
+      })
+    );
 
     // Add legend
-    
-    var legend = chart.children.push(am5.Legend.new(root, {
-      centerX: am5.p50,
-      x: am5.p50
-    }))
+
+    var legend = chart.children.push(
+      am5.Legend.new(root, {
+        centerX: am5.p50,
+        x: am5.p50,
+      })
+    );
 
     // Create axes
-    var yAxis = chart.yAxes.push(am5xy.CategoryAxis.new(root, {
-      categoryField: "casilla",
-      renderer: am5xy.AxisRendererY.new(root, {
-        inversed: true,
-        cellStartLocation: 0.1,
-        cellEndLocation: 0.9,
-        minorGridEnabled: true
+    var yAxis = chart.yAxes.push(
+      am5xy.CategoryAxis.new(root, {
+        categoryField: "casilla",
+        renderer: am5xy.AxisRendererY.new(root, {
+          inversed: true,
+          cellStartLocation: 0.1,
+          cellEndLocation: 0.9,
+          minorGridEnabled: true,
+        }),
       })
-    }));
+    );
 
     yAxis.data.setAll(dataChart);
 
-    var xAxis = chart.xAxes.push(am5xy.ValueAxis.new(root, {
-      renderer: am5xy.AxisRendererX.new(root, {
-        strokeOpacity: 0.1,
-        minGridDistance: 50
-      }),
-      min: 0
-    }));
+    var xAxis = chart.xAxes.push(
+      am5xy.ValueAxis.new(root, {
+        renderer: am5xy.AxisRendererX.new(root, {
+          strokeOpacity: 0.1,
+          minGridDistance: 50,
+        }),
+        min: 0,
+      })
+    );
 
     // Add series
     function createSeries(field, name, color) {
-      var series = chart.series.push(am5xy.ColumnSeries.new(root, {
-        name: name,
-        xAxis: xAxis,
-        yAxis: yAxis,
-        valueXField: field,
-        categoryYField: "casilla",
-        sequencedInterpolation: true,
-        tooltip: am5.Tooltip.new(root, {
-          pointerOrientation: "horizontal",
-          labelText: "[bold]{name}[/]\n{categoryY}: {valueX}"
-        }),
-        fill: am5.color(color)
-      }));
-    
+      var series = chart.series.push(
+        am5xy.ColumnSeries.new(root, {
+          name: name,
+          xAxis: xAxis,
+          yAxis: yAxis,
+          valueXField: field,
+          categoryYField: "casilla",
+          sequencedInterpolation: true,
+          tooltip: am5.Tooltip.new(root, {
+            pointerOrientation: "horizontal",
+            labelText: "[bold]{name}[/]\n{categoryY}: {valueX}",
+          }),
+          fill: am5.color(color),
+        })
+      );
+
       series.columns.template.setAll({
         height: am5.p100,
-        strokeOpacity: 0
+        strokeOpacity: 0,
       });
-    
-    
+
       series.bullets.push(function () {
         return am5.Bullet.new(root, {
           locationX: 1,
@@ -136,11 +145,11 @@ var getVotosXSeccion = (function () {
           sprite: am5.Label.new(root, {
             centerY: am5.p50,
             text: "{valueX}",
-            populateText: true
-          })
+            populateText: true,
+          }),
         });
       });
-    
+
       series.bullets.push(function () {
         return am5.Bullet.new(root, {
           locationX: 1,
@@ -150,14 +159,14 @@ var getVotosXSeccion = (function () {
             centerY: am5.p50,
             text: "{name}",
             fill: am5.color(0xffffff),
-            populateText: true
-          })
+            populateText: true,
+          }),
         });
       });
-    
+
       series.data.setAll(dataChart);
       series.appear();
-    
+
       return series;
     }
 
@@ -167,17 +176,22 @@ var getVotosXSeccion = (function () {
     createSeries("votos_total", "Votos Totales", "#000000");
 
     // Add legend
-    var legend = chart.children.push(am5.Legend.new(root, {
-      centerX: am5.p50,
-      x: am5.p50
-    }));
+    var legend = chart.children.push(
+      am5.Legend.new(root, {
+        centerX: am5.p50,
+        x: am5.p50,
+      })
+    );
 
     legend.data.setAll(chart.series.values);
 
     // Add cursor
-    var cursor = chart.set("cursor", am5xy.XYCursor.new(root, {
-      behavior: "zoomY"
-    }));
+    var cursor = chart.set(
+      "cursor",
+      am5xy.XYCursor.new(root, {
+        behavior: "zoomY",
+      })
+    );
     cursor.lineY.set("forceHidden", true);
     cursor.lineX.set("forceHidden", true);
 
@@ -192,8 +206,10 @@ var getVotosXSeccion = (function () {
 
     let percent = 0;
     if (dataSeccion[0].esperados_seccion_ng != 0) {
-      percent = (100 * dataSeccion[0].conteo_seccion_ng) / dataSeccion[0].esperados_seccion_ng;
-      percent = percent.toFixed(2)
+      percent =
+        (100 * dataSeccion[0].conteo_seccion_ng) /
+        dataSeccion[0].esperados_seccion_ng;
+      percent = percent.toFixed(2);
     }
 
     // var classPercent = percent = 0 ? "bg-light" : percent < 50 ? "bg-warning" : percent >=50 ? "bg-success" : "bg-light";
@@ -203,16 +219,11 @@ var getVotosXSeccion = (function () {
     } else if (percent >= 50) {
       classPercent = "bg-success";
     }
+    const x = dataSeccion[0].lideres.map(lider => `<a href="overview-lider.html?id=${lider._id}" class="text-gray-600 mb-1 text-hover-primary">${lider.paterno} ${lider.materno} ${lider.nombre}</a>`).join(", ");
 
     const row = `
     <tr>
-    <td><a href="overview-lider.html?id=${dataSeccion[0].lider._id}">${
-      dataSeccion[0].lider.nombre +
-      " " +
-      dataSeccion[0].lider.paterno +
-      " " +
-      dataSeccion[0].lider.materno
-    }</a></td>
+    <td>${x}</td>
         <td>${dataSeccion[0].conteo_seccion_ng}</td>
         <td>${dataSeccion[0].conteo_seccion_og}</td>
         <td>${dataSeccion[0].faltan_seccion_ng}</td>
@@ -274,29 +285,40 @@ function exportToExcel() {
   const worksheet = XLSX.utils.json_to_sheet([]);
 
   var wscols = [
-    {wch: 13}, // "characters"
-    {wch: 10}, // "characters"
-    {wch: 11}, // "characters"
-    {wch: 10}, // "characters"
-    {wch: 9}, // "characters"
-    {wch: 14}, // "characters"
+    { wch: 13 }, // "characters"
+    { wch: 10 }, // "characters"
+    { wch: 11 }, // "characters"
+    { wch: 10 }, // "characters"
+    { wch: 9 }, // "characters"
+    { wch: 14 }, // "characters"
     // {wpx: 50}, // "pixels"
   ];
 
   worksheet["!cols"] = wscols;
-  worksheet['!autofilter'] = { ref: "A1:G1" };
+  worksheet["!autofilter"] = { ref: "A1:G1" };
 
   XLSX.utils.sheet_add_aoa(
     worksheet,
-    [["Sección", "Casilla", "Votos NG", "Votos X", "Faltan NG", "Lider", "Porcentaje"]],
+    [
+      [
+        "Sección",
+        "Casilla",
+        "Votos NG",
+        "Votos X",
+        "Faltan NG",
+        "Lider",
+        "Porcentaje",
+      ],
+    ],
     { origin: "A1" }
   );
   let percent = 0;
 
   fetchedData.forEach((casilla) => {
-    if(casilla.esperados_casilla_ng != 0) {
-      percent = (100 * casilla.conteo_casilla_ng) / casilla.esperados_casilla_ng;
-      percent=percent.toFixed(2)
+    if (casilla.esperados_casilla_ng != 0) {
+      percent =
+        (100 * casilla.conteo_casilla_ng) / casilla.esperados_casilla_ng;
+      percent = percent.toFixed(2);
     }
     XLSX.utils.sheet_add_aoa(
       worksheet,
@@ -308,11 +330,11 @@ function exportToExcel() {
           casilla.conteo_casilla_og,
           casilla.faltan_casilla_ng,
           dataSeccion[0].lider.paterno +
-          " " +
-          dataSeccion[0].lider.materno +
-          " " +
-          dataSeccion[0].lider.nombre,
-          percent + "%"
+            " " +
+            dataSeccion[0].lider.materno +
+            " " +
+            dataSeccion[0].lider.nombre,
+          percent + "%",
         ],
       ],
       { origin: -1 }

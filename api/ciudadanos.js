@@ -102,7 +102,6 @@ const KTDatatablesServerSide = (() => {
   const isTokenExpired = (token) => token.exp < Date.now() / 1000;
 
   const generateLinkHTML = (items) => {
-    console.log(items)
     return `<a href="overview-${getType(items)}.html?id=${getIds(
       items
     )}" class="text-gray-600 mb-1 text-hover-primary">${getNames(items)}</a>`;
