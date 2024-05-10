@@ -294,28 +294,30 @@ worksheet['!autofilter'] = { ref: "A1:G1" };
 
   XLSX.utils.sheet_add_aoa(
     worksheet,
-    [["Municipio", "Seccional", "Casilla", "Votos OG", "Votos NG", "No han votado", "Votos Totales"]],
+    [["Municipio", "Seccional", "Casilla", "Lider", "Tel Lider", "Movilizador", "Tel Mov", "Votó/No ha votado"]],
     { origin: "A1" }
   );
  
   fetchedData.forEach((municipio) => {
     municipio.secciones.forEach((seccion) => {
       seccion.casilla.forEach((casilla) => {
-        XLSX.utils.sheet_add_aoa(
-          worksheet,
-          [
+        casilla.ciudadanos.forEach((ciudadano) => {
+          XLSX.utils.sheet_add_aoa(
+            worksheet,
             [
-              municipio.nombre,
-              seccion.numero,
-              casilla.nombre,
-              casilla.conteo_casilla_og,
-              casilla.conteo_casilla_ng,
-              casilla.faltan_casilla_ng,
-              casilla.conteo_casilla_og+casilla.conteo_casilla_ng,
+              [
+                municipio.nombre,
+                seccion.numero,
+                casilla.nombre,
+                casilla.conteo_casilla_og,
+                casilla.conteo_casilla_ng,
+                casilla.faltan_casilla_ng,
+                casilla.conteo_casilla_og+casilla.conteo_casilla_ng,
+              ],
             ],
-          ],
-          { origin: -1 }
-        );
+            { origin: -1 }
+          );
+        })
       })
     })
   });

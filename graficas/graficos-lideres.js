@@ -347,16 +347,19 @@ function exportToExcel() {
   const workbook = XLSX.utils.book_new();
   const worksheet = XLSX.utils.json_to_sheet([]);
   var wscols = [
-    { wch: 13 }, // "characters"
-    { wch: 8 }, // "characters"
-    { wch: 11 }, // "characters"
-    { wch: 21 }, // "characters"
-    { wch: 25 }, // "characters"
-    { wch: 25 }, // "characters"
+    { wch: 13 }, // "1"
+    { wch: 8 }, // "2"
+    { wch: 11 }, // "3"
+    { wch: 21 }, // "4"
+    { wch: 11 }, // "5"
+    { wch: 20 }, // "6"
+    { wch: 11 }, // "7"
+    { wch: 25 }, // "8"
+    { wch: 13 }, // "9"
     // {wpx: 50}, // "pixels"
   ];
   worksheet["!cols"] = wscols;
-  worksheet["!autofilter"] = { ref: "A1:F1" };
+  worksheet["!autofilter"] = { ref: "A1:I1" };
 
   XLSX.utils.sheet_add_aoa(
     worksheet,
@@ -366,7 +369,9 @@ function exportToExcel() {
         "Seccional",
         "Casilla",
         "Lider",
+        "Tel Lider",
         "Movilizador",
+        "Tel Mov",
         "Ciudadano",
         "Votó/NoVotó",
       ],
@@ -386,11 +391,13 @@ function exportToExcel() {
                   seccion.numero,
                   casilla.nombre,
                   lider.paterno + " " + lider.materno + " " + lider.nombre,
+                  lider.telefono,
                   movilizador.paterno +
                     " " +
                     movilizador.materno +
                     " " +
                     movilizador.nombre,
+                  movilizador.telefono,
                   ciudadano.paterno +
                     " " +
                     ciudadano.materno +
