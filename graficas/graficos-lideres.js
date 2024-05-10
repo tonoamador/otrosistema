@@ -38,7 +38,6 @@ var getVotosxLideres = (function () {
     success: function (i) {
       dataLead = i;
       fetchedData = i;
-      console.log(i[0].lideres);
       i[0].lideres.forEach((lead) => {
         let percent = (100 * lead.votaron) / lead.esperados;
         percent = percent.toFixed(2);
