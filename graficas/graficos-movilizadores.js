@@ -22,11 +22,9 @@ var am5 = am5;
 $.noConflict();
 var serverUrl = window.serverUrl;
 let data;
-
 var getVotosxMovilizadores = (function () {
   var dataChart = [];
-  var data;
-  let table;
+
   let dt;
 
   $.ajax({
@@ -36,9 +34,8 @@ var getVotosxMovilizadores = (function () {
     async: false,
     contentType: "application/json; charset=utf-8",
     success: function (i) {
-      data = i.movilizadores;
-
-      data.forEach((mov) => {
+      data = i;
+      i.movilizadores.forEach((mov) => {
         let percent = (100 * mov.votaron) / mov.esperados;
         percent = percent.toFixed(2);
         percent = parseFloat(percent);
@@ -54,16 +51,9 @@ var getVotosxMovilizadores = (function () {
   });
 
   am5.ready(function () {
-    // Create root element
-    // https://www.amcharts.com/docs/v5/getting-started/#Root_element
     var root = am5.Root.new("kt_amcharts_1");
 
-    // Set themes
-    // https://www.amcharts.com/docs/v5/concepts/themes/
     root.setThemes([am5themes_Animated.new(root)]);
-
-    // Create chart
-    // https://www.amcharts.com/docs/v5/charts/xy-chart/
     var chart = root.container.children.push(
       am5xy.XYChart.new(root, {
         panX: false,
@@ -74,9 +64,6 @@ var getVotosxMovilizadores = (function () {
         wheelY: "none",
       })
     );
-
-    // Create axes
-    // https://www.amcharts.com/docs/v5/charts/xy-chart/axes/
 
     var yRenderer = am5xy.AxisRendererY.new(root, {
       minorGridEnabled: true,
@@ -103,8 +90,6 @@ var getVotosxMovilizadores = (function () {
       })
     );
 
-    // Add series
-    // https://www.amcharts.com/docs/v5/charts/xy-chart/series/
     var series = chart.series.push(
       am5xy.ColumnSeries.new(root, {
         name: "Income",
@@ -173,35 +158,14 @@ var getVotosxMovilizadores = (function () {
 
     series.bullets.push(function (root, series, dataItem) {
       var bulletContainer = am5.Container.new(root, {});
-      var circle = bulletContainer.children.push(
-        am5.Circle.new(
-          root,
-          {
-            radius: 34,
-          },
-          circleTemplate
-        )
-      );
 
       var maskCircle = bulletContainer.children.push(
         am5.Circle.new(root, { radius: 27 })
       );
 
-      // only containers can be masked, so we add image to another container
       var imageContainer = bulletContainer.children.push(
         am5.Container.new(root, {
           mask: maskCircle,
-        })
-      );
-
-      // not working
-      var image = imageContainer.children.push(
-        am5.Picture.new(root, {
-          templateField: "pictureSettings",
-          centerX: am5.p50,
-          centerY: am5.p50,
-          width: 60,
-          height: 60,
         })
       );
 
@@ -211,7 +175,6 @@ var getVotosxMovilizadores = (function () {
       });
     });
 
-    // heatrule
     series.set("heatRules", [
       {
         dataField: "valueX",
@@ -245,23 +208,18 @@ var getVotosxMovilizadores = (function () {
       }
     });
 
-    // Make stuff animate on load
-    // https://www.amcharts.com/docs/v5/concepts/animations/
     series.appear();
     chart.appear(1000, 100);
   });
 
   var CreateTableMovilizadores = function () {
-    //Aqui genera la tabla
     const tableBody = document.querySelector("#tabla-votos-seccional");
 
-    // Limpiar cualquier fila existente en la tabla
     tableBody.innerHTML = "";
 
-    //Iterar el JSON y dibujar las TR
     let percent = 0;
 
-    data.forEach((mov) => {
+    data.movilizadores.forEach((mov) => {
       mov.secciones.forEach((seccion) => {
         if (seccion.esperados != 0) {
           percent = (100 * seccion.votaron) / seccion.esperados;
@@ -273,7 +231,7 @@ var getVotosxMovilizadores = (function () {
         } else if (percent >= 50) {
           classPercent = "bg-success";
         }
-        
+
         const row = `
         <tr>
             <td><a href="overview-movilizador.html?id=${mov._id}">${mov.nombre} ${mov.paterno} ${mov.materno}</a></td>
@@ -298,22 +256,14 @@ var getVotosxMovilizadores = (function () {
         </tr>
     `;
         tableBody.innerHTML += row;
- 
       });
-
-       
-      });
-
-
-
+    });
 
     dt = $("#kt_table_townhall").DataTable({
       searchDelay: 500,
       processing: true,
       stateSave: true,
     });
-
-    table = dt.$;
 
     dt.on("draw", function () {
       KTMenu.createInstances();
@@ -379,29 +329,40 @@ function exportToExcel() {
     { origin: "A1" }
   );
 
-  data.forEach((data) => {
-    // console.log(data)
-    // data.cuidadanos.forEach((cuidadano) => {
-    XLSX.utils.sheet_add_aoa(
-      worksheet,
-      [
-        [
-          data.municipio.nombre,
-          data.seccion.numero,
-          data.seccion.casillas.nombre,
-          data.paterno + " " + data.materno + " " + data.nombre,
-          data.lider.paterno +
-            " " +
-            data.lider.materno +
-            " " +
-            data.lider.nombre,
-          // cuidadano.paterno + " " + cuidadano.materno + " " + cuidadano.nombre,
-          // cuidadano.voto ? "Votó" : "No ha votado"
-        ],
-      ],
-      { origin: -1 }
-    );
-    // });
+  data.movilizadores.forEach((movilizador) => {
+    movilizador.secciones.forEach((seccion) => {
+      seccion.casillas.forEach((casilla) => {
+        casilla.ciudadanos.forEach((ciudadano) => {
+          XLSX.utils.sheet_add_aoa(
+            worksheet,
+            [
+              [
+                seccion.municipio[0].nombre,
+                seccion.numero,
+                casilla.nombre,
+                movilizador.paterno +
+                  " " +
+                  movilizador.materno +
+                  " " +
+                  movilizador.nombre,
+                movilizador.lider[0].paterno +
+                  " " +
+                  movilizador.lider[0].materno +
+                  " " +
+                  movilizador.lider[0].nombre,
+                ciudadano.paterno +
+                  " " +
+                  ciudadano.materno +
+                  " " +
+                  ciudadano.nombre,
+                ciudadano.voto?"Voto":"No ha votado",
+              ],
+            ],
+            { origin: -1 }
+          );
+        });
+      });
+    });
   });
 
   XLSX.utils.book_append_sheet(workbook, worksheet, "Casillas");
