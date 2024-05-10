@@ -45,27 +45,27 @@ var getVotosXMunicipio = (function () {
       id: idTownHall,
     }),
     success: function (i) {
-      e.innerHTML = i[0].nombre;
-      dataSecciones = i[0].secciones;
+      e.innerHTML = i.nombre;
+      dataSecciones = i.secciones;
       dataChart = [
         {
           votos: "Total Votos X",
-          value: i[0].conteo_og,
+          value: i.votaron_og,
         },
         {
           votos: "Total Votos NG",
-          value: i[0].conteo_ng,
+          value: i.votaron_ng,
         },
         {
           votos: "No han votado",
-          value: i[0].faltan_ng,
+          value: i.faltan,
         },
         {
           votos: "Total Votos General",
-          value: i[0].conteo_total,
+          value: i.votaron,
         },
       ];
-      fetchedData = i[0];
+      fetchedData = i;
     },
   }).done(function (result) {});
 
@@ -174,48 +174,6 @@ var getVotosXMunicipio = (function () {
       return chart.get("colors").getIndex(series.columns.indexOf(target));
     });
 
-    // Set data
-    // var data = [
-    //   {
-    //     votos: "Votos GX",
-    //     value: 35654,
-    //     bulletSettings: { src: "https://www.amcharts.com/lib/images/faces/A04.png" }
-    //   },
-    //   {
-    //     votos: "Votos NG",
-    //     value: 65456,
-    //     bulletSettings: { src: "https://www.amcharts.com/lib/images/faces/C02.png" }
-    //   },
-    //   {
-    //     votos: "No Votado NG",
-    //     value: 45724,
-    //     bulletSettings: { src: "https://www.amcharts.com/lib/images/faces/D02.png" }
-    //   },
-    //   {
-    //     votos: "Votos Totales",
-    //     value: 13654,
-    //     bulletSettings: { src: "https://www.amcharts.com/lib/images/faces/E01.png" }
-    //   }
-    // ];
-
-    // series.bullets.push(function() {
-    //   return am5.Bullet.new(root, {
-    //     locationY: 1,
-    //     sprite: am5.Picture.new(root, {
-    //       templateField: "bulletSettings",
-    //       width: 50,
-    //       height: 50,
-    //       centerX: am5.p50,
-    //       centerY: am5.p50,
-    //       shadowColor: am5.color(0x000000),
-    //       shadowBlur: 4,
-    //       shadowOffsetX: 4,
-    //       shadowOffsetY: 4,
-    //       shadowOpacity: 0.6
-    //     })
-    //   });
-    // });
-    // Add Label bullet
     series.bullets.push(function () {
       return am5.Bullet.new(root, {
         locationY: 1,
@@ -248,9 +206,8 @@ var getVotosXMunicipio = (function () {
     //Iterar el JSON y dibujar las TR
     dataSecciones.forEach((seccion) => {
       let percent = 0;
-      if (seccion.esperados_seccion_ng != 0) {
-        percent =
-          (100 * seccion.conteo_seccion_ng) / seccion.esperados_seccion_ng;
+      if (seccion.esperados != 0) {
+        percent = (100 * seccion.votaron_ng) / seccion.esperados;
         percent = percent.toFixed(2);
       }
 
@@ -261,17 +218,34 @@ var getVotosXMunicipio = (function () {
       } else if (percent >= 50) {
         classPercent = "bg-success";
       }
-
+      const lideres = Array.from(
+        new Map(
+          seccion.casillas
+            .flatMap((c) =>
+              c.ciudadanos.flatMap((c) =>
+                c.movilizador.flatMap((m) =>
+                  m.lider.map((lider) => [lider._id, lider])
+                )
+              )
+            )
+            .values()
+        )
+      );
+      const x = "";
+      lideres.forEach(([id, lider]) => {
+        x +
+          " " +
+          `<a href="overview-lider.html?id=${id}">${lider.nombre} ${lider.paterno} ${lider.materno}</a>`;
+      });
+      console.log(x);
       const row = `
                 <tr>
-                    <td><a href="grafica-votos-seccional.html?id=${
-                      seccion._id
-                    }">${seccion.numero}</a></td>
-                    <td>${seccion.conteo_seccion_ng}</td>
-                    <td>${seccion.conteo_seccion_og}</td>
-                    <td>${seccion.faltan_seccion_ng}</td>
+                    <td><a href="grafica-votos-seccional.html?id=${seccion._id}">${seccion.numero}</a></td>
+                    <td>${seccion.votaron_ng}</td>
+                    <td>${seccion.votaron_og}</td>
+                    <td>${seccion.faltan}</td>
                     <td>
-  ${seccion.lider.map(lider => `<a href="overview-lider.html?id=${lider._id}">${lider.nombre} ${lider.paterno} ${lider.materno}</a>`).join(', ')}
+
 </td>
 
                     <td>
@@ -365,11 +339,6 @@ function exportToExcel() {
 
   fetchedData.secciones.forEach((seccion) => {
     seccion.casilla.forEach((casilla) => {
-      // let percent = 0;
-      // if (seccion.esperados_seccion_ng != 0) {
-      //   percent =
-      //     (100 * seccion.conteo_seccion_ng) / seccion.esperados_seccion_ng;
-      // }
       XLSX.utils.sheet_add_aoa(
         worksheet,
         [
