@@ -25,7 +25,7 @@ let fetchedData;
 
 var getVotosxLideres = (function () {
   var dataChart = [];
-  var dataLead;
+  var lider;
   let table;
   let dt;
 
@@ -36,7 +36,7 @@ var getVotosxLideres = (function () {
     async: false,
     contentType: "application/json; charset=utf-8",
     success: function (i) {
-      dataLead = i;
+      lider = i;
       fetchedData = i;
       i[0].lideres.forEach((lead) => {
         let percent = (100 * lead.votaron) / lead.esperados;
@@ -260,7 +260,7 @@ var getVotosxLideres = (function () {
 
     //Iterar el JSON y dibujar las TR
 
-    dataLead[0].lideres.forEach((lead) => {
+    lider[0].lideres.forEach((lead) => {
       let percent = 0;
       percent = percent.toFixed(2);
       if (lead.esperados != 0) {
@@ -366,39 +366,42 @@ function exportToExcel() {
         "Seccional",
         "Casilla",
         "Lider",
+        "Movilizador",
         "Ciudadano",
         "Votó/NoVotó",
       ],
     ],
     { origin: "A1" }
   );
-
-  fetchedData[0].lideres.forEach((dataLead) => {
-    dataLead.seccion.forEach((seccion) => {
-      seccion.casillas.forEach((casilla) => {
-        casilla.ciudadanos.forEach((ciudadano) => {
-          XLSX.utils.sheet_add_aoa(
-            worksheet,
-            [
+  fetchedData[0].lideres.forEach((lider) => {
+    lider.movilizadores.forEach((movilizador) => {
+      movilizador.secciones.forEach((seccion) => {
+        seccion.casillas.forEach((casilla) => {
+          casilla.ciudadanos.forEach((ciudadano) => {
+            XLSX.utils.sheet_add_aoa(
+              worksheet,
               [
-                dataLead.municipios[0].nombre,
-                seccion.numero,
-                casilla.nombre,
-                dataLead.paterno +
-                  " " +
-                  dataLead.materno +
-                  " " +
-                  dataLead.nombre,
-                ciudadano.paterno +
-                  " " +
-                  ciudadano.materno +
-                  " " +
-                  ciudadano.nombre,
-                ciudadano.voto ? "Votó" : "No ha votado",
+                [
+                  seccion.municipio[0].nombre,
+                  seccion.numero,
+                  casilla.nombre,
+                  lider.paterno + " " + lider.materno + " " + lider.nombre,
+                  movilizador.paterno +
+                    " " +
+                    movilizador.materno +
+                    " " +
+                    movilizador.nombre,
+                  ciudadano.paterno +
+                    " " +
+                    ciudadano.materno +
+                    " " +
+                    ciudadano.nombre,
+                  ciudadano.voto ? "Votó" : "No ha votado",
+                ],
               ],
-            ],
-            { origin: -1 }
-          );
+              { origin: -1 }
+            );
+          });
         });
       });
     });
