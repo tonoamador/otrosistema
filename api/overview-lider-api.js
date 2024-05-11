@@ -3,7 +3,7 @@ const token = JSON.parse(localStorage.getItem("token"));
 var serverUrl = window.serverUrl;
 var am5 = am5;
 var dataChart;
-let dt, dt1;
+let dt, dt1, data;
 
 if (!token || token.user_type !== "admin" || isTokenExpired(token)) {
   window.location.replace("index.html");
@@ -53,6 +53,7 @@ function fetchData() {
         posts.movilizadores[0] != null
       ) {
         displayData(posts);
+        handleSearchDatatable();
       }
       if (
         posts &&
@@ -62,8 +63,11 @@ function fetchData() {
         posts.ciudadanos_extra[0] != null
       ) {
         displayData1(posts);
+        handleSearchDatatable();
       }
-      handleSearchDatatable();
+
+      data = posts
+      
 
       dataChart = [
         {
@@ -277,13 +281,17 @@ function displayData(posts1) {
                 ]}</p>
             </td>
             <td>
-                <p class="text-gray-600 mb-1">${[
-                  ...new Set(
-          
-                    post.secciones.flatMap((seccion) => seccion.numero)
-                   
-                  ),
-                ]}</p>
+                <p class="text-gray-600 mb-1">
+                ${
+                  [
+                    ...new Set(
+                      post.secciones.flatMap((seccion) =>
+                        seccion.municipio.flatMap((municipio) => municipio.nombre)
+                      )
+                    ),
+                  ]
+                }
+                </p>
             </td>
         </tr>
     <!--end::Table body-->
@@ -339,22 +347,25 @@ function displayData1(posts1) {
                 }</a>
             </td>
             <td>
-                <p class="text-gray-600 mb-1">${post.casilla.nombre}</p>
+                <p class="text-gray-600 mb-1">${[...new Set(post.casilla.map((casilla) => casilla.nombre))]}</p>
             </td>
             <td>
-                <p class="text-gray-600 mb-1">${[
-                  ...new Set(posts1.seccion.map((seccion) => seccion.numero)),
-                ]}</p>
+                <p class="text-gray-600 mb-1">
+                ${
+                  [...new Set(post.casilla.map((casilla) => casilla.open))]
+                }
+                </p>
             </td>
             <td>
                 <p class="text-gray-600 mb-1">${
-                  [
-                    ...new Set(
-                      posts1.seccion.flatMap((seccion) =>
-                        seccion.municipio.flatMap((municipio) => municipio.nombre)
-                      )
-                    ),
-                  ]
+                  post.user_type
+                  // [
+                  //   ...new Set(
+                  //     posts1.seccion.flatMap((seccion) =>
+                  //       seccion.municipio.flatMap((municipio) => municipio.nombre)
+                  //     )
+                  //   ),
+                  // ]
                 }</p>
             </td>
             <td>
@@ -372,4 +383,94 @@ function displayData1(posts1) {
   });
 
   dt1 = $("#kt_ciudadanos_table").DataTable();
+}
+
+function exportToExcel() {
+  if (!data) {
+    console.log("No hay datos aún.");
+    return;
+  }
+
+  const workbook = XLSX.utils.book_new();
+  const worksheet = XLSX.utils.json_to_sheet([]);
+  var wscols = [
+    { wch: 13 }, // "1"
+    { wch: 8 }, // "2"
+    { wch: 11 }, // "3"
+    { wch: 21 }, // "4"
+    { wch: 11 }, // "5"
+    { wch: 20 }, // "6"
+    { wch: 11 }, // "7"
+    { wch: 25 }, // "8"
+    { wch: 13 }, // "9"
+    // {wpx: 50}, // "pixels"
+  ];
+
+  worksheet["!cols"] = wscols;
+  worksheet["!autofilter"] = { ref: "A1:G1" };
+
+  XLSX.utils.sheet_add_aoa(
+    worksheet,
+    [
+      [
+        "Municipio",
+        "Seccional",
+        "Casilla",
+        "Movilizador",
+        "Tel Mov",
+        "Lider",
+        "Tel Lider",
+        "Ciudanano",
+        "Votó/NoVotó",
+      ],
+    ],
+    { origin: "A1" }
+  );
+
+  data.movilizadores.forEach((movilizador) => {
+    movilizador.secciones.forEach((seccion) => {
+      seccion.casillas.forEach((casilla) => {
+        casilla.ciudadanos.forEach((ciudadano) => {
+          XLSX.utils.sheet_add_aoa(
+            worksheet,
+            [
+              [
+                seccion.municipio[0].nombre,
+                seccion.numero,
+                casilla.nombre,
+                movilizador.paterno +
+                  " " +
+                  movilizador.materno +
+                  " " +
+                  movilizador.nombre,
+                movilizador.lider[0].paterno +
+                  " " +
+                  movilizador.lider[0].materno +
+                  " " +
+                  movilizador.lider[0].nombre,
+                ciudadano.paterno +
+                  " " +
+                  ciudadano.materno +
+                  " " +
+                  ciudadano.nombre,
+                ciudadano.voto?"Votó":"No ha votado",
+              ],
+            ],
+            { origin: -1 }
+          );
+        });
+      });
+    });
+  });
+
+  XLSX.utils.book_append_sheet(workbook, worksheet, "Casillas");
+
+  const filename =
+    "Votación General Movilizadores" +
+    (new Date().getHours() % 12 || 12) +
+    "_" +
+    new Date().getMinutes().toString().padStart(2, "0") +
+    (new Date().getHours() >= 12 ? "PM" : "AM") +
+    ".xlsx";
+  XLSX.writeFile(workbook, filename, { cellStyles: true });
 }

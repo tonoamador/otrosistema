@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", fetchData);
 const token = JSON.parse(localStorage.getItem("token"));
 var am5 = am5;
 var serverUrl = window.serverUrl;
-let dt
+let dt, data
 if (
   !token ||
   (token.user_type !== "admin") ||
@@ -33,6 +33,7 @@ function fetchData() {
       return response.json();
     })
     .then((posts) => {
+      data = posts
       document.querySelector("#nombreOVMov").innerHTML =
         posts.paterno + " " + posts.materno + " " + posts.nombre;
       document.querySelector("#direccionOVMov").innerHTML =
@@ -272,4 +273,88 @@ function displayData(posts1) {
   });
   dt = $("#kt_customers_table").DataTable();
   handleSearchDatatable()
+}
+
+function exportToExcel() {
+  if (!data) {
+    console.log("No hay datos aún.");
+    return;
+  }
+
+  const workbook = XLSX.utils.book_new();
+  const worksheet = XLSX.utils.json_to_sheet([]);
+  var wscols = [
+    { wch: 13 }, // "1"
+    { wch: 8 }, // "2"
+    { wch: 11 }, // "3"
+    { wch: 21 }, // "4"
+    { wch: 11 }, // "5"
+    { wch: 20 }, // "6"
+    { wch: 11 }, // "7"
+    { wch: 25 }, // "8"
+    { wch: 13 }, // "9"
+    // {wpx: 50}, // "pixels"
+  ];
+
+  worksheet["!cols"] = wscols;
+  worksheet["!autofilter"] = { ref: "A1:I1" };
+
+  XLSX.utils.sheet_add_aoa(
+    worksheet,
+    [
+      [
+        "Municipio",
+        "Seccional",
+        "Casilla",
+        "Movilizador",
+        "Tel Mov",
+        "Lider",
+        "Tel Lider",
+        "Ciudanano",
+        "Votó/NoVotó",
+      ],
+    ],
+    { origin: "A1" }
+  );
+
+  let nameMov = data.paterno + " " + data.materno + " " + data.nombre
+
+  data.secciones.forEach((seccion) => {
+    seccion.casillas.forEach((casilla) => {
+      casilla.ciudadanos.forEach((ciudadano) => {
+        XLSX.utils.sheet_add_aoa(
+          worksheet,
+          [
+            [
+              seccion.municipio[0].nombre,
+              seccion.numero,
+              casilla.nombre,
+              data.paterno + " " + data.materno + " " + data.nombre,
+              data.telefono,
+              data.lider[0].paterno + " " + data.lider[0].materno + " " + data.lider[0].nombre,
+              data.lider[0].telefono,
+              ciudadano.paterno +
+                " " +
+                ciudadano.materno +
+                " " +
+                ciudadano.nombre,
+              ciudadano.voto?"Votó":"No ha votado",
+            ],
+          ],
+          { origin: -1 }
+        );
+      });
+    });
+  });
+
+  XLSX.utils.book_append_sheet(workbook, worksheet, "Casillas");
+
+  const filename =
+    "Votación Movilizador_" + nameMov + "_" +
+    (new Date().getHours() % 12 || 12) +
+    "_" +
+    new Date().getMinutes().toString().padStart(2, "0") +
+    (new Date().getHours() >= 12 ? "PM" : "AM") +
+    ".xlsx";
+  XLSX.writeFile(workbook, filename, { cellStyles: true });
 }

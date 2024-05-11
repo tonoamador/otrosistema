@@ -218,26 +218,25 @@ var getVotosXMunicipio = (function () {
       } else if (percent >= 50) {
         classPercent = "bg-success";
       }
-      const lideres = Array.from(
-        new Map(
-          seccion.casillas
-            .flatMap((c) =>
-              c.ciudadanos.flatMap((c) =>
-                c.movilizador.flatMap((m) =>
-                  m.lider.map((lider) => [lider._id, lider])
-                )
-              )
-            )
-            .values()
-        )
-      );
-      const x = "";
-      lideres.forEach(([id, lider]) => {
-        x +
-          " " +
-          `<a href="overview-lider.html?id=${id}">${lider.nombre} ${lider.paterno} ${lider.materno}</a>`;
-      });
-      console.log(x);
+      // const lideres = Array.from(
+      //   new Map(
+      //     seccion.casillas
+      //       .flatMap((c) =>
+      //         c.ciudadanos.flatMap((c) =>
+      //           c.movilizador.flatMap((m) =>
+      //             m.lider.map((lider) => [lider._id, lider])
+      //           )
+      //         )
+      //       )
+      //       .values()
+      //   )
+      // );
+      
+      // `<a href="overview-lider.html?id=${lider._id}" class="text-gray-600 mb-1 text-hover-primary">${lider.paterno} ${lider.materno} ${lider.nombre}</a>`).join(", ")
+      // const x = [
+      //   ...new Set(seccion)
+      // ]
+      // console.log(x);
       const row = `
                 <tr>
                     <td><a href="grafica-votos-seccional.html?id=${seccion._id}">${seccion.numero}</a></td>
@@ -307,18 +306,20 @@ function exportToExcel() {
   const worksheet = XLSX.utils.json_to_sheet([]);
 
   var wscols = [
-    { wch: 13 }, // "characters"
-    { wch: 10 }, // "characters"
-    { wch: 11 }, // "characters"
-    { wch: 10 }, // "characters"
-    { wch: 9 }, // "characters"
-    { wch: 14 }, // "characters"
-    { wch: 13 }, // "characters"
+    { wch: 13 }, // "1"
+    { wch: 8 }, // "2"
+    { wch: 11 }, // "3"
+    { wch: 21 }, // "4"
+    { wch: 11 }, // "5"
+    { wch: 20 }, // "6"
+    { wch: 11 }, // "7"
+    { wch: 25 }, // "8"
+    { wch: 13 }, // "9"
     // {wpx: 50}, // "pixels"
   ];
 
   worksheet["!cols"] = wscols;
-  worksheet["!autofilter"] = { ref: "A1:H1" };
+  worksheet["!autofilter"] = { ref: "A1:I1" };
 
   XLSX.utils.sheet_add_aoa(
     worksheet,
@@ -328,36 +329,50 @@ function exportToExcel() {
         "Seccional",
         "Casilla",
         "Lider",
-        "Votos NG",
-        "Votos X",
-        "Faltan NG",
-        "Porcentaje",
+        "Tel Lider",
+        "Movilizador",
+        "Tel Mov",
+        "Ciudadano",
+        "Votó/NoVotó"
       ],
     ],
     { origin: "A1" }
   );
 
+  
   fetchedData.secciones.forEach((seccion) => {
-    seccion.casilla.forEach((casilla) => {
-      XLSX.utils.sheet_add_aoa(
-        worksheet,
-        [
+    seccion.casillas.forEach((casilla) => {
+      casilla.ciudadanos.forEach((ciudadano) => {
+        XLSX.utils.sheet_add_aoa(
+          worksheet,
           [
-            fetchedData.nombre,
-            seccion.numero,
-            casilla.nombre,
-            seccion.lider.paterno +
-              " " +
-              seccion.lider.materno +
-              " " +
-              seccion.lider.nombre,
-            casilla.conteo_casilla_ng,
-            casilla.conteo_casilla_og,
-            casilla.faltan_casilla_ng,
+            [
+              fetchedData.nombre,
+              seccion.numero,
+              casilla.nombre,
+              [
+                ...new Set(
+                  ciudadano.movilizador.flatMap((movilizador) =>
+                    movilizador.lider.flatMap((lider) => lider.paterno + " " + lider.materno + " " + lider.nombre)
+                  )
+                )
+              ],
+              [
+                ...new Set(
+                  ciudadano.movilizador.flatMap((movilizador) =>
+                    movilizador.lider.flatMap((lider) => lider.telefono)
+                  )
+                )
+              ],
+              [...new Set(ciudadano.movilizador.map((movilizador) => movilizador.paterno + " " + movilizador.materno + " " + movilizador.nombre))],
+              [...new Set(ciudadano.movilizador.map((movilizador) => movilizador.telefono))],
+              ciudadano.paterno + " " + ciudadano.materno + " " + ciudadano.nombre,
+              ciudadano.voto ? "Votó" : "No ha votado"
+            ],
           ],
-        ],
-        { origin: -1 }
-      );
+          { origin: -1 }
+        );
+      })
     });
   });
 

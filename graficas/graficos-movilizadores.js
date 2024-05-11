@@ -300,18 +300,20 @@ function exportToExcel() {
   const workbook = XLSX.utils.book_new();
   const worksheet = XLSX.utils.json_to_sheet([]);
   var wscols = [
-    { wch: 13 }, // "characters"
-    { wch: 10 }, // "characters"
-    { wch: 11 }, // "characters"
-    { wch: 12 }, // "characters"
-    { wch: 15 }, // "characters"
-    { wch: 10 }, // "characters"
-    { wch: 14 }, // "characters"
+    { wch: 13 }, // "1"
+    { wch: 8 }, // "2"
+    { wch: 11 }, // "3"
+    { wch: 21 }, // "4"
+    { wch: 11 }, // "5"
+    { wch: 20 }, // "6"
+    { wch: 11 }, // "7"
+    { wch: 25 }, // "8"
+    { wch: 13 }, // "9"
     // {wpx: 50}, // "pixels"
   ];
 
   worksheet["!cols"] = wscols;
-  worksheet["!autofilter"] = { ref: "A1:G1" };
+  worksheet["!autofilter"] = { ref: "A1:I1" };
 
   XLSX.utils.sheet_add_aoa(
     worksheet,
@@ -321,7 +323,9 @@ function exportToExcel() {
         "Seccional",
         "Casilla",
         "Movilizador",
+        "Tel Mov",
         "Lider",
+        "Tel Lider",
         "Ciudanano",
         "Votó/NoVotó",
       ],
@@ -345,11 +349,13 @@ function exportToExcel() {
                   movilizador.materno +
                   " " +
                   movilizador.nombre,
+                movilizador.telefono,
                 movilizador.lider[0].paterno +
                   " " +
                   movilizador.lider[0].materno +
                   " " +
                   movilizador.lider[0].nombre,
+                movilizador.lider[0].telefono,
                 ciudadano.paterno +
                   " " +
                   ciudadano.materno +

@@ -279,22 +279,24 @@ function exportToExcel() {
   const worksheet = XLSX.utils.json_to_sheet([]);
 
   var wscols = [
-    {wch: 13}, // "characters"
-    {wch: 10}, // "characters"
-    {wch: 11}, // "characters"
-    {wch: 10}, // "characters"
-    {wch: 9}, // "characters"
-    {wch: 14}, // "characters"
-    {wch: 13}, // "characters"
+    { wch: 13 }, // "1"
+    { wch: 8 }, // "2"
+    { wch: 11 }, // "3"
+    { wch: 21 }, // "4"
+    { wch: 11 }, // "5"
+    { wch: 20 }, // "6"
+    { wch: 11 }, // "7"
+    { wch: 25 }, // "8"
+    { wch: 13 }, // "9"
     // {wpx: 50}, // "pixels"
 ];
 
 worksheet["!cols"] = wscols;
-worksheet['!autofilter'] = { ref: "A1:G1" };
+worksheet['!autofilter'] = { ref: "A1:I1" };
 
   XLSX.utils.sheet_add_aoa(
     worksheet,
-    [["Municipio", "Seccional", "Casilla", "Lider", "Tel Lider", "Movilizador", "Tel Mov", "Votó/No ha votado"]],
+    [["Municipio", "Seccional", "Casilla", "Lider", "Tel Lider", "Movilizador", "Tel Mov", "Ciudadano", "Votó/No ha votado"]],
     { origin: "A1" }
   );
  
@@ -309,10 +311,7 @@ worksheet['!autofilter'] = { ref: "A1:G1" };
                 municipio.nombre,
                 seccion.numero,
                 casilla.nombre,
-                casilla.conteo_casilla_og,
-                casilla.conteo_casilla_ng,
-                casilla.faltan_casilla_ng,
-                casilla.conteo_casilla_og+casilla.conteo_casilla_ng,
+                
               ],
             ],
             { origin: -1 }
