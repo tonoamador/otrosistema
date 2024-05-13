@@ -51,6 +51,7 @@ var getVotosXSeccion = (function () {
       i[0].casilla.forEach((c) => {
         dataChart.push({
           casilla: c.nombre,
+          votos_x: c.conteo_casilla_og,
           votos_ng: c.conteo_casilla_ng,
           votos_no: c.faltan_casilla_ng,
           votos_total: c.conteo_casilla_og + c.conteo_casilla_ng,
@@ -115,8 +116,7 @@ var getVotosXSeccion = (function () {
       })
     );
 
-    // Add series
-    function createSeries(field, name, color) {
+    function createSeries(field, name, color, fontColor) {
       var series = chart.series.push(
         am5xy.ColumnSeries.new(root, {
           name: name,
@@ -158,7 +158,7 @@ var getVotosXSeccion = (function () {
             centerX: am5.p100,
             centerY: am5.p50,
             text: "{name}",
-            fill: am5.color(0xffffff),
+            fill: am5.color(fontColor), // Set font color here
             populateText: true,
           }),
         });
@@ -170,10 +170,10 @@ var getVotosXSeccion = (function () {
       return series;
     }
 
-    createSeries("votos_x", "Votos X", "#FFFF00");
-    createSeries("votos_ng", "Votos NG", "#FF00FF");
-    createSeries("votos_no", "Votos Faltantes", "#808080");
-    createSeries("votos_total", "Votos Totales", "#000000");
+    createSeries("votos_x", "Votos X", "#FFFF00", "#000000");
+    createSeries("votos_ng", "Votos NG", "#FF00FF", "#FFFFFF");
+    createSeries("votos_no", "Votos Faltantes", "#808080", "#FFFFFF");
+    createSeries("votos_total", "Votos Totales", "#000000", "#FFFFFF");
 
     // Add legend
     var legend = chart.children.push(
@@ -219,7 +219,12 @@ var getVotosXSeccion = (function () {
     } else if (percent >= 50) {
       classPercent = "bg-success";
     }
-    const x = dataSeccion[0].lideres.map(lider => `<a href="overview-lider.html?id=${lider._id}" class="text-gray-600 mb-1 text-hover-primary">${lider.paterno} ${lider.materno} ${lider.nombre}</a>`).join(", ");
+    const x = dataSeccion[0].lideres
+      .map(
+        (lider) =>
+          `<a href="overview-lider.html?id=${lider._id}" class="text-gray-600 mb-1 text-hover-primary">${lider.paterno} ${lider.materno} ${lider.nombre}</a>`
+      )
+      .join(", ");
 
     const row = `
     <tr>
@@ -306,6 +311,7 @@ function exportToExcel() {
         "Votos NG",
         "Votos X",
         "Faltan NG",
+        "Movilizador",
         "Lider",
         "Porcentaje",
       ],
@@ -320,26 +326,34 @@ function exportToExcel() {
         (100 * casilla.conteo_casilla_ng) / casilla.esperados_casilla_ng;
       percent = percent.toFixed(2);
     }
-    XLSX.utils.sheet_add_aoa(
-      worksheet,
-      [
+  
+    const maxCount = Math.max(casilla.movilizadores.length, casilla.lideres.length);
+  
+    for (let i = 0; i < maxCount; i++) {
+      const movilizador = casilla.movilizadores[i] || {};
+      const lider = casilla.lideres[i] || {};
+  
+      XLSX.utils.sheet_add_aoa(
+        worksheet,
         [
-          dataSeccion[0].numero,
-          casilla.nombre,
-          casilla.conteo_casilla_ng,
-          casilla.conteo_casilla_og,
-          casilla.faltan_casilla_ng,
-          dataSeccion[0].lider.paterno +
-            " " +
-            dataSeccion[0].lider.materno +
-            " " +
-            dataSeccion[0].lider.nombre,
-          percent + "%",
+          [
+            dataSeccion[0].numero,
+            casilla.nombre,
+            casilla.conteo_casilla_ng,
+            casilla.conteo_casilla_og,
+            casilla.faltan_casilla_ng,
+            movilizador.paterno ?
+              movilizador.paterno + " " + movilizador.materno + " " + movilizador.nombre + " (" + movilizador.telefono + ")" : '',
+            lider.paterno ?
+              lider.paterno + " " + lider.materno + " " + lider.nombre + " (" + lider.telefono + ")" : '',
+            percent + "%",
+          ],
         ],
-      ],
-      { origin: -1 }
-    );
+        { origin: -1 }
+      );
+    }
   });
+  
 
   XLSX.utils.book_append_sheet(workbook, worksheet, "Votación");
 
