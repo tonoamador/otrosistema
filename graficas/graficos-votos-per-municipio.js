@@ -45,6 +45,7 @@ var getVotosXMunicipio = (function () {
       id: idTownHall,
     }),
     success: function (i) {
+      console.log(i)
       e.innerHTML = i.nombre;
       dataSecciones = i.secciones;
       dataChart = [

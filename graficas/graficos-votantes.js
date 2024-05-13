@@ -2,7 +2,11 @@
 
 //Funcion Login
 const token = JSON.parse(localStorage.getItem("token"));
-if (!token || (token.user_type !== "rc" && token.user_type !== "admin") || isTokenExpired(token)) {
+if (
+  !token ||
+  (token.user_type !== "rc" && token.user_type !== "admin") ||
+  isTokenExpired(token)
+) {
   window.location.replace("index.html");
 } else if (token.user_type !== "admin") {
   window.location.replace("index.html");
@@ -10,7 +14,7 @@ if (!token || (token.user_type !== "rc" && token.user_type !== "admin") || isTok
 
 function isTokenExpired(token) {
   let currentTime = Date.now() / 1000;
-  currentTime=currentTime.toFixed(0)
+  currentTime = currentTime.toFixed(0);
   return token.exp < currentTime;
 }
 
@@ -43,19 +47,19 @@ var getVotosXMunicipio = (function () {
       dataChart = [
         {
           votos: "Total Votos X",
-          value: i.general_conteo_og,
+          value: i.votaron_og,
         },
         {
           votos: "Total Votos NG",
-          value: i.general_conteo_ng,
+          value: i.votaron_ng,
         },
         {
           votos: "No han votado",
-          value: i.general_faltan_ng,
+          value: i.faltan,
         },
         {
           votos: "Total Votos General",
-          value: i.general_total,
+          value: i.votaron,
         },
       ];
       fetchedData = i.municipios;
@@ -153,12 +157,12 @@ var getVotosXMunicipio = (function () {
     });
 
     var customColors = [
-      am5.color("#FFFF00"),  // Amarillo
+      am5.color("#FFFF00"), // Amarillo
       am5.color("#FF00FF"), // Magenta
       am5.color("#808080"), // Gris
       am5.color("#000000"), // Negro
     ];
-    series.columns.template.adapters.add("fill", function(fill, target) {
+    series.columns.template.adapters.add("fill", function (fill, target) {
       var index = series.columns.indexOf(target); // Obtiene el índice de la columna
       return customColors[index % customColors.length]; // Asigna el color de la paleta basado en el índice
     });
@@ -200,12 +204,11 @@ var getVotosXMunicipio = (function () {
     //Iterar el JSON y dibujar las TR
     dataTownhall.forEach((townhall) => {
       let percent = 0;
-      if (townhall.esperados_ng != 0) {
-        percent = (100 * townhall.conteo_ng) / townhall.esperados_ng;
-        percent=percent.toFixed(2)
+      if (townhall.esperados != 0) {
+        percent = (100 * townhall.votaron_ng) / townhall.esperados;
+        percent = percent.toFixed(2);
       }
 
-      
       let classPercent = "bg-light";
       if (percent < 50) {
         classPercent = "bg-warning";
@@ -216,9 +219,9 @@ var getVotosXMunicipio = (function () {
       const row = `
                 <tr>
                     <td><a href="grafica-votantes-municipio.html?id=${townhall._id}">${townhall.nombre}</a></td>
-                    <td>${townhall.conteo_ng}</td>
-                    <td>${townhall.conteo_og}</td>
-                    <td>${townhall.faltan_ng}</td>
+                    <td>${townhall.votaron_ng}</td>
+                    <td>${townhall.votaron_og}</td>
+                    <td>${townhall.faltan}</td>
                     <td>
                         <div class="d-flex align-items-center w-200px w-sm-300px flex-column mt-3">
                             <div class="d-flex justify-content-between w-100 mt-auto mb-2">
@@ -289,36 +292,89 @@ function exportToExcel() {
     { wch: 25 }, // "8"
     { wch: 13 }, // "9"
     // {wpx: 50}, // "pixels"
-];
+  ];
 
-worksheet["!cols"] = wscols;
-worksheet['!autofilter'] = { ref: "A1:I1" };
+  worksheet["!cols"] = wscols;
+  worksheet["!autofilter"] = { ref: "A1:I1" };
 
   XLSX.utils.sheet_add_aoa(
     worksheet,
-    [["Municipio", "Seccional", "Casilla", "Lider", "Tel Lider", "Movilizador", "Tel Mov", "Ciudadano", "Votó/No ha votado"]],
+    [
+      [
+        "Municipio",
+        "Seccional",
+        "Casilla",
+        "Lider",
+        "Tel Lider",
+        "Movilizador",
+        "Tel Mov",
+        "Ciudadano",
+        "Votó/No ha votado",
+      ],
+    ],
     { origin: "A1" }
   );
- 
   fetchedData.forEach((municipio) => {
     municipio.secciones.forEach((seccion) => {
-      seccion.casilla.forEach((casilla) => {
+      seccion.casillas.forEach((casilla) => {
         casilla.ciudadanos.forEach((ciudadano) => {
-          XLSX.utils.sheet_add_aoa(
-            worksheet,
-            [
+          ciudadano.movilizador.forEach((movilizador) => {
+            movilizador.lider.forEach((lider) => {
+              XLSX.utils.sheet_add_aoa(
+                worksheet,
+                [
+                  [
+                    municipio.nombre,
+                    seccion.numero,
+                    casilla.nombre,
+                    lider.paterno + " " + lider.materno + " " + lider.nombre,
+                    lider.telefono,
+                    movilizador.paterno +
+                      " " +
+                      movilizador.materno +
+                      " " +
+                      movilizador.nombre,
+                    movilizador.telefono,
+                    ciudadano.paterno +
+                      " " +
+                      ciudadano.materno +
+                      " " +
+                      ciudadano.nombre,
+                      ciudadano.voto ? "Votó" : "No ha votado"
+                  ],
+                ],
+                { origin: -1 }
+              );
+            });
+          });
+        });
+        casilla.ciudadanos_extra.forEach((ciudadano) => {
+          ciudadano.lider.forEach((lider) => {
+            XLSX.utils.sheet_add_aoa(
+              worksheet,
               [
-                municipio.nombre,
-                seccion.numero,
-                casilla.nombre,
-                
+                [
+                  municipio.nombre,
+                  seccion.numero,
+                  casilla.nombre,
+                  lider.paterno + " " + lider.materno + " " + lider.nombre,
+                  lider.telefono,
+                  "",
+                  "",
+                  ciudadano.paterno +
+                    " " +
+                    ciudadano.materno +
+                    " " +
+                    ciudadano.nombre,
+                    ciudadano.voto ? "Votó" : "No ha votado"
+                ],
               ],
-            ],
-            { origin: -1 }
-          );
-        })
-      })
-    })
+              { origin: -1 }
+            );
+          });
+        });
+      });
+    });
   });
 
   XLSX.utils.book_append_sheet(workbook, worksheet, "Casillas");
