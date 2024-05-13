@@ -3,7 +3,7 @@ const token = JSON.parse(localStorage.getItem("token"));
 var serverUrl = window.serverUrl;
 var am5 = am5;
 var dataChart;
-let dt, dt1, data;
+let dt, dt1, lider;
 
 if (!token || token.user_type !== "admin" || isTokenExpired(token)) {
   window.location.replace("index.html");
@@ -66,8 +66,7 @@ function fetchData() {
         handleSearchDatatable();
       }
 
-      data = posts
-      
+      lider = posts;
 
       dataChart = [
         {
@@ -76,11 +75,11 @@ function fetchData() {
         },
         {
           votos: "No han votado",
-          value: posts.no_votaron,
+          value: posts.faltan,
         },
         {
           votos: "Experados",
-          value: posts.esperados,
+          value: posts.votos_esperados,
         },
       ];
 
@@ -282,15 +281,13 @@ function displayData(posts1) {
             </td>
             <td>
                 <p class="text-gray-600 mb-1">
-                ${
-                  [
-                    ...new Set(
-                      post.secciones.flatMap((seccion) =>
-                        seccion.municipio.flatMap((municipio) => municipio.nombre)
-                      )
-                    ),
-                  ]
-                }
+                ${[
+                  ...new Set(
+                    post.secciones.flatMap((seccion) =>
+                      seccion.municipio.flatMap((municipio) => municipio.nombre)
+                    )
+                  ),
+                ]}
                 </p>
             </td>
         </tr>
@@ -311,7 +308,6 @@ function displayData1(posts1) {
 
   // Iterar sobre los posts y agregarlos a la tabla
   posts.forEach((post) => {
-    console.log(post)
     const row = `
             
         
@@ -347,25 +343,16 @@ function displayData1(posts1) {
                 }</a>
             </td>
             <td>
-                <p class="text-gray-600 mb-1">${[...new Set(post.casilla.map((casilla) => casilla.nombre))]}</p>
+                <p class="text-gray-600 mb-1">${post.casilla[0].nombre}</p>
             </td>
             <td>
                 <p class="text-gray-600 mb-1">
-                ${
-                  [...new Set(post.casilla.map((casilla) => casilla.open))]
-                }
+                ${post.casilla[0].seccion[0].numero}
                 </p>
             </td>
             <td>
                 <p class="text-gray-600 mb-1">${
-                  post.user_type
-                  // [
-                  //   ...new Set(
-                  //     posts1.seccion.flatMap((seccion) =>
-                  //       seccion.municipio.flatMap((municipio) => municipio.nombre)
-                  //     )
-                  //   ),
-                  // ]
+                  post.casilla[0].seccion[0].municipio[0].nombre
                 }</p>
             </td>
             <td>
@@ -386,7 +373,7 @@ function displayData1(posts1) {
 }
 
 function exportToExcel() {
-  if (!data) {
+  if (!lider) {
     console.log("No hay datos aún.");
     return;
   }
@@ -426,8 +413,7 @@ function exportToExcel() {
     ],
     { origin: "A1" }
   );
-
-  data.movilizadores.forEach((movilizador) => {
+  lider.movilizadores.forEach((movilizador) => {
     movilizador.secciones.forEach((seccion) => {
       seccion.casillas.forEach((casilla) => {
         casilla.ciudadanos.forEach((ciudadano) => {
@@ -443,17 +429,15 @@ function exportToExcel() {
                   movilizador.materno +
                   " " +
                   movilizador.nombre,
-                movilizador.lider[0].paterno +
-                  " " +
-                  movilizador.lider[0].materno +
-                  " " +
-                  movilizador.lider[0].nombre,
+                movilizador.telefono,
+                lider.paterno + " " + lider.materno + " " + lider.nombre,
+                lider.telefono,
                 ciudadano.paterno +
                   " " +
                   ciudadano.materno +
                   " " +
                   ciudadano.nombre,
-                ciudadano.voto?"Votó":"No ha votado",
+                ciudadano.voto ? "Votó" : "No ha votado",
               ],
             ],
             { origin: -1 }
@@ -461,6 +445,30 @@ function exportToExcel() {
         });
       });
     });
+  });
+
+  lider.ciudadanos_extra.forEach((ciudadano_extra) => {
+    XLSX.utils.sheet_add_aoa(
+      worksheet,
+      [
+        [
+          ciudadano_extra.casilla[0].seccion[0].municipio[0].nombre,
+          ciudadano_extra.casilla[0].seccion[0].numero,
+          ciudadano_extra.casilla[0].nombre,
+          "",
+          "",
+          lider.paterno + " " + lider.materno + " " + lider.nombre,
+          lider.telefono,
+          ciudadano_extra.paterno +
+            " " +
+            ciudadano_extra.materno +
+            " " +
+            ciudadano_extra.nombre,
+            ciudadano_extra.voto ? "Votó" : "No ha votado",
+        ],
+      ],
+      { origin: -1 }
+    );
   });
 
   XLSX.utils.book_append_sheet(workbook, worksheet, "Casillas");

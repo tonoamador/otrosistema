@@ -326,13 +326,16 @@ function exportToExcel() {
         (100 * casilla.conteo_casilla_ng) / casilla.esperados_casilla_ng;
       percent = percent.toFixed(2);
     }
-  
-    const maxCount = Math.max(casilla.movilizadores.length, casilla.lideres.length);
-  
+
+    const maxCount = Math.max(
+      casilla.movilizadores.length,
+      casilla.lideres.length
+    );
+
     for (let i = 0; i < maxCount; i++) {
       const movilizador = casilla.movilizadores[i] || {};
       const lider = casilla.lideres[i] || {};
-  
+
       XLSX.utils.sheet_add_aoa(
         worksheet,
         [
@@ -342,10 +345,26 @@ function exportToExcel() {
             casilla.conteo_casilla_ng,
             casilla.conteo_casilla_og,
             casilla.faltan_casilla_ng,
-            movilizador.paterno ?
-              movilizador.paterno + " " + movilizador.materno + " " + movilizador.nombre + " (" + movilizador.telefono + ")" : '',
-            lider.paterno ?
-              lider.paterno + " " + lider.materno + " " + lider.nombre + " (" + lider.telefono + ")" : '',
+            movilizador.paterno
+              ? movilizador.paterno +
+                " " +
+                movilizador.materno +
+                " " +
+                movilizador.nombre +
+                " (" +
+                movilizador.telefono +
+                ")"
+              : "",
+            lider.paterno
+              ? lider.paterno +
+                " " +
+                lider.materno +
+                " " +
+                lider.nombre +
+                " (" +
+                lider.telefono +
+                ")"
+              : "",
             percent + "%",
           ],
         ],
@@ -353,7 +372,6 @@ function exportToExcel() {
       );
     }
   });
-  
 
   XLSX.utils.book_append_sheet(workbook, worksheet, "Votación");
 
