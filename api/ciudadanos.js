@@ -37,11 +37,17 @@ const KTDatatablesServerSide = (() => {
             colonia,
             c_postal,
           }) =>
-            `${calle} ${direccion_ext} ${direccion_int}, ${colonia}, ${c_postal}`,
+            `${calle}${direccion_ext ? " " + direccion_ext : ""}${
+              direccion_int ? " " + direccion_int : ""
+            }${
+              (direccion_ext || direccion_int) && (colonia || c_postal)
+                ? ","
+                : ""
+            }${colonia ? " " + colonia : ""}${c_postal ? " " + c_postal : ""}`,
         },
-        { 
+        {
           data: null,
-          render: ({ telefono }) => phoneCheck(telefono)
+          render: ({ telefono }) => phoneCheck(telefono),
         },
         {
           data: null,
@@ -108,12 +114,12 @@ const KTDatatablesServerSide = (() => {
   };
 
   const phoneCheck = (phone) => {
-    let phoneText = ""
-    if(phone){
-      phoneText = phone
+    let phoneText = "";
+    if (phone) {
+      phoneText = phone;
     }
-    return phoneText
-  }
+    return phoneText;
+  };
 
   const getType = (items) =>
     items.length > 0

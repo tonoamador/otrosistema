@@ -53,7 +53,7 @@ const KTDatatablesServerSide = (() => {
             colonia,
             c_postal,
           }) =>
-            `${calle} ${direccion_ext} ${direccion_int}, ${colonia}, ${c_postal}`,
+            `${calle}${direccion_ext ? ' ' + direccion_ext : ''}${direccion_int ? ' ' + direccion_int : ''}${(direccion_ext || direccion_int) && (colonia || c_postal) ? ',' : ''}${colonia ? ' ' + colonia : ''}${c_postal ? ' ' + c_postal : ''}`
         },
         { data: "telefono" },
         {
