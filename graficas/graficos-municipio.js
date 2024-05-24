@@ -238,9 +238,25 @@ function exportToExcel() {
   const workbook = XLSX.utils.book_new();
   const worksheet = XLSX.utils.json_to_sheet([]);
 
+  var wscols = [
+    { wch: 13 }, // "1"
+    { wch: 8 }, // "2"
+    { wch: 11 }, // "3"
+    { wch: 8.5 }, // "4"
+    { wch: 33 }, // "5"
+    { wch: 11 }, // "6"
+    { wch: 33 }, // "7"
+    { wch: 11 }, // "8"
+    // { wch: 13 }, // "9"
+    // {wpx: 50}, // "pixels"
+  ];
+
+  worksheet["!cols"] = wscols;
+  worksheet["!autofilter"] = { ref: "A1:H1" };
+
   XLSX.utils.sheet_add_aoa(
     worksheet,
-    [["Municipio", "Seccion", "Casilla", "Estatus"]],
+    [["Municipio", "Seccion", "Casilla", "Estatus", "RC", "Tel RC", "RG", "Tel RG"]],
     { origin: "A1" }
   );
   fetchedData.forEach((municipio) => {
@@ -254,6 +270,10 @@ function exportToExcel() {
               seccion.numero,
               casilla.nombre,
               casilla.open ? "Abierta" : "Cerrada",
+              casilla.rc.paterno + " " + casilla.rc.materno + " " + casilla.rc.nombre,
+              casilla.rc.telefono,
+              casilla.rc.rg.paterno + " " + casilla.rc.rg.materno + " " + casilla.rc.rg.nombre,
+              casilla.rc.rg.telefono
             ],
           ],
           { origin: -1 }

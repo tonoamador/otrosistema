@@ -6697,7 +6697,7 @@ License: For each use you must have a valid license purchased only from above li
 		$(document).ready(function () {
 			// Función para mostrar u ocultar los datos según el contenido del campo de entrada
 			function toggleDataVisibility() {
-				if ($('#search').val().trim() !== '') {
+				if ($('#search').val().trim() !== '' && $('#search').val().length > 8) {
 					$('.data-list').removeClass('hidden');
 					
 				} else {
