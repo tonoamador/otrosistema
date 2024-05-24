@@ -6706,6 +6706,10 @@ License: For each use you must have a valid license purchased only from above li
 			}
 
 			$("#search").keyup(function() {
+				// var string_norm = $(this).val().normalize('NFD').replace(/\p{Diacritic}/gu, '');
+				var string_norm = z_removeAccent($(this).val())
+				console.log(string_norm)
+				$(this).val(string_norm)
 				toggleDataVisibility()
 			})
 
@@ -6727,6 +6731,26 @@ License: For each use you must have a valid license purchased only from above li
 				$("#btn-vote-x").removeClass("hidden")
 				
 			})
+
+			function z_removeAccent(Par) {
+				var map = {
+					'a': 'á|à|ã|â|À|Á|Ã|Â',
+					'e': 'é|è|ê|É|È|Ê',
+					'i': 'í|ì|î|Í|Ì|Î',
+					'o': 'ó|ò|ô|õ|Ó|Ò|Ô|Õ',
+					'u': 'ú|ù|û|ü|Ú|Ù|Û|Ü',
+					'c': 'ç|Ç',
+					// 'n': 'ñ|Ñ'
+				};
+
+				str = Par
+
+				for (var pattern in map) {
+					str = str.replace(new RegExp(map[pattern], 'g'), pattern)
+				}
+
+				return str
+			}
 
 			// Detecta cambios en el campo de entrada
 			// $("#search").keyup(function() {
