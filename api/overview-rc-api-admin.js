@@ -1,11 +1,7 @@
 document.addEventListener("DOMContentLoaded", fetchData);
 var serverUrl = window.serverUrl;
 const token = JSON.parse(localStorage.getItem("token"));
-if (
-  !token ||
-  (token.user_type !== "admin") ||
-  isTokenExpired(token)
-) {
+if (!token || token.user_type !== "admin" || isTokenExpired(token)) {
   window.location.replace("index.html");
 }
 function isTokenExpired(token) {
@@ -45,9 +41,13 @@ function fetchData() {
         posts.c_postal;
       document.querySelector("#telefonoOVMov").innerHTML = posts.telefono;
       document.querySelector("#casilla").innerHTML = posts.casilla.nombre;
-      document.querySelector("#rg").innerHTML = posts.rg.paterno + " " + posts.rg.materno + " " + posts.rg.nombre;
-      document.querySelector("#rg").setAttribute('href', 'overview-rg.html?='+posts.rg._id);
-      document.querySelector("#seccion").innerHTML = posts.casilla.seccion.numero;
+      document.querySelector("#rg").innerHTML =
+        posts.rg.paterno + " " + posts.rg.materno + " " + posts.rg.nombre;
+      document
+        .querySelector("#rg")
+        .setAttribute("href", "overview-rg.html?=" + posts.rg._id);
+      document.querySelector("#seccion").innerHTML =
+        posts.casilla.seccion.numero;
       displayData(posts.casilla);
     })
     .catch((error) => {
@@ -96,9 +96,9 @@ function displayData(posts) {
                 }</a>
             </td>
 <td>
-<div class="badge badge-light-${
-  post.voto ? "success" : "danger"
-}">${post.voto ? "Votó" : "Sin voto"}</div>
+<div class="badge badge-light-${post.voto ? "success" : "danger"}">${
+      post.voto ? "Votó" : "Sin voto"
+    }</div>
 </td>
         </tr>
     <!--end::Table body-->

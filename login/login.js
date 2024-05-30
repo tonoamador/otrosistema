@@ -1,5 +1,5 @@
 "use strict";
-var serverUrl ="https://hcpboca.ddns.net:3050/";
+var serverUrl = window.serverUrl;
 var KTSigninGeneral = (function () {
   var t, e, r;
   return {
