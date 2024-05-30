@@ -40,7 +40,7 @@ var getCitizen = function (e) {
     },
     preConfirm: async () => {
       try {
-        const url = "https://hcpboca.ddns.net:3050/api/setVoto/";
+        const url = `${serverUrl}api/setVoto/`;
         const response = await fetch(url, {
           method: "POST",
           headers: {
