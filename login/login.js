@@ -1,5 +1,5 @@
 "use strict";
-var serverUrl = window.serverUrl;
+var serverUrl = 'https://election.ddns.net:3050/';
 var KTSigninGeneral = (function () {
   var t, e, r;
   return {
