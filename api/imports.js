@@ -1,4 +1,4 @@
-window.serverUrl = 'https://172.18.1.238:3050/';
+window.serverUrl = 'https://election.ddns.net:3050/';
 document.addEventListener("DOMContentLoaded", function () {
   function loadContent(elementId, filePath) {
     var xhr = new XMLHttpRequest();
