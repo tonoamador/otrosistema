@@ -159,7 +159,7 @@ var KTDatatablesServerSide = (function () {
           var btnCount = `<button onclick="getCitizen(this)" id="btn-send-vote" data-citizen-id="${
             d._id
           }" data-citizen-name="${
-            d.paterno + " " + d.materno + " " + d.nombre
+            d.numero +" "+ d.paterno + " " + d.materno + " " + d.nombre
           }" class="btn btn-sm btn-primary fs-5 fw-bold">Contar Voto</button>`;
           if (d.voto) {
             btnCount = `<div class="badge badge-light-success disabled fs-5 fw-bold">Votó</div>`;
