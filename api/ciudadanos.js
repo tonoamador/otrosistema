@@ -23,6 +23,7 @@ const KTDatatablesServerSide = (() => {
       },
       columns: [
         { data: null },
+        { data: "numero" },
         {
           data: null,
           render: ({ paterno, materno, nombre }) =>
