@@ -210,11 +210,11 @@ var KTDatatablesServerSide = (function () {
           
           <tr>
               <td></td>
-              <td>${post.paterno + " " + post.materno + " " + post.nombre}</td>
+              <td>${ post.numero +" "+ post.paterno + " " + post.materno + " " + post.nombre}</td>
               <td><button id="openModalVote" onclick="getCitizen()" data-citizen-id="${
                 post._id
               }" data-citizen-name="${
-        post.paterno + " " + post.materno + " " + post.nombre
+                post.numero +" "+ post.paterno + " " + post.materno + " " + post.nombre
       }" class="btn ${btnClass}" data-bs-toggle="modal" data-bs-target="#kt_modal_vote">${btnText}</button></td>
           </tr>          
       <!--end::Table body-->
