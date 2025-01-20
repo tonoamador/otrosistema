@@ -165,7 +165,7 @@ var KTDatatablesServerSide = (function () {
             btnCount = `<div class="badge badge-light-success disabled fs-5 fw-bold">Votó</div>`;
           }
           const row = `
-          <li data-name="${d.paterno + " " + d.materno + " " + d.nombre}">
+          <li data-name="${ d.numero +" "+ d.paterno + " " + d.materno + " " + d.nombre}">
               <div class="d-flex flex-stack item" id="${d._id}">
                 <div class="symbol symbol-40px me-5">
                   <img src="assets/media/avatars/300-2.jpg" class="h-50 align-self-center" alt="" />
@@ -173,7 +173,7 @@ var KTDatatablesServerSide = (function () {
                 <div class="d-flex align-items-center flex-row-fluid flex-wrap">
                   <div class="flex-grow-1 me-2">
                     <p class="text-gray-800 text-hover-primary fs-6 fw-bold">${
-                      d.paterno + " " + d.materno + " " + d.nombre
+                      d.numero +" "+ d.paterno + " " + d.materno + " " + d.nombre
                     }</p>
                     
                   </div>
