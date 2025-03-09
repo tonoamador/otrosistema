@@ -37,8 +37,7 @@ var getVotosxMovilizadores = (function () {
       data = i;
       i.movilizadores.forEach((mov) => {
         let percent = (100 * mov.votaron) / mov.esperados;
-        percent = percent.toFixed(2);
-        percent = parseFloat(percent);
+        percent = parseFloat(percent.toFixed(2));
         dataChart.push({
           name: mov.nombre + " " + mov.paterno,
           steps: percent,
@@ -47,8 +46,30 @@ var getVotosxMovilizadores = (function () {
           },
         });
       });
+  
+      // Ordenar los datos de mayor a menor según el porcentaje.
+      dataChart.sort((a, b) => a.steps - b.steps);
+  
+      // Define cuántos elementos quieres en cada grupo.
+      const topCount = 5;
+      const bottomCount = 5;
+      let finalData = [];
+  
+      // Si hay más datos de los que queremos mostrar, separamos top y bottom.
+      if (dataChart.length > topCount + bottomCount) {
+        const topData = dataChart.slice(0, topCount);
+        let bottomData = dataChart.slice(dataChart.length - bottomCount);
+        // Ordenamos los de menor a mayor para que en la segunda mitad se muestren de forma ascendente.
+        bottomData.sort((a, b) => a.steps - b.steps);
+        finalData = topData.concat(bottomData);
+      } else {
+        finalData = dataChart;
+      }
+      // Reasignamos la data para la gráfica.
+      dataChart = finalData;
     },
   });
+  
 
   am5.ready(function () {
     var root = am5.Root.new("kt_amcharts_1");

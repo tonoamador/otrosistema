@@ -23,11 +23,11 @@ document.querySelector("#seccion").innerHTML = token.casilla.seccion.numero;
 document.querySelector("#municipio").innerHTML =
   token.casilla.seccion.municipio.nombre;
 document.querySelector("#casilla").innerHTML = token.casilla.nombre;
-console.log(token)
-if(token.casilla.open){
-  window.location.replace("ciudadanos-rc.html")
-}
 
+  OpenBox();
+  
+
+window.location.replace("ciudadanos-rc.html");
 
 function OpenBox() {
   const id = token.casilla._id;
